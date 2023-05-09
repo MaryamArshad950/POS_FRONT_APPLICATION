@@ -1,0 +1,349 @@
+﻿@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Configuration.Json
+@inject IConfiguration Configuration
+@{
+    Layout = null;
+}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<title>Point of Sales - Salaam Family Takaful</title>
+<link rel="stylesheet" href="~/Assets/vendors/feather/feather.css">
+<link rel="stylesheet" href="~/Assets/vendors/ti-icons/css/themify-icons.css">
+<link rel="stylesheet" href="~/Assets/vendors/css/vendor.bundle.base.css">
+<link rel="stylesheet" href="~/Assets/vendors/ti-icons/css/themify-icons.css">
+<link rel="stylesheet" href="~/Assets/css/vertical-layout-light/style.css">
+<link rel="shortcut icon" href="~/Assets/images/SalaamSavings.png" />
+<link rel="stylesheet" href="~/Assets/css/pos.css" />
+<link rel="stylesheet" href="~/Assets/css/illustration.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/json2/20130526/json2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://use.fontawesome.com/32965eb355.js"></script>
+<script type="text/javascript">
+    const app_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value);
+    const api_port_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_PNO").Value);
+    const Result_API = (app_host_API + ":" + api_port_API);
+    var getsession = window.sessionStorage.getItem("tokenIndex");
+    if (getsession == null && sessionStorage.getItem("token") == '') {
+        getsession = sessionStorage.getItem("GlobalPos");
+    }
+    if (getsession == null && sessionStorage.getItem("token") != '') {
+        getsession = sessionStorage.getItem("token");
+        sessionStorage.removeItem("GlobalPos")
+    }
+</script>
+<script src="~/Assets/js/JSPOS/Userillust.js" defer></script>
+<div class="container-scroller">
+    <form method="post" action="/User/POS_USER_CREATION" class="form-horizontal form" id="SummaryData">
+        <div class="card card-illust pb-4 p-3">
+            <div class="card-body doc-summary card-border-summary">
+                <div class="row">
+                    <div class="col-md-1">
+                        <img src="~/Assets/images/SalaamSavings.png" id="image_logo" />
+                    </div>
+                    <div class="col-md-11">
+                        <h2 class="text-white text-lemonade text-center mt-4">Illustration Summary</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <img src="~/Assets/images/illustration-result.png" class="life-illustration m-auto animated animatedFadeInUpp fadeInUpp" />
+                </div>
+                <div class="col-md-3" hidden>
+                    <label for="" class="mr-5 text-success">DOCUMENT ID:</label>
+                    <input class="form-control" name="FCDM_DOCUMENT_ID" id="FCDM_DOCUMENT_ID" value="@TempData["DocumentNoValue"]" />
+                </div>
+                <div class="col-md-3" hidden>
+                    <label for="" class="mr-5 text-success">DOCUMENT CODE:</label>
+                    <input class="form-control" name="FCDM_DOCUMENT_CODE" id="FCDM_DOCUMENT_CODE" value="@TempData["DocumentCodeValue"]" />
+                </div>
+                <div class="row" hidden>
+                    <div class="col-md-12 table-responsive">
+                        <table class="table" id="tableBasicInfo">
+                            <thead>
+                                <tr>
+                                    <th hidden class="text-primary">user</th>
+                                    <th hidden class="text-primary">user.</th>
+                                    <th class="text-primary">Plan</th>
+                                    <th class="text-primary">Participant Name</th>
+                                    <th hidden class="text-primary">Participant Number</th>
+                                    <th class="text-primary">Quotation Number</th>
+                                    <th class="text-primary">Annual Savings</th>
+                                    <th class="text-primary">Membership Term</th>
+                                    <th class="text-primary">Coverage Amount</th>
+                                    <th class="text-primary">Customer DOB</th>
+                                    <th hidden class="text-primary">Email</th>
+                                    <th hidden class="text-primary">Occupation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row mb-4 mt-4 pt-5 card-illustrations animated animatedFadeInUpp fadeInUpp">
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <img src="~/Assets/images/myInfo.png" class="illusticon m-auto" />
+                                </div>
+                                <hr />
+                                <div class="row mt-3">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5 w-100">Name</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="p_PARTICIPANT_NAME" class="form-control2" readonly />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5">Date of Birth</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="p_DOB" class="form-control2" readonly />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5">Gender</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="p_GENDER" class="form-control2" readonly />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5">Document No</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="p_fcdm_document_code" class="form-control2" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <img src="~/Assets/images/myPlan.png" class="illusticon m-auto" />
+                                </div>
+                                <hr />
+                                <div class="row mt-3">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5">Plan Name</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="FSPM_PRODUCT_ID" class="form-control2 w-100" readonly />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5">Policy Term</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="p_NUMBER_OF_PROJECTION_YEARS" class="form-control2" readonly />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5">Extra Mortality</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="" class="form-control2" value="N/A" readonly />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5">Cover Multiple</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="p_COVER_MULTIPLE" class="form-control2" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row mb-4 card-illustrations animated animatedFadeInUpp fadeInUpp">
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <img src="~/Assets/images/Illustratitive-date.png" class="illusticon m-auto" />
+                                </div>
+                                <hr />
+                                <div class="row mt-3">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5">Expected Commencement Date</label>
+                                    </div>
+                                    <div class="col-5">
+                                        <input id="" class="form-control2" value="N/A" readonly />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5">Reference No</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="" class="form-control2" value="N/A" readonly />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5">Illustration Valid Date</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="p_PROPOSAL_NUMBER" class="form-control2" value="N/A" readonly />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5">Income Tax</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="" class="form-control2" value="N/A" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <img src="~/Assets/images/calculations.png" class="illusticon m-auto" />
+                                </div>
+                                <hr />
+                                <div class="row mt-3">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5">Takaful Contribution</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="p_BASIC_CONTRIBUTION" class="form-control2" readonly />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5">Basic Contribution Indexation</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="p_CONTRIBUTION_INDEXATION_RATE" class="form-control2" readonly />
+                                    </div>
+                                </div>
+                                @*<div class="row">
+                                        <div class="col-md-6">
+                                            <label class="text-primary font-weight-bold mr-5">Sum Assured Indexation</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input id="p_SA_INDEXATION_RATE" class="form-control2" readonly />
+                                        </div>
+                                    </div>*@
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5">Supplementary Benefits</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="RIDER_NAME" class="form-control2 w-100" readonly />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="text-primary font-weight-bold mr-5">Sum Assured</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input id="p_SA" class="form-control2" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div id="tableDiv">
+                    @*<h4 class="card-title text-primary pl-3 pt-2 pb-2">Illustrative Result Values</h4>*@
+                    <div class="col-md-12 table-responsive">
+                        <table class="table" id="tableIllustrative">
+                            <thead>
+                                <tr>
+                                    <th>Membersip Year</th>
+                                    <th>Age</th>
+                                    <th>Takaful Contribution</th>
+                                    <th>Cumm. Paid Contribution</th>
+                                    <th class="text-center" colspan="2">9% Unit Growth Rate</th>
+                                    <th class="text-center" colspan="2">11% Unit Growth Rate</th>
+                                    <th class="text-center" colspan="2">13% Unit Growth Rate</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="4"></th>
+                                    <th>Death Benefit</th>
+                                    <th>Net Cash Value</th>
+                                    <th>Death Benefit</th>
+                                    <th>Net Cash Value</th>
+                                    <th>Death Benefit</th>
+                                    <th>Net Cash Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="input-group-append mt-3">
+                    <label class="m-auto btn btn-light m-0 rounded-pill px-4 downloadReport">
+                        <i class="fa fa-cloud-download mr-2 text-muted"></i>
+                        <button class="text-uppercase font-weight-bold text-muted border-0 bg-transparent" type="button">
+                            Download
+                            file
+                        </button>
+                    </label>
+                </div>
+                <div class="row mt-5 mb-6 justify-content-center">
+                    <div class="col-md-2 col-sm-3 mb-2">
+                        <button class="btn btn-rounded btn-info w-100" id="btnNewQuotation" type="button">Get Another Quotation</button>
+                    </div>
+                    <div class="col-md-2 col-sm-3">
+                        <button class="btn btn-rounded btn-success w-100" type="button" id="saveIllustration">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade animated animatedFadeInUpp fadeInUpp" id="AgreementModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="modal-icon">
+                            <img src="~/Assets/images/investigation_magnify.png" class="notebook_image terms-cond" />
+                        </div>
+                        <h3 class="title">Terms &amp; Conditions</h3>
+                        <h5 class="card-title mb-4 mt-3">
+                            I, <span class="customer-name"></span>, accept, studied and understood the above Illustration and Notes carefully and found it according to my needs.
+                            I also confirm that no other illustration verbal, written or electronic in contradiction to this illustration has been given to me.
+                            I understand in case of any misconduct on part of the takaful operator, the SECP shall have the authority to take any action in light of the Insurance Ordinance 2000.<br />
+                        </h5>
+                        <h4 class="card-title">Disclaimer:</h4>
+                        <h5 class="card-tile mb-3">
+                            The Participant can cancel the Membership within fourteen (14) days of the receipt of the Participant's Membership Document (PMD) by the Participant.
+                            In case of cancellation during this free look period (subject to Terms and Conditions), the paid contribution is refundable
+                        </h5>
+                        <button class="btn btn-rounded btn-danger mb-2" type="button" id="btnDisAgreeTerms">Disagree</button>
+                        <button class="btn btn-rounded btn-success mb-2" type="submit" id="btnAgreeTermsCond">Agree</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="spinner">
+    <img src="~/Assets/images/loader-img.gif" class="spinner-icon" />
+    <div class="row">
+        <img src="~/Assets/images/loading-text.gif" class="spinner-text" />
+    </div>
+</div>

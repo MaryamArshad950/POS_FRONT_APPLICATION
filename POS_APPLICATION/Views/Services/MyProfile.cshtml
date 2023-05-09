@@ -1,0 +1,160 @@
+﻿@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Configuration.Json
+@inject IConfiguration Configuration
+<script type="text/javascript">
+    const app_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value);
+    const api_port_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_PNO").Value);
+    const Result_API = (app_host_API + ":" + api_port_API);
+
+    const core_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("GLOBAL_API_IP").Value);
+    const Global_API = (core_host_API);
+    var getsession = window.sessionStorage.getItem("tokenIndex");
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        let thisCustCNIC = sessionStorage.getItem("cnic.");
+        thisCustCNIC = thisCustCNIC.replace(/^(\d{5})(\d{7})(\d)$/, "$1-$2-$3");
+        $.ajax({
+            //"async": false,
+            "crossDomain": true,
+
+            url: "" + Result_API + "/api/PosUser/GetUserByUserCd/" + sessionStorage.getItem("cnic."),
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Access-Control-Allow-Origin': Result_API,
+                'Access-Control-Allow-Methods': 'POST, GET',
+                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                'Authorization': 'Bearer ' + getsession
+            },
+            datatype: 'jsonp',
+            success: function (result) {
+                $(result).each(function () {
+                    let birth_date = new Date(this.SUM_CUST_DOB);
+                    let birthMonth = birth_date.getMonth() + 1;
+                    if (("" + birthMonth).length == 1) {
+                        birthMonth = "0" + birthMonth;
+                    }
+                    birth_date = birth_date.getDate() + "-" + birthMonth + "-" + birth_date.getFullYear();
+
+                    $("#processPlan").removeAttr("hidden", true);
+                    $("#reportPlan").removeAttr("hidden", true);
+                    $("#servicesDropdown").removeAttr("hidden", true);
+                    $("#SUM_FULL_NAME").html(this.SUM_FULL_NAME);
+                    $(".SUM_CUST_CONTPHONE").html(this.SUM_CUST_CONTPHONE)
+                    $(".SUM_USER_EMAIL_ADDR").html(this.SUM_USER_EMAIL_ADDR)
+                    $(".SUM_CUST_DOB").html(birth_date)
+                    $(".SUM_CUST_CONTPHONE").val(this.SUM_CUST_CONTPHONE)
+                    $(".SUM_USER_EMAIL_ADDR").val(this.SUM_USER_EMAIL_ADDR)
+                    $(".SUM_CUST_DOB").val(birth_date)
+
+                    $("#status").html("Active")
+                })
+            },
+            error: function (data2) { }
+        });
+        $.ajax({
+            //"async": false,
+            "crossDomain": true,
+            url: "" + Global_API + "/API/CUSTOMER/SEARCH_CUSTOMER/" + thisCustCNIC,
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Access-Control-Allow-Origin': Global_API,
+                'Access-Control-Allow-Methods': 'POST, GET',
+                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                'Authorization': 'Bearer ' + coresession
+            },
+            datatype: 'jsonp',
+            success: function (result) {
+                $(result).each(function () {
+                    let customer_code = this.FSCU_CUSTOMER_CODE;
+                    sessionStorage.setItem("thisCustomerCode", customer_code);
+                    sessionStorage.getItem("thisCustomerCode");
+                    //search address
+                    $.ajax({
+                        //"async": false,
+                        "crossDomain": true,
+
+                        url: "" + Global_API + "/API/CUSTOMER_ADDRESS/GET_CUST_ADDRESS_DETAILS/" + customer_code + "/" + "P",
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Access-Control-Allow-Origin': Global_API,
+                            'Access-Control-Allow-Methods': 'POST, GET',
+                            'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                            'Authorization': 'Bearer ' + coresession
+                        },
+                        datatype: 'jsonp',
+                        success: function (result) {
+                            $(result).each(function () {
+                                $("#FSCA_ADDRESS1").html(this.FSCA_ADDRESS1);
+                            })
+                        },
+                        error: function (data2) { }
+                    });
+                })
+            },
+            error: function (data2) { }
+        });
+    })
+</script>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="border-bottom text-center pb-4">
+                            <img src="~/Assets/images/social.png" alt="profile" class="img-lg rounded-circle mb-3" />
+                            <h3 id="SUM_FULL_NAME"></h3>
+                        </div>
+                        <div class="col-md-4 m-auto">
+                            <div class="py-4">
+                                <p class="clearfix">
+                                    <span class="float-left">
+                                        Status
+                                    </span>
+                                    <span class="float-right text-muted" id="status">
+                                    </span>
+                                </p>
+                                <p class="clearfix">
+                                    <span class="float-left">
+                                        Phone
+                                    </span>
+                                    <span class="float-right text-muted SUM_CUST_CONTPHONE" id="SUM_CUST_CONTPHONE">
+                                    </span>
+                                </p>
+                                <p class="clearfix">
+                                    <span class="float-left">
+                                        Mail
+                                    </span>
+                                    <span class="float-right text-muted SUM_USER_EMAIL_ADDR" id="SUM_USER_EMAIL_ADDR">
+                                    </span>
+                                </p>
+                                <p class="clearfix">
+                                    <span class="float-left">
+                                        Date of birth
+                                    </span>
+                                    <span class="float-right text-muted SUM_CUST_DOB" id="SUM_CUST_DOB">
+                                    </span>
+                                </p>
+                                <p class="clearfix">
+                                    <span class="float-left">
+                                        Permanent Address
+                                    </span>
+                                    <span class="float-right text-muted FSCA_ADDRESS1" id="FSCA_ADDRESS1">
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,386 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Point of Sales - Salaam Family Takaful</title>
+    <link rel="stylesheet" href="~/Assets/vendors/feather/feather.css">
+    <link rel="stylesheet" href="~/Assets/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="~/Assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/Assets/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="~/Assets/css/vertical-layout-light/style.css">
+    <link rel="shortcut icon" href="~/Assets/images/SalaamSavings.png" />
+    <script src="~/Assets/js/pos.js" defer></script>
+    <script src="~/Assets/js/CoreSessions.js" defer></script>
+    <link rel="stylesheet" href="~/Assets/css/pos.css" />
+    <script src="https://use.fontawesome.com/32965eb355.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Playfair+Display&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/json2/20130526/json2.min.js"></script>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/json2/20130526/json2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://use.fontawesome.com/32965eb355.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&amp;family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
+</head>
+<body>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#spinner").hide();
+            $(".regularDepositPlan").click(function () {
+                $("#videoGraphy").modal("show");
+            })
+            $(".closePlanIllust").click(function () {
+                muteVideo();
+                $("#videoGraphy").modal("hide");
+            });
+        })
+        $(document).ajaxStart(function () {
+            $("#spinner").show();
+        });
+
+        $(document).ajaxStop(function () {
+            $("#spinner").hide();
+        });
+
+        const $form = $('.form-horizontal');
+        $form.submit(function () {
+            $("#spinner").show();
+        });
+        function muteVideo() {
+            $('.savings-illustration')[0].muted = true;
+        }
+    </script>
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/5f6300b3f0e7167d00111ba4/default';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <div id="spinner">
+        <img src="~/Assets/images/loader-img.gif" class="spinner-icon" />
+        <div class="row">
+            <img src="~/Assets/images/loading-text.gif" class="spinner-text" />
+        </div>
+    </div>
+    <div class="container-scroller">
+        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+                <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="~/Assets/images/SalaamSavings.png" class="mr-2" alt="logo" /></a>
+                @*<a class="navbar-brand brand-logo-mini" href="index.html"><img src="~/attachments/images/logo-mini.svg" alt="logo" /></a>*@
+            </div>
+            <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+                <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                    <span class="icon-menu"></span>
+                </button>
+                <ul class="navbar-nav mr-lg-2">
+                    <li class="nav-item nav-search d-none d-lg-block">
+                        <div class="input-group">
+                            <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                                <span class="input-group-text" id="search">
+                                    <i class="icon-search"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+                        </div>
+                    </li>
+                </ul>
+                <ul class="navbar-nav navbar-nav-right">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Proposal_summary" id="reportPlan" hidden>
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item nav-profile dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="productsDropdown">
+                            Our Products
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="productsDropdown">
+                            <a class="dropdown-item regularDepositPlan">
+                                Salaam Life &amp; Saving Plan (Regular)
+                            </a>
+                            @*<a class="dropdown-item disabled">
+                                    Life Stage
+                                </a>*@
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                            <i class="icon-bell mx-0"></i>
+                            <span class="count"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                            <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+                            <a class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-success">
+                                        <i class="ti-info-alt mx-0"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <h6 class="preview-subject font-weight-normal">Application Error</h6>
+                                    <p class="font-weight-light small-text mb-0 text-muted">
+                                        Just now
+                                    </p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-warning">
+                                        <i class="ti-settings mx-0"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <h6 class="preview-subject font-weight-normal">Settings</h6>
+                                    <p class="font-weight-light small-text mb-0 text-muted">
+                                        Private message
+                                    </p>
+                                </div>
+                            </a>
+                            <a class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-info">
+                                        <i class="ti-user mx-0"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <h6 class="preview-subject font-weight-normal">New user registration</h6>
+                                    <p class="font-weight-light small-text mb-0 text-muted">
+                                        2 days ago
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item nav-profile dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                            <img src="~/Assets/images/account.png" alt="profile" />
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                            <a class="dropdown-item">
+                                <i class="ti-settings text-primary"></i>
+                                Settings
+                            </a>
+                            <a class="dropdown-item sign_out">
+                                <i class="ti-power-off text-primary"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item nav-settings d-none d-lg-flex">
+                        <a class="nav-link" href="#">
+                            <i class="icon-ellipsis"></i>
+                        </a>
+                    </li>
+                </ul>
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+                    <span class="icon-menu"></span>
+                </button>
+            </div>
+        </nav>
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Onboarding">
+                            <i class="icon-grid menu-icon"></i>
+                            <span class="menu-title">New Takaful Policy</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#sevicing" aria-expanded="false" aria-controls="sevicing">
+                            <i class="icon-layout menu-icon"></i>
+                            <span class="menu-title">Our Services</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="sevicing">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="collapse" href="#alterationService" aria-expanded="false" aria-controls="alterationService">
+                                        <span class="menu-title">Alterations</span>
+                                        <i class="menu-arrow"></i>
+
+                                    </a>
+                                    <div class="collapse" id="alterationService">
+                                        <ul class="nav flex-column mt-0 mb-0">
+                                            <li class="nav-item"><a class="nav-link" href="/Services/AlterAddress">Address Change</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="/Services/AlterContact">Contact Change</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="/Services/AlterEmail">Email Add/Change</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="#">Funds Switching</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="collapse" href="#PaymentService" aria-expanded="false" aria-controls="PaymentService">
+                                        <span class="menu-title">Payment</span>
+                                        <i class="menu-arrow"></i>
+
+                                    </a>
+                                    <div class="collapse" id="PaymentService">
+                                        <ul class="nav flex-column mt-0 mb-0">
+                                            <li class="nav-item"><a class="nav-link" href="/Services/FreeLook">Free Look</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="/Services/PartialWithdrawal">Partial Withdrawal</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="/Services/PolicySurrender">Surrender</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="#">Maturity</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="collapse" href="#ClaimsService" aria-expanded="false" aria-controls="ClaimsService">
+                                        <span class="menu-title">Claims</span>
+                                        <i class="menu-arrow"></i>
+                                    </a>
+                                    <div class="collapse" id="ClaimsService">
+                                        <ul class="nav flex-column mt-0 mb-0">
+                                            <li class="nav-item"><a class="nav-link" href="/Services/ClaimIntimation">Claims Intimation</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Proposal_summary">
+                            <i class="icon-grid menu-icon"></i>
+                            <span class="menu-title">Membership Report</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ContributionPayment">
+                            <i class="icon-grid menu-icon"></i>
+                            <span class="menu-title">Contribution Payment</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#DocView" aria-expanded="false" aria-controls="DocView">
+                            <i class="icon-grid menu-icon"></i>
+                            <span class="menu-title">My Documents</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="DocView">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link" href="/Services/Documents">Saved Documents</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#productsPlan" aria-expanded="false" aria-controls="productsPlan">
+                            <i class="icon-layout menu-icon"></i>
+                            <span class="menu-title">Our Products</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="productsPlan">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link regularDepositPlan">Salaam Life &amp; Saving Plan</a></li>
+                                @*<li class="nav-item"><a class="nav-link" disabled>Life Stage</a></li>*@
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    @RenderBody()
+                </div>
+                <!-- content-wrapper ends -->
+                <!-- partial:partials/_footer.html -->
+                <footer class="footer">
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2022. <a href="https://salaamtakaful.com/" target="_blank">SALAAM TAKAFUL LIMITED</a>. All rights reserved.</span>
+                        @*<span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>*@
+                    </div>
+                    @*<div class="d-sm-flex justify-content-center justify-content-sm-between">
+                            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Distributed by <a href="https://www.themewagon.com/" target="_blank">UAN: 021-111-875-111</a></span>
+                        </div>*@
+                </footer>
+                <!-- partial -->
+            </div>
+
+            <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <div class="modal fade animated animatedFadeInUpp fadeInUpp videographyModal" id="videoGraphy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content salaam-color">
+                <button type="button" class="close closePlanIllust" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <div class="modal-body">
+                    <div class="modal-icon">
+                        <div class="row">
+                            <video controls class="savings-illustration w-100" autoplay muted>
+                                <source src="~/Assets/images/salaamlife-and-savings-illustration.mp4" type="video/mp4">
+                                Salaam Life &amp; Saving Plan (Regular)
+                            </video>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- container-scroller -->
+    @RenderSection("Scripts", required: false)
+    @RenderSection("TokenIndex", required: false)
+
+    <bold-script-manager></bold-script-manager>
+
+    <script src="~/Assets/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="~/Assets/vendors/chart.js/Chart.min.js"></script>
+    <script src="~/Assets/vendors/datatables.net/jquery.dataTables.js"></script>
+    <script src="~/Assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+    <script src="~/Assets/js/dataTables.select.min.js"></script>
+
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="~/Assets/js/off-canvas.js"></script>
+    <script src="~/Assets/js/hoverable-collapse.js"></script>
+    <script src="~/Assets/js/template.js"></script>
+    <script src="~/Assets/js/settings.js"></script>
+    <script src="~/Assets/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="~/Assets/js/dashboard.js"></script>
+    <script src="~/Assets/js/Chart.roundedBarCharts.js"></script>
+    <!-- End custom js for this page-->
+    <!-- Use as a Vanilla JS plugin -->
+    <script src="build/js/intlTelInput.min.js"></script>
+    <!-- Use as a jQuery plugin -->
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="build/js/intlTelInput-jquery.min.js"></script>
+</body>
+</html>

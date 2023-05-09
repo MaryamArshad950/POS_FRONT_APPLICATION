@@ -1,0 +1,223 @@
+﻿@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Configuration.Json
+@inject IConfiguration Configuration
+<script type="text/javascript">
+    const app_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value);
+    const api_port_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_PNO").Value);
+    const Result_API = (app_host_API + ":" + api_port_API);
+
+    const app_host_Front = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_FRONT_IP").Value);
+    const api_port_Front = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_FRONT_PNO").Value);
+    const Result_Front = (app_host_Front + ":" + api_port_Front);
+    var getsession = window.sessionStorage.getItem("tokenIndex");
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="~/Assets/js/servicePos/claims.js"></script>
+<form method="post" action="/Services/INTIMATE_CLAIM" class="form-horizontal">
+    @Html.AntiForgeryToken()
+    <div class="card pb-4 p-3 card-onboard">
+        <div class="card-body">
+            <div class="row flex-div">
+                <div class="col-md-2">
+                    <img src="~/Assets/images/SalaamSavings.png" id="image_logo" />
+                </div>
+                <div class="col-md-7">
+                    <h2 class="text-lemonade text-primary text-center mt-3 mb-4">Claim Intimation</h2>
+                </div>
+            </div>
+            @if (TempData["successMessage"] != null)
+            {<div class="modal fade" id="successRequest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <button type="button" class="close closeRequestSuccess" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <div class="modal-body">
+                                <div class="modal-icon">
+                                    <img src="~/Assets/images/check.png" class="notebook_image center-img w-25" />
+                                </div>
+                                <h3 class="font-cursive text-center mt-3">Your Request has been received!</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="row mt-lg-5">
+                <div class="col-md-4 mb-3">
+                    <label for="" class="mr-5 text-success">Policy No</label>
+                    <input class="form-control" placeholder="Policy No" id="FPDH_POLICY_NO" name="FPDH_POLICY_NO" required />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="" class="mr-5 text-success">Claim Type</label>
+                    <select class="form-control" name="FPCL_CLMTP_FSCD_ID" id="FPCL_CLMTP_FSCD_ID" required>
+                        <option value="">Select</option>
+                        <option value="1">Critical Illness</option>
+                        <option value="2">Accidential Disability</option>
+                        <option value="3">Natural Disability</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="" class="mr-5 text-success">Type Of Event</label>
+                    <select class="form-control" name="FCIH_PLACE_OF_EVNT" id="FCIH_PLACE_OF_EVNT" required>
+                        <option value="">Select</option>
+                        <option value="1">Natural (Sickness)</option>
+                        <option value="2">Accident</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-4 mb-3">
+                    <label for="" class="mr-5 text-success">Date of Event</label>
+                    <input class="form-control" type="date" id="FCIH_DATE_EVNT" name="FCIH_DATE_EVNT" />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="" class="mr-5 text-success">Date first Treated for the Accident or Illness</label>
+                    <input class="form-control" type="date" id="FPCL_DATE_TREATMNT" name="FPCL_DATE_TREATMNT" required />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="" class="mr-5 text-success">Description</label>
+                    <input class="form-control" type="text" placeholder="Please Describe how and where the disability or accident occured" name="FPCL_CLAIM_DESC" id="FPCL_CLAIM_DESC" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="row ml-1 mt-4">
+                        <h5 class="mr-5 text-success">Have you ever had the same or similar Condition in Past</h5>
+                    </div>
+                    <div class="row mt-2 ml-1">
+                        <div class="form-check form-check-success mr-4">
+                            <label for="FPCL_SIMLR_CNDITIONY" class="form-check-label">
+                                Yes
+                                <input class="form-check-input mr-5" type="radio" id="FPCL_SIMLR_CNDITIONY" name="FPCL_SIMLR_CNDITION" value="Y" oninput="checkValue(this.value)" required />
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                        <div class="form-check form-check-success">
+                            <label for="FPCL_SIMLR_CNDITIONN" class="form-check-label">
+                                NO
+                                <input class="form-check-input" type="radio" id="FPCL_SIMLR_CNDITIONN" name="FPCL_SIMLR_CNDITION" value="N" oninput="checkValue(this.value)" required />
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="row  ml-1 mt-4">
+                        <h5 class="mr-5 text-success">Treated by Doctor</h5>
+                    </div>
+                    <div class="row mt-2 ml-1">
+                        <div class="form-check form-check-success mr-4">
+                            <label for="FPCL_TREATEDY" class="form-check-label">
+                                Doctor
+                                <input class="form-check-input mr-5" type="radio" id="FPCL_TREATEDY" name="FPCL_TREATED" value="Y" oninput="enableMedDtls(this.value)" />
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                        <div class="form-check form-check-success">
+                            <label for="FPCL_TREATED" class="form-check-label">
+                                Hospital
+                                <input class="form-check-input" type="radio" id="maturity_value" name="mode" value="M" oninput="enableMedDtls(this.value)" />
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-4">
+                    <label for="" class="mr-5 text-success">Name</label>
+                    <input class="form-control claimStatus" name="FPCL_NAME" id="FPCL_NAME" type="text" />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="" class="mr-5 text-success">Hospital date of admit</label>
+                    <input class="form-control claimStatus" id="FPCL_HOSPADMT_DATE" type="date" name="FPCL_HOSPADMT_DATE" />
+                </div>
+                <div class="col-md-4">
+                    <label for="" class="mr-5 text-success">Discharge Date</label>
+                    <input class="form-control claimStatus" id="FPCL_HOSDIS_DATE" type="date" name="FPCL_HOSDIS_DATE" />
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-4 mb-3">
+                    <label for="" class="mr-5 text-success">Last Date Attended The WorkPlace</label>
+                    <input class="form-control claimStatus" type="date" name="FPCL_ATTND_WORKPLACE" id="FPCL_ATTND_WORKPLACE" />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="" class="mr-5 text-success">Date Of Rejoining WorkPlace</label>
+                    <input class="form-control claimStatus" id="FPCL_REJOING_WORKPLACE" type="date" name="FPCL_REJOING_WORKPLACE" />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="" class="mr-5 text-success">Address</label>
+                    <input class="form-control claimStatus" placeholder="Address" type="text" name="FPCL_ADDRESS" id="FPCL_ADDRESS" />
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6 mb-5">
+                    <label for="" class="mr-5 text-success">Other Details</label>
+                    <input class="form-control" type="text" placeholder="Please Add Details" name="" id="" />
+                </div>
+            </div>
+            <h2 class="text-lemonade text-primary m-auto mt-4">Account Details</h2>
+            <div class="row mt-3 mb-3">
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Account Name</label>
+                    <input class="form-control" placeholder="Account Name" type="text" name="FPCL_ACC_NAME" id="FPCL_ACC_NAME" required />
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Bank Name</label>
+                    <input class="form-control" id="FPCL_BANK_NAME" type="text" placeholder="Bank Name" name="FPCL_BANK_NAME" required />
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Account Type</label>
+                    <input class="form-control" id="FPCL_ACC_TYPE" type="text" placeholder="Account Type" name="FPCL_ACC_TYPE" required />
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Account No/IBFT</label>
+                    <input class="form-control" id="FPCL_ACCNO_IBFT" type="text" placeholder="Account Type" name="FPCL_ACCNO_IBFT" required />
+                </div>
+            </div>
+            <input class="form-control" name="SUM_CUST_CONTPHONE" id="SUM_CUST_CONTPHONE" hidden required />
+            <input class="form-control" name="SUM_FULL_NAME" id="SUM_FULL_NAME" hidden required />
+            <input class="form-control" name="SUM_USER_EMAIL_ADDR" id="SUM_USER_EMAIL_ADDR" hidden required />
+            <h2 class="text-lemonade text-primary m-auto">Upload Documents</h2>
+            <div class="row mt-3 mb-3">
+                <div class="col-md-4 mb-3">
+                    <label for="" class="mr-5 text-success">Hospital Record</label>
+                    <input class="form-control" type="file" name="" id="" />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="" class="mr-5 text-success">Attending Physician Certificate</label>
+                    <input class="form-control" id="" type="file" name="" />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="" class="mr-5 text-success">FIR Copy</label>
+                    <input class="form-control" id="" type="file" name="" />
+                </div>
+            </div>
+            <div class="row mt-6 mb-3">
+                <div class="col-md-12">
+                    <h4>Declaration: I, hereby confirm that the above stated information is true and correct </h4>
+                </div>
+            </div>
+            <div class="row mt-6 mb-3">
+                <div class="col-md-12">
+                    <div class="form-check form-check-success mr-4">
+                        <label for="Annual_savings" class="form-check-label">
+                            Agree
+                            <input class="mr-5" type="checkbox" id="" name="" value="Y" required />
+                            <i class="input-helper"></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5 mb-6">
+                <div class="m-auto">
+                    <button class="btn btn-rounded btn-custom-sm btn-outline-primary" type="submit" id="btnIntimateClaim">Submit</button>
+                </div>
+            </div>
+            <div class="chatbot-helper">
+                <img src="~/Assets/images/helping_chatbot.png" class="chatbotImg animated animatedFadeInUpp fadeInUpp" />
+            </div>
+        </div>
+    </div>
+</form>

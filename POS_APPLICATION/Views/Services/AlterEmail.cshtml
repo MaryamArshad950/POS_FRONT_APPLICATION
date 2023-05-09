@@ -1,0 +1,77 @@
+﻿@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Configuration.Json
+@inject IConfiguration Configuration
+<script type="text/javascript">
+    const app_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value);
+    const api_port_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_PNO").Value);
+    const Result_API = (app_host_API + ":" + api_port_API);
+
+    const app_host_Front = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_FRONT_IP").Value);
+    const api_port_Front = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_FRONT_PNO").Value);
+    const Result_Front = (app_host_Front + ":" + api_port_Front);
+    var getsession = window.sessionStorage.getItem("tokenIndex");
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="~/Assets/js/servicePos/alterEmail.js"></script>
+<form action="/Services/UPDATE_EMAILADDR" method="post" class="form-horizontal">
+    <div class="card">
+        <div class="card-body card-funds">
+            <div class="row flex-div">
+                <div class="col-md-2">
+                    <img src="~/Assets/images/SalaamSavings.png" id="image_logo" />
+                </div>
+                <div class="col-md-8">
+                    <h2 class="text-lemonade text-primary text-center mt-3 mb-4">Add/Change Email Address</h2>
+                </div>
+            </div>
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-6">
+                    <div class="row mb-1">
+                        <div class="col-md-8 mb-2 m-auto">
+                            <div class="py-4">
+                                <p class="clearfix">
+                                    <span class="float-left">
+                                        Status
+                                    </span>
+                                    <span class="float-right text-muted" id="status">
+                                    </span>
+                                </p>
+                                <p class="clearfix">
+                                    <span class="float-left">
+                                        Full Name
+                                    </span>
+                                    <span class="float-right text-muted SUM_FULL_NAME">
+                                    </span>
+                                </p>
+                                <p class="clearfix">
+                                    <span class="float-left">
+                                        CNIC
+                                    </span>
+                                    <span class="float-right text-muted" id="cnic">
+                                    </span>
+                                </p>
+                                <p class="clearfix">
+                                    <span class="float-left">
+                                        Existing Email Address
+                                    </span>
+                                    <span class="float-right text-muted SUM_USER_EMAIL_ADDR">
+                                    </span>
+                                </p>
+                                <p class="clearfix">
+                                    <span class="float-left">
+                                        New Email Address
+                                    </span>
+                                    <input class="form-control mt-3" type="email" placeholder="user@mail.com" name="SUM_USER_EMAIL_ADDR" id="SUM_USER_EMAIL_ADDR" required />
+                                    <input class="form-control mt-3" name="SUM_SYS_USER_ID" id="SUM_SYS_USER_ID" required hidden />
+                                    <input class="form-control mt-3" name="SUM_FULL_NAME" id="SUM_FULL_NAME" required hidden />
+                                    <input class="form-control mt-3" name="SUM_CUST_CONTPHONE" id="SUM_CUST_CONTPHONE" required hidden />
+                                </p>
+                                <button class="btn btn-success w-100 mt-4" type="submit" id="updateUserEmail">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

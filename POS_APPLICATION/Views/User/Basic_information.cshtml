@@ -1,0 +1,667 @@
+﻿@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Configuration.Json
+@inject IConfiguration Configuration
+<script type="text/javascript">
+    const app_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value);
+    const api_port_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_PNO").Value);
+    const Result_API = (app_host_API + ":" + api_port_API);
+    const global_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("GLOBAL_API_IP").Value);
+    const Global_API = (global_host_API);
+    var getsession = window.sessionStorage.getItem("tokenIndex");
+    if (getsession == null) {
+        getsession = sessionStorage.getItem("token");
+    }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+<script src="~/Assets/js/JSPOS/BasicInfo.js" defer></script>
+<div class="card card-basicinfo">
+    <div class="card-body">
+        <div class="tab tab-primary border-0">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button disabled class="nav-link active fw-bold" id="basicInfo-tab" data-toggle="tab" data-target="#basicInfo" type="button" role="tab" aria-controls="basicInfo" aria-selected="true"><img src="~/Assets/images/one.png" class="icon_gif mr-2" />Basic Info</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button disabled class="nav-link fw-bold bg-transparent border-0" id="userIdentification-tab" data-toggle="tab" data-target="#userIdentification" type="button" role="tab" aria-controls="userIdentification" aria-selected="false"><img src="~/Assets/images/number_2.png" class="icon_gif mr-2" />Identification</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button disabled class="nav-link fw-bold bg-transparent border-0" id="beneficiary-tab" data-toggle="tab" data-target="#beneficiary" type="button" role="tab" aria-controls="beneficiary" aria-selected="false"><img src="~/Assets/images/three.png" class="icon_gif mr-2" />Beneficiary</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button disabled class="nav-link fw-bold bg-transparent border-0" id="regQuestions-tab" data-toggle="tab" data-target="#regQuestions" type="button" role="tab" aria-controls="regQuestions" aria-selected="false"><img src="~/Assets/images/four.png" class="icon_gif mr-2" />Questions</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button disabled class="nav-link fw-bold bg-transparent border-0" id="policyConfirm-tab" data-toggle="tab" data-target="#policyConfirm" type="button" role="tab" aria-controls="policyConfirm" aria-selected="false"><img src="~/Assets/images/number5.png" class="icon_gif mr-2" />Confirmation</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button disabled class="nav-link fw-bold bg-transparent border-0" id="paymentMode-tab" data-toggle="tab" data-target="#paymentMode" type="button" role="tab" aria-controls="paymentMode" aria-selected="false"><img src="~/Assets/images/number6.png" class="icon_gif mr-2" />Payment Details</button>
+                </li>
+            </ul>
+            <div class="tab-content border-0">
+                <!---------------------------------CUSTOMER ADDITIONAL INFO------------------------------------>
+                <div class="tab-pane fade active show" id="basicInfo" role="tabpanel" aria-labelledby="policy-tab">
+                    <div class="pb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="~/Assets/images/SalaamSavings.png" id="image_logo" />
+                                </div>
+                                <div class="col-md-7">
+                                    <h2 class="text-lemonade text-primary text-center mt-3 mb-2 font-25">Basic Information</h2>
+                                </div>
+                                <div class="col-md-2 mb-2">
+                                    <img src="~/Assets/images/notebook_icon.gif" class="notebook_image" />
+                                </div>
+                            </div>
+                            <h6 class="font-weight-500 text-md-center mb-7 welcome-div" hidden>Welcome <span id="cust_name"></span>, We Know Its Formal But We Need Your Further Information</h6>
+                            <div class="row mt-lg-5">
+                                <div class="col-md-3 mb-3">
+                                    <label for="" class="mr-5 text-success">CNIC</label>
+                                    <input class="form-control mb-2 readonly" placeholder="42101-XXXXXXX-X" maxlength="15" name="FSCU_IDENTIFICATION_NO" id="FSCU_IDENTIFICATION_NO" readonly />
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="" class="mr-5 text-success">CNIC Issue date</label>
+                                    <input class="form-control mb-2" type="date" name="FSCU_IDENTISSUE_DATE" id="FSCU_IDENTISSUE_DATE" />
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="" class="mr-5 text-success">CNIC Expiry date</label>
+                                    <input class="form-control mb-2" type="date" name="FSCU_IDENTIEXPIRY_DATE" id="FSCU_IDENTIEXPIRY_DATE" />
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="" class="mr-5 text-success">Father/Husband Name</label>
+                                    <input class="form-control mb-2" placeholder="Father Name" name="FSCU_FATHUSB_NAME" id="FSCU_FATHUSB_NAME" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <label for="" class="mr-5 text-success">Mother Name</label>
+                                    <input class="form-control mb-2" placeholder="Mother Name" name="FSCU_MOTHER_NAME" id="FSCU_MOTHER_NAME" />
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="" class="mr-5 text-success">Marital Status</label>
+                                    <select class="form-control mb-2" name="FSCU_MRTST_FSCD_DID" id="FSCU_MRTST_FSCD_DID"><option value="">Select</option></select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="" class="mr-5 text-success">Residency</label>
+                                    <select class="form-control mb-2" name="FSSC_COUNTRY_ID" id="FSSC_COUNTRY_ID" onchange="setNationality(this.value)"><option value="">Select</option><option value="1">Pakistan</option><option value="2">USA</option><option value="3">UK</option></select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="" class="mr-5 text-success">Nationality</label>
+                                    <select class="form-control mb-2" name="FSCU_BIRTH_COUNTRY" id="FSCU_BIRTH_COUNTRY"><option value="">Select</option><option value="1">Pakistan</option><option value="2">USA</option><option value="3">UK</option></select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <label for="" class="mr-5 text-success">City</label>
+                                    <select class="form-control mb-2" name="FSCT_CITY_ID" id="FSCT_CITY_ID" onchange="setProvince(this.value)"><option value="">Select</option></select>
+                                </div>
+                                <input class="form-control mb-2" name="FSSP_PROVINCE_ID" id="FSSP_PROVINCE_ID" hidden />
+                                <div class="col-md-3 mb-3">
+                                    <label for="" class="mr-5 text-success">Address</label>
+                                    <textarea class="form-control" name="FSCA_ADDRESS1" id="FSCA_ADDRESS1" placeholder="H# 123"></textarea>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="" class="mr-5 text-success">Annual Income</label>
+                                    <input class="form-control mb-2" placeholder="Annual Income" type="number" name="FSCU_CUST_ANNUAL_INCOME" id="FSCU_CUST_ANNUAL_INCOME" min="1" />
+                                </div>
+                            </div>
+                            <div class="row mt-5 mb-6 justify-content-center">
+                                <div class="col-md-2">
+                                    <button class="btn btn-rounded btn-info mb-2 w-100" href="/Onboarding" type="button" id="btnPrev">
+                                        Previous
+                                    </button>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-rounded btn-info w-100" type="button" id="btnNextBasic">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!---------------------------------USER IDENTIFICATION------------------------------------>
+                <div class="tab-pane fade" id="userIdentification" role="tabpanel" aria-labelledby="policy-tab">
+                    @using (Html.BeginForm("SaveDMS", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <form class="form-horizontal" method="post" action="/User/SaveDMS">
+                            <div class="card-kyc pb-3">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <img src="~/Assets/images/SalaamSavings.png" id="image_logo" />
+                                        </div>
+                                        <div class="col-md-7">
+                                            <h2 class="text-lemonade text-primary text-center mt-3 mb-2 font-25">User Identification</h2>
+                                        </div>
+                                        <div class="col-md-2 mb-2">
+                                            <img src="~/Assets/images/kyc_verify.gif" class="user_identify" />
+                                        </div>
+                                    </div>
+                                    <div class="row cnicDocAlert" hidden>
+                                        <div class="col-md-6">
+                                            <div class="alert alert-success center p-3 mb-3" style="border-radius:8px; margin:auto; width:80% "><i class="fa fa-check p-2 me-3 text-white bg-success rounded-circle" aria-hidden="true"></i>Documents have been uploaded!</div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-lg-4 pt-2 pb-3 p-sm-3 pe-3">
+                                        <!-- FRONT -->
+                                        <div class="col-md-6">
+                                            <h6 class="text-success">Upload CNIC Picture <span class="text-danger p-2">Front Side * </span></h6>
+                                            <input class="form-control w-25" name="FPDH_DMSCUS_CNIC" id="FPDH_DMSCUS_CNIC" hidden />
+                                            <input id="FPDD_PATH" name="FPDD_PATH" type="file" onchange="readURLFront(this);"
+                                                   class="form-control input-group-append border-0 file_select FPDD_PATH1 opacity-0" placeholder="Select File" required />
+                                            <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+                                                <label id="upload-label" for="upload"
+                                                       class="font-weight-light text-muted"></label>
+                                                <div class="input-group-append">
+                                                    <label for="upload" class="btn btn-light m-0 rounded-pill px-4" id="chooseBtn1" onclick="FileUploadOpen(this.id)">
+                                                        <i class="fa fa-cloud-upload mr-2 text-muted"></i>
+                                                        <small class="text-uppercase font-weight-bold text-muted">
+                                                            Choose
+                                                            file
+                                                        </small>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="image-area mt-1">
+                                                <img id="imageResultFront" src="#" alt=""
+                                                     class="img-fluid rounded shadow-sm mx-auto d-block">
+                                            </div>
+                                        </div>
+                                        <!-- BACK -->
+                                        <div class="col-md-6">
+                                            <h6 class="text-success">Upload CNIC Picture <span class="p-2 text-danger">Back Side * </span></h6>
+                                            <input id="FPDD_PATH" name="FPDD_PATH" type="file" onchange="readURLBack(this);"
+                                                   class="form-control border-0 file_select custom-file-input1 FPDD_PATH2 opacity-0" required />
+
+                                            <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+                                                <label id="upload-label" for="upload"
+                                                       class="font-weight-light text-muted"></label>
+                                                <div class="input-group-append">
+                                                    <label for="upload" class="btn btn-light m-0 rounded-pill px-4" id="chooseBtn2" onclick="FileUploadOpen(this.id)">
+                                                        <i class="fa fa-cloud-upload mr-2 text-muted"></i>
+                                                        <small class="text-uppercase font-weight-bold text-muted">
+                                                            Choose
+                                                            file
+                                                        </small>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="image-area mt-1">
+                                                <img id="imageResultBack" src="#" alt=""
+                                                     class="img-fluid rounded shadow-sm mx-auto d-block">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row pt-2 pb-2 p-sm-3 pe-3">
+                                        <!-- PERSONAL -->
+                                        <div class="col-md-6">
+                                            <h6 class="text-success">Upload Your Picture</h6>
+                                            <input id="FPDD_PATH" name="FPDD_PATH" value="" type="file" onchange="readURLPrsnl(this);"
+                                                   class="form-control border-0 file_select custom-file-input2 FPDD_PATH3 opacity-0" placeholder="Select File" required />
+
+                                            <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+                                                <label id="upload-label" for="upload"
+                                                       class="font-weight-light text-muted"></label>
+                                                <div class="input-group-append">
+                                                    <label for="upload" class="btn btn-light m-0 rounded-pill px-4" id="chooseBtn3" onclick="FileUploadOpen(this.id)">
+                                                        <i class="fa fa-cloud-upload mr-2 text-muted"></i>
+                                                        <small class="text-uppercase font-weight-bold text-muted">
+                                                            Choose
+                                                            file
+                                                        </small>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="image-area mt-1">
+                                                <img id="imageResultPrsnl" src="#" alt=""
+                                                     class="img-fluid rounded shadow-sm mx-auto d-block">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 flex-column-reverse">
+                                            <img src="~/Assets/images/user_verify.gif" class="notebook_image" />
+                                        </div>
+                                    </div>
+                                    <div class="row mt-5 mb-6 justify-content-center">
+                                        <div class="col-md-2">
+                                            <button class="btn btn-rounded btn-info mb-2 w-100" type="button" id="btnPrevIdentify">
+                                                Previous
+                                            </button>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input class="btn btn-rounded btn-info w-100" type="submit" id="btnNextIdentify" value="Next" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    }
+                </div>
+
+                <!---------------------------------BENEFICIARY------------------------------------>
+                <div class="tab-pane fade" id="beneficiary" role="tabpanel" aria-labelledby="documents-tab">
+                    <form method="post" action="/User/ADD_DCMNT_NOMINEE" class="form-horizontal">
+                        <div class="pb-4 card-nominee">
+                            <div class="card-body p-3">
+                                <div class="row beneficiary-div">
+                                    <div class="col-md-3">
+                                        <img src="~/Assets/images/SalaamSavings.png" id="image_logo" />
+                                    </div>
+                                    <div class="col-md-7">
+                                        <h2 class="text-lemonade text-primary text-center mt-3 mb-2 font-25">Beneficiary Information</h2>
+                                    </div>
+                                    <div class="col-md-2 mb-2">
+                                        <img src="~/Assets/images/notebook_icon.gif" class="notebook_image" />
+                                    </div>
+                                </div>
+                                <div class="row mt-5 mb-7">
+                                    <div class="col-md-4">
+                                        <p class="font-weight-500 text-danger">Minimum One Beneficiary is Required *</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="" class="mr-5 text-success">Beneficiary Name:</label>
+                                        <input class="form-control mb-2" placeholder="Beneficiary Name" id="FCPND_NMNEE_NAME" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="" class="mr-5 text-success">CNIC:</label>
+                                        <input class="form-control mb-2" placeholder="42101-XXXXXXX-X" id="B_FSCU_IDENTIFICATION_NO" maxlength="15" onchange="setCNICFormat(this.value,this.id)" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="" class="mr-5 text-success">Age:</label>
+                                        <input class="form-control mb-2" type="number" placeholder="Ex. 45 Years" id="FCPND_AGE" onchange="openGuardianInfo(this.value)" maxlength="3" min="1" />
+                                    </div>
+                                </div>
+                                <div class="row mt-4" id="guardian_infoRow" hidden>
+                                    <div class="col-md-4">
+                                        <label for="" class="mr-5 text-success">Guardian Name:</label>
+                                        <input class="form-control mb-2" placeholder="Guardian Name" id="FCNGD_GUDAN_NAME" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="" class="mr-5 text-success">Guardian CNIC:</label>
+                                        <input class="form-control mb-2" placeholder="42101-XXXXXXX-X" id="G_FSCU_IDENTIFICATION_NO" maxlength="15" onchange="setCNICFormat(this.value,this.id)" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="" class="mr-5 text-success">Guardian Age:</label>
+                                        <input class="form-control mb-2" type="number" placeholder="Guardian" id="FCNGD_AGE" maxlength="3" min="1" />
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-md-4">
+                                        <label for="" class="mr-5 text-success">Relation:</label>
+                                        <select class="form-control mb-2" id="FCPND_RELTN_FSCD_ID"><option value="">Select</option><option value="28">Father</option><option value="29">Mother</option><option value="30">Brother</option><option value="3405">Sister</option><option value="3406">Spouse</option><option value="3407">Son</option><option value="3408">Daughter</option><option value="3409">Niece</option><option value="3410">Nephew</option><option value="3411">Grand Father</option><option value="3412">Grand Mother</option><option value="3413">Other</option></select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="" class="mr-5 text-success">Share:</label>
+                                        <input class="form-control mb-2" type="number" placeholder="Ex. 50%" id="FCPND_NMNEE_PERCT" maxlength="3" min="1" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img src="~/Assets/images/add_beneficiary.png" id="btnAddBeneficiary" />
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-4">
+                                        <p class="text-danger font-weight-500">Note: Please insert correct information as the information in the below table will be saved only once</p>
+                                    </div>
+                                </div>
+                                <div class="card card-blue mt-4 ">
+                                    <div class="card-body" id="tableDiv">
+                                        <h4 class="card-title text-white">Beneficiary Details</h4>
+                                        <div class="table-responsive">
+                                            <table class="table" id="tableBeneficiary">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-white" hidden>DCMNT ID</th>
+                                                        <th class="text-white" hidden>Beneficiary ID</th>
+                                                        <th class="text-white">Beneficiary Name</th>
+                                                        <th class="text-white">CNIC</th>
+                                                        <th class="text-white">Age</th>
+                                                        <th class="text-white">Relation</th>
+                                                        <th class="text-white">Share</th>
+                                                        <th class="text-white grdn_info">Guardian Name</th>
+                                                        <th class="text-white grdn_info">Guardian CNIC</th>
+                                                        <th class="text-white grdn_info">Guardian Age</th>
+                                                        <th class="text-white">Delete</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-5 mb-6 justify-content-center">
+                                    <div class="col-md-2">
+                                        <button class="btn btn-rounded btn-info mb-2 w-100" type="button" id="btnPrevBenef">
+                                            Previous
+                                        </button>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-rounded btn-info w-100" type="submit" id="btnNextBenef" disabled>Next</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!---------------------------------QUESTIONS------------------------------------>
+                <div class="tab-pane fade" id="regQuestions" role="tabpanel" aria-labelledby="decisions-tab">
+                    <div class="card-reg pb-4">
+                        <div class="card-body">
+                            <div class="row question-div">
+                                <div class="col-md-3">
+                                    <img src="~/Assets/images/SalaamSavings.png" id="image_logo" />
+                                </div>
+                                <div class="col-md-7">
+                                    <h2 class="text-lemonade text-primary text-center mt-3 mb-2 font-25">Regulatory Questions</h2>
+                                </div>
+                                <div class="col-md-2 mb-2">
+                                    <img src="~/Assets/images/detective.gif" class="notebook_image" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-blue p-2 mb-4">
+                            <div class="card-body">
+                                <img src="~/Assets/images/investigation_magnify.png" class="notebook_image" />
+                                <div class="mt-3">
+                                    <h4 class="text-white mr-5 ">Anti-Money-Laundering (AML)</h4>
+                                    <p class="text-white">
+                                        It is hereby confirming that I have not been subjected to any money laundering or terrorist financing-related proceedings,
+                                        investigations, sanctions, punitive actions indictment, fines, conviction, or civil enforcement action imposed on me by a
+                                        law enforcement body during the last five years.
+                                    </p>
+                                    <input class="form-control" id="QUES_AML_YN" hidden />
+                                    <div class="form-check form-check-success">
+                                        <label for="yess" class="form-check-label text-white">
+                                            Agree
+                                            <input class="form-check-input" type="radio" id="yess" name="aml" value="Y" onchange='ReturnAMLVal(this.id, this.value)' />
+                                            <i class="input-helper"></i>
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-success">
+                                        <label for="noo" class="form-check-label text-white">
+                                            Disagree
+                                            <input class="form-check-input" type="radio" id="noo" name="aml" value="N" onchange='ReturnAMLVal(this.id, this.value)' />
+                                            <i class="input-helper"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <h4 class="text-white mr-5">Politically-Exposed-Persons' (PEPs)</h4>
+                                    <p class="text-white">
+                                        also, I confirm that me or any of my associates (immediate family members) is not affiliated with any Political Party, or works for the Judiciary,
+                                        Armed Forces, Law Enforcement Agency, or Bureaucracy in any possible way.<br />
+                                        Furthermore, I declare that no criminal record or any criminal proceedings pending against me before any adjudicating forum(s) OR associated/linked
+                                        with any Proscribed Organization/Individual referred in Schedule IV of the Anti-Terrorism Act 1997 or as per any other prevailing law of the land.
+                                    </p>
+                                    <input class="form-control" id="QUES_PEP_YN" hidden />
+                                    <div class="form-check form-check-success">
+                                        <label for="yes" class="form-check-label text-white">
+                                            Agree
+                                            <input class="form-check-input mb-2" type="radio" id="yes" name="pep1" value="Y" onchange='ReturnPepVal(this.id, this.value)' />
+                                            <i class="input-helper"></i>
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-success">
+                                        <label for="no" class="form-check-label text-white">
+                                            Disagree
+                                            <input class="form-check-input mb-2" type="radio" id="no" name="pep1" value="N" onchange='ReturnPepVal(this.id, this.value)' />
+                                            <i class="input-helper"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-5 mb-6 justify-content-center">
+                            <div class="col-md-2">
+                                <button class="btn btn-rounded btn-info mb-2 w-100" data-toggle="tab" data-target="#beneficiary" type="button" id="btnPrevRegQuest" disabled>
+                                    Previous
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-rounded btn-info w-100" data-toggle="tab" type="button" id="btnNextRegQuest">
+                                    Next
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!---------------------------------CONFIRMATION------------------------------------>
+                <div class="tab-pane fade" id="policyConfirm" role="tabpanel" aria-labelledby="decisions-tab">
+                    <div class="card-validate">
+                        <div class="card-body">
+                            <div class="row confirmationTab">
+                                <div class="col-md-2">
+                                    <img src="~/Assets/images/SalaamSavings.png" id="image_logo" />
+                                </div>
+                                <div class="col-md-8">
+                                    <h2 class="text-lemonade text-primary text-center pt-5 mb-2 font-25">Policy Confirmation</h2>
+                                </div>
+                                <div class="col-md-2 mb-2">
+                                    <img src="~/Assets/images/payment_proceed.gif" class="policy-confirm" />
+                                </div>
+                            </div>
+                            <div class='row returnToFlagship' hidden>
+                                <div class='col-md-3 m-auto'>
+                                    <button class='btn bg-transparent border-0 mt-2' type='button' id='btnNewQuot'>Create New Quotation?</button>
+                                </div>
+                            </div>
+                            <h4 class="text-center m-auto text-success pb-2 text" id="proposalMesg">
+                                Dear <span id="name_gender"></span>, Your Proposal# <span class="proposal_No"></span> has been accepted.<br /> Upon successful payment, your policy will be issued. <br />
+                            </h4>
+                            <div class="row mt-3 p-3">
+                                <div class="m-auto p-3">
+                                    <div class="row pb-3 custom_row">
+                                        <div class="col-md-12">
+                                            <label for="" class="mr-1">Participant Name</label>
+                                            <input type="text" class="input_custom ml-5 bg-transparent" id="PARTICIPANT_NAME" placeholder="Participant Name" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row pb-3 pt-3 custom_row">
+                                        <div class="col-md-12">
+                                            <label for="" class="mr-5">Date of Birth</label>
+                                            <input type="text" class="input_custom ml-4 pl-2 bg-transparent" id="PARTICIPANT_DOB" placeholder="Date of Birth" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row pb-3 pt-3 custom_row">
+                                        <div class="col-md-12">
+                                            <label for="" class="mr-5">Plan Name</label>
+                                            <input type="text" class="input_custom ml-5 bg-transparent" id="PLAN_NAME" placeholder="Plan Name" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row pb-3 pt-3 custom_row">
+                                        <div class="col-md-12">
+                                            <label for="" class="mr-4">Contribution</label>
+                                            <input type="text" class="input_custom ml-5 pl-3 bg-transparent" id="CONTRIB_AMOUNT" placeholder="Contribution" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row pb-3 pt-3 custom_row">
+                                        <div class="col-md-12">
+                                            <label for="" class="mr-4">Sum Assured</label>
+                                            <input type="text" class="input_custom ml-5 pl-2 bg-transparent" id="SA_AMOUNT" placeholder="Sum Assured" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-1 mb-6 justify-content-center">
+                                <div class="col-lg-3 col-md-2">
+                                    <button class="btn btn-rounded btn-success w-100" type="button" id="btnPaymentProcess">
+                                        Pay Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!---------------------------------PAYMENT MODULE------------------------------------>
+                <div class="tab-pane fade" id="paymentMode" role="tabpanel" aria-labelledby="decisions-tab">
+                    <div class="card-paymentmode pb-4 p-3" id="mainCard">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="~/Assets/images/SalaamSavings.png" id="image_logo" />
+                                </div>
+                                <div class="col-md-7">
+                                    <h2 class="text-lemonade text-primary text-center mt-3 mb-2 font-25">Payment Mode Selection</h2>
+                                </div>
+                                <div class="col-md-2 mb-2" hidden>
+                                    <img src="~/Assets/images/card_payment.gif" class="user_identify" />
+                                </div>
+                            </div>
+
+                            <h4 class="mt-3 text-center text-danger"><img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" />Please Select Your Payment Mode</h4>
+                            <div class="row mt-4 justify-content-center">
+                                <div class="col-md-6 p-0">
+                                    <div class="row mb-1">
+                                        <div class="col-md-6 mb-2 p-0 col-sm-12">
+                                            <button class="custom_row2" type="button">
+                                                <img src="~/Assets/images/paypro.png" class="debitCardsImg p-2 mr-5" />                                                    PayPro
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6 mb-2 p-0 col-sm-12">
+                                            <button class="btnPayment custom_row2" id="btnCCAlfalah" type="button" onclick="HandShakeOrderId(this)">
+                                                <img src="~/Assets/images/visa.png" class="debitCardsImg p-2 mr-5" />
+                                                Debit/Credit by Alfalah
+                                            </button>
+                                            <input id="Key1" name="Key1" type="hidden" value="u89NbkDSQ2aJdRy6">
+                                            <input id="Key2" name="Key2" type="hidden" value="2965239994269557">
+
+                                            <form hidden action="https://sandbox.bankalfalah.com/HS/HS/HS" id="HandshakeForm" method="post">
+                                                <input id="HS_RequestHash" name="HS_RequestHash" type="hidden" value="">
+                                                <input id="HS_IsRedirectionRequest" name="HS_IsRedirectionRequest" type="hidden" value="0">
+                                                <input id="HS_ChannelId" name="HS_ChannelId" type="hidden" value="1001">
+                                                <input id="HS_ReturnURL" name="HS_ReturnURL" type="hidden" value="https://portals.salaamfamilytakaful.com/policy_issuance">
+                                                <input id="HS_MerchantId" name="HS_MerchantId" type="hidden" value="3822">
+                                                <input id="HS_StoreId" name="HS_StoreId" type="hidden" value="012504">
+                                                <input id="HS_MerchantHash" name="HS_MerchantHash" type="hidden" value="OUU362MB1uoMr5lPy4FNLSfRUDlz3hFPFG84TiALPgsiYBZ1ElfKBcGijuSejcKvSXRrqsAJA1M=">
+                                                <input id="HS_MerchantUsername" name="HS_MerchantUsername" type="hidden" value="aneheg">
+                                                <input id="HS_MerchantPassword" name="HS_MerchantPassword" type="hidden" value="z5p1OPB79LtvFzk4yqF7CA==">
+                                                <input id="HS_TransactionReferenceNumber" name="HS_TransactionReferenceNumber" placeholder="Order ID" value="">
+                                                <button type="button" class="btn btn-custon-four btn-danger" id="handshake">Handshake</button>
+                                            </form>
+
+                                            <form hidden action="https://sandbox.bankalfalah.com/SSO/SSO/SSO" id="PageRedirectionForm" method="post" novalidate="novalidate">
+                                                <div>
+                                                    <input id="AuthToken" name="AuthToken" type="hidden" value="">
+                                                    <input id="RequestHash" name="RequestHash" type="hidden" value="">
+                                                    <input id="ChannelId" name="ChannelId" type="hidden" value="1001">
+                                                    <input id="Currency" name="Currency" type="hidden" value="PKR">
+                                                    <input id="IsBIN" name="IsBIN" type="hidden" value="0">
+                                                    @*<input id="ReturnURL" name="ReturnURL" type="hidden" value="https://portals.salaamfamilytakaful.com/policy_issuance">*@
+                                                    <input id="ReturnURL" name="ReturnURL" type="hidden" value="https://portals.salaamfamilytakaful.com/policy_issuance">
+                                                    <input id="MerchantId" name="MerchantId" type="hidden" value="3822">
+                                                    <input id="StoreId" name="StoreId" type="hidden" value="012504">
+                                                    <input id="MerchantHash" name="MerchantHash" type="hidden" value="OUU362MB1uoMr5lPy4FNLSfRUDlz3hFPFG84TiALPgsiYBZ1ElfKBcGijuSejcKvSXRrqsAJA1M=">
+                                                    <input id="MerchantUsername" name="MerchantUsername" type="hidden" value="aneheg">
+                                                    <input id="MerchantPassword" name="MerchantPassword" type="hidden" value="z5p1OPB79LtvFzk4yqF7CA==">
+                                                    <select autocomplete="off" id="TransactionTypeId" name="TransactionTypeId" value="3">
+                                                        @*<option value="">Select Transaction Type</option>
+                            <option value="1">Alfa Wallet</option>
+                            <option value="2">Alfalah Bank Account</option>*@
+                                                        <option value="3">Credit/Debit Card</option>
+                                                    </select>
+                                                    <input autocomplete="off" id="TransactionReferenceNumber" name="TransactionReferenceNumber" placeholder="Order ID" type="text" value="">
+                                                    <input autocomplete="off" id="TransactionAmount" name="TransactionAmount" placeholder="Transaction Amount" type="text" value="">
+                                                    <button type="submit" class="btn btn-custon-four btn-danger" id="run" onclick="submitRequest('PageRedirectionForm')">RUN</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <form method="post" action="/paymentGateway/paymobPaymentUserAuthent" class="form-horizontal">
+                                        <div class="row btnCCPaymob" hidden>
+                                            <input class="form-control" id="P_DOCUMENT_ID" name="P_DOCUMENT_ID" required />
+                                            <input class="form-control" id="FIPR_COLL_AMOUNT" name="FIPR_COLL_AMOUNT" required />
+                                            <input class="form-control" id="PaymentType" name="PaymentType" required />
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col-md-6 mb-2 p-0 col-sm-12">
+                                                <div class="modal fade" id="chargesDisclaimer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content popup">
+                                                            <div class="popup-head">
+                                                                <h3 class="popup-title ng-binding">Alert!</h3>
+                                                            </div>
+                                                            <div class="popup-body">
+                                                                <span class="disclaimer-text"><span class="bank_charges"></span> bank charges plus service tax will be charged in addition to your payment amount</span>
+                                                            </div>
+                                                            <div class="popup-buttons">
+                                                                <button class="button ng-binding button-positive" type="submit">OK</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <button class="btnPayment custom_row2" id="btnCreditCard" type="button">
+                                                    <img src="~/Assets/images/visa.png" class="debitCardsImg p-2 mr-5" />
+                                                    Debit/Credit by Pymob
+                                                </button>
+                                            </div>
+                                            <div class="col-md-6 mb-2 p-0 col-sm-12">
+                                                <button class="custom_row2" type="submit" id="btnEasyPaisaPay">
+                                                    <img src="~/Assets/images/easypaisa.png" class="debitCardsImg p-2 mr-5" />
+                                                    Easy Paisa
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-2 p-0 col-sm-12">
+                                                <button class="custom_row2" id="btnJazzCash" type="submit">
+                                                    <img src="~/Assets/images/jazzcash.png" class="debitCardsImg p-2 mr-5" />                                             Jazz Cash
+                                                </button>
+                                            </div>
+                                            @*<div class="col-md-6 mb-2 p-0 col-sm-12">
+            <button class="custom_row2" type="button">
+                <img src="~/Assets/images/cod.png" class="debitCardsImg mr-5" />
+                Cash
+            </button>
+        </div>*@
+                                            <div class="col-md-6 mb-2 p-0 col-sm-12">
+                                                <button class="custom_row2" id="btnNIFTPay" type="button">
+                                                    <img src="~/Assets/images/NIFT-e-pay.png" class="debitCardsImg p-2 mr-5" />                                             NIFT e-Pay
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade animated animatedFadeInUpp fadeInUpp" id="AgreementModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="modal-icon">
+                    <img src="~/Assets/images/investigation_magnify.png" class="notebook_image terms-cond" />
+                </div>
+                <h3 class="title">Terms &amp; Conditions</h3>
+                <h5 class="card-title mb-4 mt-3">
+                    I, <span class="customer-name"></span>, hereby certify that all answers to questions appearing are true and complete to the best of my knowledge and belief.<br />
+                    For the underwriting and claim process, I give my permission to any physician or other medical practitioner, hospital, clinic, other medical or medically related facility,
+                    takaful/insurance company, or employer to give Salaam Family Takaful Limited or its Authorized representative "ALL INFORMATION" <br />
+                    on my behalf including copies of Records with reference to any sickness, accidental disability, treatment, examination medical investigation, advice or hospitalization underwent.<br />
+                    I hereby apply for the Family Takaful coverage under the terms and conditions of the master Participant Membership Document (PMD).
+                </h5>
+                <h4 class="card-title">Disclaimer:</h4>
+                <h5 class="card-tile mb-3">
+                    The Participant can cancel the Membership within fourteen (14) days of the receipt of the Participant's Membership Document (PMD) by the Participant.
+                    In case of cancellation during this free look period (subject to Terms and Conditions), the paid contribution is refundable.
+                </h5>
+                <div class="row">
+                    <button class="btn btn-rounded btn-danger mr-3 mb-1" type="button" id="btnDisAgreeTerms">Disagree</button>
+                    <button class="btn btn-rounded btn-success mb-1" type="button" id="btnAgreeTermsCond">Agree</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="chatbot-helper">
+    <img src="~/Assets/images/helping_chatbot.png" class="chatbotImg animated animatedFadeInUpp fadeInUpp" />
+</div>

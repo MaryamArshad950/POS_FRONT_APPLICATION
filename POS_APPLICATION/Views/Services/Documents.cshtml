@@ -1,0 +1,43 @@
+﻿@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Configuration.Json
+@inject IConfiguration Configuration
+
+<script type="text/javascript">
+     const app_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value);
+     const api_port_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_PNO").Value);
+     const Result_API = (app_host_API + ":" + api_port_API);
+
+     const app_host_Front = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_FRONT_IP").Value);
+     const api_port_Front = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_FRONT_PNO").Value);
+     const Result_Front = (app_host_Front + ":" + api_port_Front);
+     var getsession = window.sessionStorage.getItem("tokenIndex");
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="~/Assets/js/servicePos/myDoc.js"></script>
+<div class="card col-sm-10 col-md-11 col-lg-12">
+    <div class="card-body">
+        <h3 class="text-lemonade text-center mt-4">My Documents</h3>
+        <div class="col-12 col-lg-12">
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="image-area mt-1">
+                        <img id="document1" src="#" alt=""
+                             class="img-fluid rounded shadow-sm mx-auto d-block">
+                    </div>  
+                </div>
+                <div class="col-md-6">
+                    <div class="image-area mt-1">
+                        <img id="document2" src="#" alt=""
+                             class="img-fluid rounded shadow-sm mx-auto d-block">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="image-area mt-1">
+                        <img id="document3" src="#" alt=""
+                             class="img-fluid rounded shadow-sm mx-auto d-block">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

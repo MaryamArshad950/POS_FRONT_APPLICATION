@@ -1,0 +1,1018 @@
+﻿@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Configuration.Json
+@inject IConfiguration Configuration
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="~/Assets/js/alerts.js" defer></script>
+<link rel="stylesheet" href="~/Assets/css/CustomSelect.css">
+<script src="~/Assets/js/CustomSelect.js" defer></script>
+<script type="text/javascript">
+    const app_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value);
+    const api_port_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_PNO").Value);
+    const Result_API = (app_host_API + ":" + api_port_API);
+    const corePos = @Json.Serialize(@Configuration.GetSection("Credentials").GetSection("Global").Value);
+    const global_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("GLOBAL_API_IP").Value);
+    const Global_API = (global_host_API);
+
+    var setsession = sessionStorage.setItem("token", '@TempData["Token"]');
+    var getsession = sessionStorage.getItem("token");
+</script>
+<script src="~/Assets/js/JSPOS/Onboard.js" defer></script>
+<form method="post" action="/User/ADD_PARTICIPANT_BASICINFO" class="form-horizontal">
+    @Html.AntiForgeryToken()
+    <div class="card pb-4 p-3 card-onboard">
+        <div class="card-body">
+            <div class="row flex-div">
+                <div class="col-md-2">
+                    <img src="~/Assets/images/SalaamSavings.png" id="image_logo" />
+                </div>
+                <div class="col-md-8">
+                    <h2 class="text-lemonade text-primary text-center mt-3 mb-4">Salaam Life &amp; Saving Plan (Regular)</h2>
+                </div>
+            </div>
+            <div class="row mt-lg-5">
+                <div class="col-md-3" hidden>
+                    <label for="" class="mr-5 text-success">USER ID:</label>
+                    <input class="form-control" name="SUM_SYS_USER_ID" id="SUM_SYS_USER_ID" value="@TempData["UserIDValue"]" />
+                </div>
+                <div class="col-md-3" hidden>
+                    <label for="" class="mr-5 text-success">CUSTOMER CODE:</label>
+                    <input class="form-control" name="FSCU_CUSTOMER_CODE" id="FSCU_CUSTOMER_CODE" value="@TempData["CustomerCodeValue"]" />
+                </div>
+                <div class="col-md-6">
+                    @if (TempData["WrongStatus"] != null)
+                     {
+                        <div class='alert alert-danger alert-dismissible fade show p-3 mt-2' role='alert'>@TempData["WrongStatus"] </div>
+                     }
+                </div>
+            </div>
+
+            <div class="row ml-1 mb-3" id="SavedIllustText" hidden>
+                <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
+                <h5 class="text-danger font-weight-500 pt-1"> Please Click below to select your results to continue</h5>
+            </div>
+            <div class="row mt-lg-3 mb-5" id="SavedIllustBtn" hidden>
+                <div class="col-md-4">
+                    <button class="btn btn-rounded btn-success" type="button" id="btnViewSavedIllustrations">View Saved Illustrations</button>
+                </div>
+            </div>
+            <div class="modal fade animated animatedFadeInUpp fadeInUpp" id="needAnalysisModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <button type="button" class="close closeAnalysisForm" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <h3 class="text-center mb-4 text-lemonade text-primary">Need Analysis</h3>
+                                </div>
+                                <div class="col-md-2">
+                                    <img src="~/Assets/images/report.png" class="finance-report" />
+                                </div>
+                            </div>
+                            <div class="col-md-5 mt-3">
+                                <h4 class="mb-4 mt-3">
+                                    <i>Do you have any existing life assurance plan?</i>
+                                </h4>
+                                <div class="form-check form-check-success">
+                                    <label for="INSUREREXIST_Y" class="form-check-label">
+                                        Yes
+                                        <input class="form-check-input" type="radio" id="INSUREREXIST_YN" name="FCIH_INSUREREXIST_YN" value="Y" onchange='ExistInsValYes(this.id, this.value)' required />
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-success">
+                                    <label for="INSUREREXIST_N" class="form-check-label">
+                                        No
+                                        <input class="form-check-input" type="radio" id="INSUREREXIST_N" name="FCIH_INSUREREXIST_YN" value="N" checked onchange="ExistInsValNo(this.id, this.value)" required />
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-3 table-responsive ExistingLifePlans" hidden>
+                                <h4 class="card-title text-primary pl-3 pt-2 pb-2"></h4>
+                                <hr />
+                                <table class="table table-borderless" id="tblMyExistingLifePlans">
+                                    <thead>
+                                        <tr>
+                                            <th hidden>ID</th>
+                                            <th>Policy Number</th>
+                                            <th>Sum Covered</th>
+                                            <th>Contribution</th>
+                                            <th>Start Date</th>
+                                            <th>Maturity Date</th>
+                                            <th>Purpose</th>
+                                            <th>Company</th>
+                                            <th>Condition of Acceptance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td hidden><input class="form-control" name="FCIH_INSUREREXIST_ID" id="FCIH_INSUREREXIST_ID" value="0"></td>
+                                            <td><input class="form-control" name="FCIH_POLICY_NO" id="FCIH_POLICY_NO"></td>
+                                            <td><input class="form-control" name="FCIH_SA_AMOUNT" id="FCIH_SA_AMOUNT" type="number" min="1"></td>
+                                            <td><input class="form-control" name="FCIH_CONTRIB_AMT" id="FCIH_CONTRIB_AMT" type="number" min="1"></td>
+                                            <td><input class="form-control" name="FCIH_START_DATE" id="FCIH_START_DATE" type="date"></td>
+                                            <td><input class="form-control" name="FCIH_MATURITY_DATE" id="FCIH_MATURITY_DATE" type="date"></td>
+                                            <td><input class="form-control" name="FCIH_INSURER_PURPOSE" id="FCIH_INSURER_PURPOSE"></td>
+                                            <td><input class="form-control" name="FCIH_INSURER_NM" id="FCIH_INSURER_NM"></td>
+                                            <td><input class="form-control" name="FCIH_COND_ACCPTNCE" id="FCIH_COND_ACCPTNCE"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h3 class="card-title mt-5">Financial Details</h3>
+                            <div class="row ml-1 mt-4">
+                                <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
+                                <h5 class="text-danger font-weight-500 pt-1 font-size-2"> Please enter your financial details</h5>
+                                <input class="form-control" name="FCFA_FIN_ID" id="FCFA_FIN_ID" hidden />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h3 class="card-title mt-3">Assets <i class="text-danger text-sml">All sources</i></h3>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="" class="font-size-2 text-success">Annual Income</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input class="form-control" name="FCFA_ANNUAL_INCOME" id="FCFA_ANNUAL_INCOME" type="number" required onkeyup="calcTotalIncome(this.value)" />
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="" class="font-size-2 text-success">Other Income</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input class="form-control" name="FCFA_OTHER_INCOME" id="FCFA_OTHER_INCOME" type="number" onkeyup="calcTotalIncome(this.value)" min="0" />
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="" class="font-size-2 text-success">Total Income</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input class="form-control readonly" name="FCFA_TOTAL_INCOME" id="FCFA_TOTAL_INCOME" onclick="calcTotalIncome(this.value)" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="card-title mt-3">Expenses <i class="text-danger text-sml">All sources</i></h3>
+                                    <div class="row mb-3">
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="" class="font-size-2 text-success">Expenses Last Year</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input class="form-control" name="FCFA_EXPENSES_LASTYR" id="FCFA_EXPENSES_LASTYR" type="number" required />
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="" class="font-size-2 text-success">Expenses Current Year</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input class="form-control" name="FCFA_EXPENSES_CURRENTYR" id="FCFA_EXPENSES_CURRENTYR" type="number" required />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3 card-blue border-rad-25 p-3">
+                                <h3 class="card-title col-md-12 mt-4 text-white text-center mb-4">Financial Priorities &amp; Objectives</h3>
+                                <div class="col-md-4">
+                                    <div class="card card-objectives">
+                                        <div class="m-auto">
+                                            <img src="~/Assets/images/priority-2.png" class="priorites-img pt-3" />
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="card-title text-center">
+                                                Priorities &amp; Objectives
+                                            </div>
+                                            <div class="card-title text-center">
+                                                Please rate 1-7 according to your prorities
+                                            </div>
+                                            <div id="financial_security"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card card-objectives">
+                                        <div class="m-auto">
+                                            <img src="~/Assets/images/prioritize.png" class="priorites-img pt-3" />
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="card-title text-center">
+                                                Identified Takaful Needs
+                                            </div>
+                                            <div class="card-title text-center">
+                                                Please rate 1-7 according to your prorities
+                                            </div>
+                                            <div id="financial_needs"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card card-objectives">
+                                        <div class="m-auto">
+                                            <img src="~/Assets/images/good.png" class="priorites-img pt-3" />
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="card-title text-center">
+                                                Recommendations
+                                            </div>
+                                            <div class="card-title text-center">
+                                                Life Stage
+                                            </div>
+                                            <div class="row p-2">
+                                                <div class="col-md-7">
+                                                    Protection Needs
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <input type="checkbox" id="" value="" checked /> <span>Life &amp; Health</span>
+                                                    <input type="checkbox" id="" value="" checked /> <span>Savings &amp; Investment</span>
+                                                    <input type="checkbox" id="" value="" /> <span>Pension</span>
+                                                </div>
+                                            </div>
+                                            <div class="row p-2">
+                                                <div class="col-md-7">
+                                                    Appetite for risk
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <input type="checkbox" id="" value="" checked /> <span>Low</span>
+                                                    <input type="checkbox" id="" value="" /> <span>Medium</span>
+                                                    <input type="checkbox" id="" value="" /> <span>High</span>
+                                                </div>
+                                            </div>
+                                            <div class="row p-2 mt-3">
+                                                <div class="col-md-12">
+                                                    Policy recommended, including name of insurance / Takaful Plan
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <input class="form-control" value="Salaam Life & Savings" />
+                                                </div>
+                                            </div>
+                                            <div class="row p-2 mt-3">
+                                                <div class="col-md-12">
+                                                    Commitment for the current/future years
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <textarea class="textarea">Saving & Protection</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h5 class="mt-4 line-height-2">
+                                <i>
+                                    <span class="text-danger">** </span>The above recommendation is based on the information provided to me. I have been explained the features of the product and believe it would be suitable for me based on my insurance/Takaful needs and financial objectives.  I also fully understand and acknowledge that:<br />
+                                    a)	I  am  buying a Takaful  product  that  is  linked  to  the  performance  of underlying assets under unit-linked fund(s) and is not a pure investment or saving product such as collective investment schemes or mutual funds or bank deposits;<br />
+                                    b)	This is a Regular takaful deposit product under which I will be required to pay the deposit (Takaful contribution) every month/ quarter, or year for the premium payment term selected by me. (only in the case of regular products)<br />
+                                    c)	The investment risk under the policy shall be borne by me and the cash value of the policy may go up and down according to the performance of the underlying fund(s) in which I have opted to invest. The actual maturity or surrender values may be lower or higher than the projected figures.<br />
+                                    d)	The policy is subject to certain fees and charges (which are deducted to cover Takaful risk under the policy)<br />
+                                    e)	I have seen a brief audio-visual clip for the key features of the product.
+                                </i>
+                            </h5>
+                            <h5 class="mt-2">
+                                <input type="checkbox" required id="acceptAnalysis" class="checkbox" /><span class="ml-1"> I accept these terms &amp; conditions</span>
+                            </h5>
+                            <div class="row mt-5 mb-6 justify-content-center">
+                                <div class="col-md-2 mb-2">
+                                    <button class="btn btn-rounded btn-outline-primary closeAnalysisForm w-100" type="button">CLOSE</button>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-rounded btn-primary w-100" type="submit" id="btnSubmitParticipant">PROCESS</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" hidden>
+                <label for="" class="mr-5 text-success">Planning For</label>
+                <select class="form-control" name="FSPM_PRODUCT_ID" id="FSPM_PRODUCT_ID" required></select>
+            </div>
+            <div class="col-md-4" hidden>
+                <label for="" class="mr-5 text-success">Ident type</label>
+                <select class="form-control" name="FCDM_OW_FSNT_IDENTYPE_ID" id="FCDM_OW_FSNT_IDENTYPE_ID" required></select>
+            </div>
+            @*<div class="col-md-4" hidden>
+                    <label for="" class="mr-5 text-success">Contrib Frequency</label>
+                    <select class="form-control" name="FCDM_PFREQ_FSCD_ID" id="FCDM_PFREQ_FSCD_ID" required></select>
+                </div>*@
+            <div class="col-md-4" hidden>
+                <label for="" class="mr-5 text-success">Cover MultipleType</label>
+                <select class="form-control" name="FCDM_PLAN_CASE_STATUS" id="FCDM_PLAN_CASE_STATUS" required></select>
+            </div>
+            <div class="col-md-4" hidden>
+                <label for="" class="mr-5 text-success">Cover Multiple</label>
+                <select class="form-control" name="FCDM_COVER_MULTIPLE" id="FCDM_COVER_MULTIPLE" required></select>
+            </div>
+            <div class="col-md-4" hidden>
+                <label for="" class="mr-5 text-success">Contrib IDX Rate</label>
+                <select class="form-control" name="FCDM_CONTRIB_IDX_RATE" id="FCDM_CONTRIB_IDX_RATE" required></select>
+            </div>
+            <div class="col-md-4" hidden>
+                <label for="" class="mr-5 text-success">FaceValue IDX Rate</label>
+                <select class="form-control" name="FCDM_FACEVAL_IDX_RATE" id="FCDM_FACEVAL_IDX_RATE" required></select>
+            </div>
+            <div class="row mt-lg-3 biodata">
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">First Name <span class="text-danger font-weight-light">same as cnic</span></label>
+                    <input class="form-control" placeholder="First Name" id="FCDM_OWCUST_FIRSTNAME" name="FCDM_OWCUST_FIRSTNAME" required />
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Middle Name</label>
+                    <input class="form-control" placeholder="Middle Name" id="FCDM_OWCUST_MDDLNAME" name="FCDM_OWCUST_MDDLNAME" />
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Last Name</label>
+                    <input class="form-control" placeholder="Last Name" id="FCDM_OWCUST_LASTNAME" name="FCDM_OWCUST_LASTNAME" />
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">CNIC</label>
+                    <input class="form-control mb-2" placeholder="42101-XXXXXXX-X" maxlength="15" name="FCDM_OWCUST_CNIC" id="FCDM_OWCUST_CNIC" required onchange="setCNICFormat(this.value,this.id)" />
+                </div>
+            </div>
+            <div class="row gendetails">
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Gender</label>
+                    <select class="form-control" name="FCDM_OW_GENDR_FSCD_ID" id="FCDM_OW_GENDR_FSCD_ID" required><option value="">Select</option><option value="1">Male</option><option value="2">Female</option><option value="3">Others</option></select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="CUOCP_FSCD_ID" class="mr-5 text-success">Occupation</label>
+                    <select class="form-control" name="CUOCP_FSCD_ID" id="CUOCP_FSCD_ID" title="Select a number" data-hide-disabled="true" onchange="selectOccup(this.value)"></select>
+                    <input class="form-control" name="FCDM_OW_CUOCP_FSCD_ID" id="FCDM_OW_CUOCP_FSCD_ID" hidden required/>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Mobile Number</label><br />
+                    <input class="form-control" placeholder="3401927518" type="tel" id="FCDM_OWCUST_MOBILENO" name="FCDM_OWCUST_MOBILENO" maxlength="13" required />
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Email</label>
+                    <input class="form-control" type="email" placeholder="user@mail.com" name="FCDM_OWCUST_EMAILADDR" id="FCDM_OWCUST_EMAILADDR" />
+                </div>
+            </div>
+            <div class="row mt-2 healthdetails">
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Date of Birth</label>
+                    <input class="form-control" name="FCDM_OWCUST_DOB" id="FCDM_OWCUST_DOB" type="date" required />
+                </div>
+                <div class="col-md-3">
+                    <label for="" class="mr-5 text-success">Height</label>
+                    <div class="input-group slidecontainer">
+                        <input type="range" class="slider mt-3 mb-3" max="8" min="3" step="1" id="heightFt" hidden onchange="selectHeightFeet(this.value)">
+                        <input type="range" class="slider mt-3 mb-3" max="11" min="0" step="1" id="heightIn" hidden onchange="selectHeightInches(this.value)">
+                    </div>
+                    <input class="form-control" id="FCDM_OWCUST_HEITACT" name="FCDM_OWCUST_HEITACT" placeholder="Ex. 5ft 7inches" required onfocus="setHeightMaxLength(this.value)" />
+                    <output id="heightResult" class="mb-2"></output>
+                </div>
+                <div class="col-md-2">
+                    <label for="" class="mr-5 text-success">Weight</label>
+                    <input class="form-control" id="FCDM_OWCUST_WEITACT" type="number" name="FCDM_OWCUST_WEITACT" placeholder="Ex. 50 Kilograms" maxlength="3" required onkeyup="calculate_BMI()" />
+                </div>
+                <div class="col-md-4">
+                    <div class="row mt-2">
+                        <div class="col-md-3 mb-3">
+                            <img src="~/Assets/images/bmi.png" class="icon_size" id="btnCalculateBMI" />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="" class="mr-5 text-success">BMI:</label>
+                            <input class="form-control form-control-custom readonly" placeholder="BMI" id="FCDM_OWCUST_BMI" name="FCDM_OWCUST_BMI" onclick="calculate_BMI()" readonly required />
+                        </div>
+                        <div class="col">
+                            <img id="bmi_unhealthy" src="~/Assets/images/unhealthy_boy.png" class="icon_size animated animatedFadeInUpp fadeInUpp" hidden />
+                            <img id="bmi_healthy" src="~/Assets/images/healthy.png" class="icon_size animated animatedFadeInUpp fadeInUpp" hidden />
+                            <img id="bmi_obesity" src="~/Assets/images/obesity.png" class="icon_size animated animatedFadeInUpp fadeInUpp" hidden />
+                            <img id="bmi_serious" src="~/Assets/images/reject.png" class="icon_size animated animatedFadeInUpp fadeInUpp" hidden />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div class="row ml-1 mt-4">
+                    <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
+                    <h5 class="text-danger font-weight-500 pt-1"> Please Choose Between Takaful Contribution or Maturity Value</h5>
+                </div>
+                <div class="row mt-2 ml-1">
+                    <div class="form-check form-check-success mr-4">
+                        <label for="Annual_savings" class="form-check-label">
+                            Takaful Contribution
+                            <input class="form-check-input mr-5" type="radio" id="Annual_savings" name="mode" value="A" oninput="checkValue(this.value)" />
+                            <i class="input-helper"></i>
+                        </label>
+                    </div>
+                    <div class="form-check form-check-success">
+                        <label for="maturity_value" class="form-check-label">
+                            Maturity Value
+                            <input class="form-check-input" type="radio" id="maturity_value" name="mode" value="M" oninput="checkValue(this.value)" disabled />
+                            <i class="input-helper"></i>
+                        </label>
+                    </div>
+                </div>*@
+            <div class="row mt-3 mb-3">
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Takaful Contribution Mode</label>
+                    <select class="form-control" name="FCDM_PFREQ_FSCD_ID" id="FCDM_PFREQ_FSCD_ID" required onchange="calculateFaceValue()"><option value="">Select</option><option value="42">Annual</option><option value="43">Semi-Annual</option><option value="44">Quaterly</option><option value="45">Monthly</option><option value="46">Single</option></select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Plan Terms (Years)</label>
+                    <input class="form-control" placeholder="Ex 10 years" type="number" name="FCDM_PAYING_TERM" id="FCDM_PAYING_TERM" required onkeyup="calculateFaceValue()" min="5" max="35"/>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Takaful Contribution</label>
+                    <input class="form-control" id="FCDM_PLAN_CONTRIB" type="number" name="FCDM_PLAN_CONTRIB" placeholder="Contribution" required onkeyup="calculateFaceValue()" min="1000" />
+                </div>
+                <div class="col-md-3">
+                    <label for="" class="mr-5 text-success">Sum Covered</label>
+                    <input class="form-control" id="FCDM_FACE_VALUE" type="number" name="FCDM_FACE_VALUE" placeholder="Maturity Value" onclick="calculateFaceValue()" readonly required />
+                </div>
+            </div>
+            <div class="row ml-1 mt-4">
+                <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
+                <h5 class="text-danger font-weight-500 pt-1"> Do you want to take any extra benefits (Riders)</h5>
+            </div>
+            <div class="row mt-2 ml-1">
+                <div class="form-check form-check-success mr-4">
+                    <label for="CHECK_RIDERY" class="form-check-label">
+                        Yes
+                        <input class="form-check-input mr-5" type="radio" id="CHECK_RIDERY" name="CHECK_RIDER" value="1" onclick="checkRider(this.value)" />
+                        <i class="input-helper"></i>
+                    </label>
+                </div>
+                <div class="form-check form-check-success">
+                    <label for="CHECK_RIDERN" class="form-check-label">
+                        No
+                        <input class="form-check-input" type="radio" id="CHECK_RIDERN" name="CHECK_RIDER" value="0" onclick="checkRider(this.value)" />
+                        <i class="input-helper"></i>
+                    </label>
+                </div>
+            </div>
+            <div class="row mt-3 mb-3">
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Referral Code</label>
+                    <input class="form-control" id="FSAG_AGENT_CODE" name="FSAG_AGENT_CODE" type="number" placeholder="001" onkeyup="setAgentName(this.value)" />
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Referral Name</label>
+                    <input class="form-control readonly" id="AGENT_NAME" name="AGENT_NAME" placeholder="Agent Name" readonly />
+                </div>
+            </div>
+        </div>
+        <div class="card card-blue p-2">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-1">
+                        <img src="~/Assets/images/medical_questionare.png" class="notebook_image align-center" title="Please answer below questions" />
+                    </div>
+                    <div class="col-md-10">
+                        <h3 class="text-white mb-3 text-center pt-3">Medical Questions</h3>
+                    </div>
+                </div>
+                @*<span class="tooltiptext">Please answer all of the below questions</span>*@
+                <div class="row mt-2" id="questionare_section">
+                </div>
+            </div>
+        </div>
+        <div class="row ml-5 mt-5" id="NoteToProcessOrCont" hidden>
+            <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
+            <h5 class="text-danger font-weight-500 pt-1"> Please Click Continue if you want to continue with this Illustration</h5>
+        </div>
+
+        <div class="row mt-5 mb-6 justify-content-center">
+            <div class="col-lg-4 col-md-3 pb-3 text-center">
+                <button class="btn btn-rounded btn-outline-primary w-50" type="button" id="btnProcessFlagship">CONTINUE</button>
+            </div>
+        </div>
+        <div class="chatbot-helper">
+            <img src="~/Assets/images/helping_chatbot.png" class="chatbotImg animated animatedFadeInUpp fadeInUpp" />
+        </div>
+    </div>
+    <div class="spinner-box" hidden>
+        <img src="~/Assets/images/maleUserLogedin.gif" class="loaderImage" />
+        <div class="row">
+            <div class="m-auto loader_div">
+            </div>
+        </div>
+    </div>
+    <div class="modal fade AccountSection" id="AccountSection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content border-rad-25">
+                <div class="modal-body">
+                    <div class="modal-icon">
+                        <img src="~/Assets/images/Account-created.png" class="medical-checkup animated animatedFadeInUpp fadeInUpp" alt="Account-created" />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="card-title text-center font-weight-bold animated animatedFadeInUpp fadeInUpp pt-5">Congratulations!</h3>
+                            <h4 class="text-lemonade text-center animated animatedFadeInUpp fadeInUpp pt-3">Your Account has been created!</h4>
+                            <h5 class="text-lemonade text-center animated animatedFadeInUpp fadeInUpp pt-2">Your Login credentials have been sent via sms to your provided contact number.</h5>
+                        </div>
+                    </div>
+                    <div class="row m-3 justify-content-center">
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-info btn-rounded continueAccSect" type="button">Continue</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade RiderSection" id="RiderSection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <button type="button" class="close closeRidersForm" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h3 class="text-lemonade text-center animated animatedFadeInUpp fadeInUpp pt-5">Please select your Rider(s)</h3>
+                        </div>
+                        <div class="col-md-3">
+                            <img src="~/Assets/images/life-insurance-rider.png" class="medical-checkup animated animatedFadeInUpp fadeInUpp" alt="life-insurance-rider" />
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-md-12">
+                            <div class="card border-0">
+                                <div class="card-body">
+                                    <div class="row ridersList">
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="card m-2">
+                                            <table class="table table-striped table-responsive" id="tableRiders">
+                                                <thead>
+                                                    <tr class="salaam-color text-white">
+                                                        <th hidden>RiderID</th>
+                                                        <th>Rider</th>
+                                                        <th>Term (Years)</th>
+                                                        <th>Face Value</th>
+                                                        <th>Delete</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-3 justify-content-center">
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary closeRidersForm" type="button">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade medicalUnderWT" id="medicalUnderWT" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <button type="button" class="close closeDiseaseForm" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h3 class="text-lemonade text-center pt-5">Please select your disease(s)</h3>
+                        </div>
+                        <div class="col-md-3">
+                            <img src="~/Assets/images/medical-test.gif" class="medical-checkup" alt="medical-checkup" />
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-md-12">
+                            <div class="card bg-transparent border-0">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID1" name="FSDI_DISEASE_ID" value="1" class="selectDisease" onchange="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID1" class="diseaseLabel text-primary">
+                                                Morbid Obesity
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID2" name="FSDI_DISEASE_ID" value="2" class="selectDisease" onchange="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID2" class="diseaseLabel text-primary">
+                                                Hypertension
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID3" name="FSDI_DISEASE_ID" value="3" class="selectDisease" onchange="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID3" class="diseaseLabel text-primary">
+                                                Diabetes
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID4" name="FSDI_DISEASE_ID" value="4" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID4" class="diseaseLabel text-primary">
+                                                High Cholestrol
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID5" name="FSDI_DISEASE_ID" value="5" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID5" class="diseaseLabel text-primary">
+                                                Heart Disease
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID6" name="FSDI_DISEASE_ID" value="6" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID6" class="diseaseLabel text-primary">
+                                                Blood Disorder
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @*<div class="row mt-2">
+                                            <div class="col-md-4">
+                                                <a href="#" class="viewAllDisorders">View All</a>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <a href="#" class="seeLessDisorders" hidden>See Less</a>
+                                            </div>
+                                        </div>*@
+                                    <div class="row mt-2 allDisorders">
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID7" name="FSDI_DISEASE_ID" value="7" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID7" class="diseaseLabel text-primary">
+                                                Stroke
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID8" name="FSDI_DISEASE_ID" value="8" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID8" class="diseaseLabel text-primary">
+                                                Lungs Disease
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID9" name="FSDI_DISEASE_ID" value="9" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID9" class="diseaseLabel text-primary">
+                                                Liver Disease
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 allDisorders">
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID10" name="FSDI_DISEASE_ID" value="10" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID10" class="diseaseLabel text-primary">
+                                                Tumor
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID11" name="FSDI_DISEASE_ID" value="11" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID11" class="diseaseLabel text-primary">
+                                                Cancer
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID12" name="FSDI_DISEASE_ID" value="12" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID12" class="diseaseLabel text-primary">
+                                                Thyroidism
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 allDisorders">
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID13" name="FSDI_DISEASE_ID" value="13" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID13" class="diseaseLabel text-primary">
+                                                Multiple Sclerosis
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID14" name="FSDI_DISEASE_ID" value="14" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID14" class="diseaseLabel text-primary">
+                                                Organ Transplant
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID15" name="FSDI_DISEASE_ID" value="15" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID15" class="diseaseLabel text-primary">
+                                                HIV/AIDS
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 allDisorders">
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID16" name="FSDI_DISEASE_ID" value="16" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID16" class="diseaseLabel text-primary">
+                                                Nervous Disorder
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID17" name="FSDI_DISEASE_ID" value="17" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID17" class="diseaseLabel text-primary">
+                                                Renal Failure
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID18" name="FSDI_DISEASE_ID" value="18" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID18" class="diseaseLabel text-primary">
+                                                Eye Disorders
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 allDisorders">
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID19" name="FSDI_DISEASE_ID" value="19" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID19" class="diseaseLabel text-primary">
+                                                Digestive System Disorder
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID20" name="FSDI_DISEASE_ID" value="20" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID20" class="diseaseLabel text-primary">
+                                                Immune Disorder
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID21" name="FSDI_DISEASE_ID" value="21" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID21" class="diseaseLabel text-primary">
+                                                Hereditary
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 allDisorders">
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID22" name="FSDI_DISEASE_ID" value="22" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID22" class="diseaseLabel text-primary">
+                                                Psychiatric Illness
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID23" name="FSDI_DISEASE_ID" value="23" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID23" class="diseaseLabel text-primary">
+                                                Physical Impairment
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID24" name="FSDI_DISEASE_ID" value="24" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID24" class="diseaseLabel text-primary">
+                                                Joints Disorder
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 allDisorders">
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID25" name="FSDI_DISEASE_ID" value="25" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID25" class="diseaseLabel text-primary">
+                                                Drug or Alcohol Abuse
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID26" name="FSDI_DISEASE_ID" value="26" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID26" class="diseaseLabel text-primary">
+                                                Others
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card m-2">
+                        <table class="table table-striped table-responsive" id="tblMedDiseases">
+                            <thead>
+                                <tr class="salaam-color text-white">
+                                    <th hidden>DiseaseID</th>
+                                    <th>Disease</th>
+                                    <th>Duration</th>
+                                    <th>More Details (If Any)</th>
+                                    <th>Upload Document</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row m-3 justify-content-center">
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary closeDiseaseForm" type="button">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade medicalUnderWT" id="medicalUnderWT2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <button type="button" class="close closeDiseaseForm2" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h3 class="text-lemonade text-center pt-5">Please select your disease(s)</h3>
+                        </div>
+                        <div class="col-md-3">
+                            <img src="~/Assets/images/medical-test.gif" class="medical-checkup" alt="medical-checkup" />
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-md-12">
+                            <div class="card bg-transparent border-0">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID27" name="FSDI_DISEASE_ID" value="27" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID27" class="diseaseLabel text-primary">
+                                                Medical Consultation
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID28" name="FSDI_DISEASE_ID" value="28" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID28" class="diseaseLabel text-primary">
+                                                Hopitilization
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID29" name="FSDI_DISEASE_ID" value="29" class="selectDisease" onchange="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID29" class="diseaseLabel text-primary">
+                                                Surgery
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-md-4">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID30" name="FSDI_DISEASE_ID" value="30" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID30" class="diseaseLabel text-primary">
+                                                Any Abnormal Tests
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID31" name="FSDI_DISEASE_ID" value="31" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID31" class="diseaseLabel text-primary">
+                                                COVID-19 (In history)
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID32" name="FSDI_DISEASE_ID" value="32" class="selectDisease32" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID32" class="diseaseLabel text-primary">
+                                                COVID-19 (Currently +ve)
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-md-4">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID33" name="FSDI_DISEASE_ID" value="33" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID33" class="diseaseLabel text-primary">
+                                                Any Long term Medication
+                                            </label>
+                                        </div>
+                                        @*<div class="col-md-4">
+                                                <input type="checkbox" id="FSDI_DISEASE_ID34" name="FSDI_DISEASE_ID" value="26" class="selectDisease" onclick="showDisease(this,this.value)">
+                                                <label for="FSDI_DISEASE_ID34" class="diseaseLabel text-primary">
+                                                    Others
+                                                </label>
+                                            </div>*@
+                                    </div>
+                                    @*<div class="diseaseExtraSec" hidden>
+                                            <div class="mt-3 row">
+                                                <div class="col-md-12">
+                                                    <p>More Details (If any)</p>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3">
+                                                <div class="col-md-4">
+                                                    <input class="form-control" name="FCDS_DISEASE_DETAILS" id="FCDS_DISEASE_DETAILS2" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input class="form-control" type="file" name="" id="" />
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <table class="table table-striped table-responsive" id="tblMedCatgry">
+                            <thead>
+                                <tr class="salaam-color text-white">
+                                    <th hidden>DiseaseID</th>
+                                    <th>Disease</th>
+                                    <th>More Details (If Any)</th>
+                                    <th>Upload Document</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row mt-3 justify-content-center">
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary closeDiseaseForm2" type="button">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="modal fade" id="mySavedIllustModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close closeSavedIllust" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <div class="modal-body">
+                <h3 class="title text-white">My Saved Illustrations</h3>
+                <p class="description text-white">You can view, edit and continue with any of the below saved illustrations</p>
+                <div class="row pt-2">
+                    <div class="card savedIllustCard w-100">
+                        <div class="card-body">
+                            <div class="col-md-12 table-responsive table-custom-responsive">
+                                <table class="table table-striped table-borderless" id="tableSavedillust">
+                                    <thead>
+                                        <tr>
+                                            <th hidden>Document ID</th>
+                                            <th hidden>Document Code</th>
+                                            <th>Document Name</th>
+                                            <th>Coverage Amount</th>
+                                            <th>Takaful Contribution</th>
+                                            <th>Plan Term</th>
+                                            <th>Download</th>
+                                            <th>View</th>
+                                            <th>Continue</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="VerifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="modal-icon">
+                    <img src="~/Assets/images/password.png" class="phoneVerifyImage" />
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="description">Please enter the verification code to complete sign in</p>
+                        <div class="alert alert-success alert-dismissible alert-otp fade show p-3 mt-2" role="alert" hidden>
+                            <i class="fa fa-check p-2 me-3 text-white bg-success rounded-circle" aria-hidden="true"></i>
+                            <strong>
+                                Your OTP has been verified sucessfully
+                            </strong>
+                        </div>
+                        <div class="alert alert-danger alert-dismissible wrong-otp fade show p-3 mt-2" role="alert" hidden>
+                            <i class="fa fa-times p-2 me-3 text-white bg-success rounded-circle" aria-hidden="true"></i>
+                            <strong>
+                                Please enter correct OTP
+                            </strong>
+                        </div>
+                        <ul class="code-number">
+                            <li><input id="firstDigit" class="border-0 bg-transparent w-50" placeholder="1" maxlength="1" /></li>
+                            <li><input id="secondDigit" class="border-0 bg-transparent w-50" placeholder="0" maxlength="1" /></li>
+                            <li><input id="thirdDigit" class="border-0 bg-transparent w-50" placeholder="5" maxlength="1" /></li>
+                            <li><input id="fourthDigit" class="border-0 bg-transparent w-50" placeholder="3" maxlength="1" /></li>
+                            <li><input id="fifthDigit" class="border-0 bg-transparent w-50" placeholder="9" maxlength="1" /></li>
+                            <li><input id="sixthDigit" class="border-0 bg-transparent w-50" placeholder="2" maxlength="1" /></li>
+                        </ul>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button class="btn btn-submit-code" type="button" id="verifyOTP">Submit</button>
+                            </div>
+                        </div>
+                        <button class="btn bg-transparent mt-2 text-danger font-weight-bold text-center" id="resendCode" type="button">Didn't get the code? Send Again</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade animated animatedFadeInUpp fadeInUpp videographyModal" id="videographyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content salaam-color">
+            <button type="button" class="close closePlanIllust" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <div class="modal-body">
+                <div class="modal-icon">
+                    <div class="row">
+                        <video controls class="savings-illustration w-100" autoplay muted>
+                            <source src="~/Assets/images/salaamlife-and-savings-illustration.mp4" type="video/mp4">
+                            Salaam Life &amp; Saving Plan (Regular)
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

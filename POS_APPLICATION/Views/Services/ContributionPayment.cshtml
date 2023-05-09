@@ -1,0 +1,229 @@
+﻿@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Configuration.Json
+@inject IConfiguration Configuration
+<script type="text/javascript">
+    const app_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value);
+    const api_port_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_PNO").Value);
+    const Result_API = (app_host_API + ":" + api_port_API);
+    const corePos = @Json.Serialize(@Configuration.GetSection("Credentials").GetSection("Global").Value);
+    const global_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("GLOBAL_API_IP").Value);
+    const Global_API = (global_host_API);
+    var getsession = window.sessionStorage.getItem("tokenIndex");
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+<link rel="stylesheet" href="~/Assets/css/pos.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="~/Assets/js/servicePos/contrib_payment.js" defer></script>
+<div class="card summary-report">
+    <div class="card-body">
+        <div class="row justify-content-center mt-3">
+            <h2 class="text-lemonade text-primary">
+                Regular Contribution
+            </h2>
+        </div>
+        <form class="form-horizontal" action="" method="post">
+            <div class="row ml-3 mt-4">
+                <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
+                <h5 class="text-danger font-weight-500 pt-1"> Please Choose Between Regular Contribution or Topup</h5>
+            </div>
+            <div class="row mt-2 ml-3 select_paymnt">
+                <div class="form-check form-check-success mr-4">
+                    <label for="reg_contrib" class="form-check-label">
+                        Regular Contribution
+                        <input class="form-check-input mr-5" type="radio" id="reg_contrib" name="mode" value="1" oninput="checkValue(this.value)" />
+                        <i class="input-helper"></i>
+                    </label>
+                </div>
+                <div class="form-check form-check-success">
+                    <label for="top_up" class="form-check-label">
+                        Top up
+                        <input class="form-check-input" type="radio" id="top_up" name="mode" value="2" oninput="checkValue(this.value)" />
+                        <i class="input-helper"></i>
+                    </label>
+                </div>
+            </div>
+            <div class="indexation-contribution" hidden>
+                <div class="row mt-3 justify-content-center">
+                    <div class="col-md-3 mb-2">
+                        <div class="row custom_row2 p-0">
+                            <div class="col-md-10">
+                                <div class="p-4 non-index-contrib" type="button">Non-index Contribution</div>
+                            </div>
+                            <div class="col-2">
+                                <input class='form-control' type='radio' name="gross_payment" id='nonIndexContrib' required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="row custom_row2 p-0">
+                            <div class="col-md-10">
+                                <div class="p-4 index-contrib" type="button">Index Contribution</div>
+                            </div>
+                            <div class="col-2">
+                                <input class='form-control' type='radio' name="gross_payment" id='IndexContrib' required />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3 justify-content-center">
+                    <div class="col-md-4">
+                        <button class="btn btn-success" type="button" id="btnPaymentProceed" onclick="paymentSelection(this.id)">
+                            Pay Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="topup" hidden>
+                <div class="row mt-3 justify-content-center pl-3">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="policy_number" class="text-success">Policy Number</label>
+                                <input class="form-control" name="policy_number" id="policy_number" required />
+                            </div>
+                        </div>
+                        <div class="row mt-4 text-lemonade pl-3">
+                            You have only <span class="policy_fund_count"></span>  against your policy number
+                        </div>
+                        <div class="row ml-1 mt-4">
+                            <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
+                            <h5 class="text-danger font-weight-500 pt-1"> Please enter your payment value for below fund</h5>
+                        </div>
+                        <div class="row mt-2 fundsCount">
+                            <div class="col-md-2">
+                                <label for="" class="text-success fund_name"></label>
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control" name="fund_payment" id="fund_payment" onkeyup="calculateTotalPayment(this.value)"/>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <label for="" class="text-success">Total Amount</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control" name="TOTAL_AMOUNT" id="TOTAL_AMOUNT" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3 justify-content-center">
+                    <div class="col-md-4">
+                        <button class="btn btn-success" type="button" id="btnPaymentopup">
+                            Pay Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="paymode-select" hidden>
+            <h3 class="text-center text-lemonade mb-2 mt-3">Please select your payment mode</h3>
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-6 p-0">
+                    <div class="row mb-1">
+                        <div class="col-md-6 mb-2 p-0 col-sm-12">
+                            <button class="custom_row2" type="button">
+                                <img src="~/Assets/images/paypro.png" class="debitCardsImg p-2 mr-5" />                                                    PayPro
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-2 p-0 col-sm-12">
+                            <button class="btnPayment custom_row2" id="btnCCAlfalah" type="button" onclick="HandShakeOrderId(this)">
+                                <img src="~/Assets/images/visa.png" class="debitCardsImg p-2 mr-5" />
+                                Debit/Credit by Alfalah
+                            </button>
+                            <input id="Key1" name="Key1" type="hidden" value="u89NbkDSQ2aJdRy6">
+                            <input id="Key2" name="Key2" type="hidden" value="2965239994269557">
+
+                            <form hidden action="https://sandbox.bankalfalah.com/HS/HS/HS" id="HandshakeForm" method="post">
+                                <input id="HS_RequestHash" name="HS_RequestHash" type="hidden" value="">
+                                <input id="HS_IsRedirectionRequest" name="HS_IsRedirectionRequest" type="hidden" value="0">
+                                <input id="HS_ChannelId" name="HS_ChannelId" type="hidden" value="1001">
+                                <input id="HS_ReturnURL" name="HS_ReturnURL" type="hidden" value="https://portals.salaamfamilytakaful.com/ContributionPayment">
+                                <input id="HS_MerchantId" name="HS_MerchantId" type="hidden" value="3822">
+                                <input id="HS_StoreId" name="HS_StoreId" type="hidden" value="012504">
+                                <input id="HS_MerchantHash" name="HS_MerchantHash" type="hidden" value="OUU362MB1uoMr5lPy4FNLSfRUDlz3hFPFG84TiALPgsiYBZ1ElfKBcGijuSejcKvSXRrqsAJA1M=">
+                                <input id="HS_MerchantUsername" name="HS_MerchantUsername" type="hidden" value="aneheg">
+                                <input id="HS_MerchantPassword" name="HS_MerchantPassword" type="hidden" value="z5p1OPB79LtvFzk4yqF7CA==">
+                                <input id="HS_TransactionReferenceNumber" name="HS_TransactionReferenceNumber" placeholder="Order ID" value="">
+                                <button type="button" class="btn btn-custon-four btn-danger" id="handshake">Handshake</button>
+                            </form>
+
+                            <form hidden action="https://sandbox.bankalfalah.com/SSO/SSO/SSO" id="PageRedirectionForm" method="post" novalidate="novalidate">
+                                <div>
+                                    <input id="AuthToken" name="AuthToken" type="hidden" value="">
+                                    <input id="RequestHash" name="RequestHash" type="hidden" value="">
+                                    <input id="ChannelId" name="ChannelId" type="hidden" value="1001">
+                                    <input id="Currency" name="Currency" type="hidden" value="PKR">
+                                    <input id="IsBIN" name="IsBIN" type="hidden" value="0">
+                                    <input id="ReturnURL" name="ReturnURL" type="hidden" value="https://portals.salaamfamilytakaful.com/ContributionPayment">
+                                    <input id="MerchantId" name="MerchantId" type="hidden" value="3822">
+                                    <input id="StoreId" name="StoreId" type="hidden" value="012504">
+                                    <input id="MerchantHash" name="MerchantHash" type="hidden" value="OUU362MB1uoMr5lPy4FNLSfRUDlz3hFPFG84TiALPgsiYBZ1ElfKBcGijuSejcKvSXRrqsAJA1M=">
+                                    <input id="MerchantUsername" name="MerchantUsername" type="hidden" value="aneheg">
+                                    <input id="MerchantPassword" name="MerchantPassword" type="hidden" value="z5p1OPB79LtvFzk4yqF7CA==">
+                                    <select autocomplete="off" id="TransactionTypeId" name="TransactionTypeId" value="3">
+                                        @*<option value="">Select Transaction Type</option>
+                            <option value="1">Alfa Wallet</option>
+                            <option value="2">Alfalah Bank Account</option>*@
+                                        <option value="3">Credit/Debit Card</option>
+                                    </select>
+                                    <input autocomplete="off" id="TransactionReferenceNumber" name="TransactionReferenceNumber" placeholder="Order ID" type="text" value="">
+                                    <input autocomplete="off" id="TransactionAmount" name="TransactionAmount" placeholder="Transaction Amount" type="text" value="">
+                                    <button type="submit" class="btn btn-custon-four btn-danger" id="run" onclick="submitRequest('PageRedirectionForm')">RUN</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <form method="post" action="/paymentGateway/paymobPaymentUserAuthent" class="form-horizontal">
+                        <div class="row btnCCPaymob" hidden>
+                            <input class="form-control" id="P_DOCUMENT_ID" name="P_DOCUMENT_ID" />
+                            <input class="form-control" id="FIPR_COLL_AMOUNT" name="FIPR_COLL_AMOUNT" />
+                            <input class="form-control" id="PaymentType" name="PaymentType" />
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-6 mb-2 p-0 col-sm-12">
+                                <div class="modal fade" id="chargesDisclaimer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content popup">
+                                            <div class="popup-head">
+                                                <h3 class="popup-title ng-binding">Alert!</h3>
+                                            </div>
+                                            <div class="popup-body">
+                                                <span class="disclaimer-text"><span class="bank_charges"></span> bank charges plus service tax will be charged in addition to your payment amount</span>
+                                            </div>
+                                            <div class="popup-buttons">
+                                                <button class="button ng-binding button-positive" type="submit">OK</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btnPayment custom_row2" id="btnCreditCard" type="button">
+                                    <img src="~/Assets/images/visa.png" class="debitCardsImg p-2 mr-5" />
+                                    Debit/Credit by Pymob
+                                </button>
+                            </div>
+                            <div class="col-md-6 mb-2 p-0 col-sm-12">
+                                <button class="custom_row2" type="submit" id="btnEasyPaisaPay">
+                                    <img src="~/Assets/images/easypaisa.png" class="debitCardsImg p-2 mr-5" />
+                                    Easy Paisa
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-2 p-0 col-sm-12">
+                                <button class="custom_row2" id="btnJazzCash" type="submit">
+                                    <img src="~/Assets/images/jazzcash.png" class="debitCardsImg p-2 mr-5" />                                             Jazz Cash
+                                </button>
+                            </div>
+                            <div class="col-md-6 mb-2 p-0 col-sm-12">
+                                <button class="custom_row2" id="btnNIFTPay" type="submit">
+                                    <img src="~/Assets/images/NIFT-e-pay.png" class="debitCardsImg p-2 mr-5" />                                             NIFT e-Pay
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

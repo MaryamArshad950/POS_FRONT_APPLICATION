@@ -1,0 +1,48 @@
+﻿@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Configuration.Json
+@inject IConfiguration Configuration
+<script type="text/javascript">
+    const app_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value);
+    const api_port_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_PNO").Value);
+    const Result_API = (app_host_API + ":" + api_port_API);
+    const global_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("GLOBAL_API_IP").Value);
+    const Global_API = (global_host_API);
+    var getsession = window.sessionStorage.getItem("tokenIndex");
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="~/Assets/js/servicePos/policySurrender.js"></script>
+<form class="form-horizontal">
+    <div class="card">
+        <div class="card-body card-funds">
+            <div class="row flex-div">
+                <div class="col-md-2">
+                    <img src="~/Assets/images/SalaamSavings.png" id="image_logo" />
+                </div>
+                <div class="col-md-8">
+                    <h2 class="text-lemonade text-primary text-center mt-3 mb-4">Policy Surrender</h2>
+                </div>
+            </div>
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-6">
+                    <div class="row mb-1">
+                        <div class="col-md-6 mb-2">
+                            <div class="p-4 custom_row2 contrib_paid" type="button">
+
+                            </div><br />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="p-4 custom_row2 currentCashValue" type="button">
+
+                            </div><br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3 justify-content-center">
+                <div class="col-md-6">
+                    <p class="text-lemonade font-25">Before you cancel your life Takaful Membership, consider the long-term impact it may have on your family's financial'</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
