@@ -144,7 +144,11 @@ function paymentSelection(elemID) {
             $("#PaymentType").val("EP");
         })
     } else {
-        alert('The gross payment input is not checked');
+        Swal.fire({
+            icon: 'info',
+            title: 'Alert',
+            text: 'The gross payment input is not checked!',
+        })
     }
 }
 function HandShakeOrderId(elem) {

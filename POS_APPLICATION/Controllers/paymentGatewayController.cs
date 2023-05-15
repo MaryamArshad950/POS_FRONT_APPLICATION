@@ -44,6 +44,8 @@ namespace POS_APPLICATION.Controllers
             userAuthentURL = configuration.GetSection("paymentConfig").GetSection("ULoginURL").Value;
             UserAuthen payMobUser = new UserAuthen();
             var handler = new HttpClientHandler();
+            string CustEmailAddr = HttpContext.Session.GetString("SUM_USER_EMAIL_ADDR");
+            string CustPhone = HttpContext.Session.GetString("SUM_CUST_CONTPHONE");
             handler.ClientCertificateOptions = ClientCertificateOption.Manual;
             handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => { return true; };
             payMobUser.api_key = payMobSKey;
@@ -68,7 +70,7 @@ namespace POS_APPLICATION.Controllers
                     throw new Exception("Failed to user Authentication" + ex.Message);
                 }
                 string paymentAmount = Convert.ToString(FIPR_COLL_AMOUNT * 100);
-                if(PaymentType == "CC")
+                if (PaymentType == "CC")
                 {
                     double amountpayment = FIPR_COLL_AMOUNT / 0.974;
                     amountpayment = Math.Round(amountpayment * 100);
@@ -106,7 +108,7 @@ namespace POS_APPLICATION.Controllers
 
                         //paymentAmount = amountpayment.ToString();
                         paymentCard = configuration.GetSection("paymentConfig").GetSection("paymentCard").Value;
-                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': 'deen.Muhammad@salaamtakaful.com','floor': '1','first_name': 'Deen Muhammad Khan', 'street': 'Gulshan-e-Iqbal Karachi Eest Karachi','building': '1','phone_number': '+92333-6499777', " +
+                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': '" + CustEmailAddr + "','floor': '1','first_name': 'Deen Muhammad Khan', 'street': 'Gulshan-e-Iqbal Karachi Eest Karachi','building': '1','phone_number': '" + CustPhone + "', " +
                                                   "'shipping_method': 'PKG','postal_code': '75010','city': 'Karachi','country': 'Pakistan', 'last_name': 'Muhammad','state': 'Sindh' },'currency': '" + prudCurr + "', " +
                                                   "'integration_id': '" + Clientid + "','lock_order_when_paid': 'false'}";
                         JObject json = JObject.Parse(creditCardJson);
@@ -134,7 +136,7 @@ namespace POS_APPLICATION.Controllers
                     {
                         Clientid = configuration.GetSection("paymentConfig").GetSection("EPClientId").Value;
                         paymentCard = configuration.GetSection("paymentConfig").GetSection("paymentCard").Value;
-                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': 'deen.Muhammad@salaamtakaful.com','floor': '1','first_name': 'Deen Muhammad Khan', 'street': 'Gulshan-e-Iqbal Karachi Eest Karachi','building': '1','phone_number': '+92333-6499777', " +
+                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': '" + CustEmailAddr + "','floor': '1','first_name': 'Deen Muhammad Khan', 'street': 'Gulshan-e-Iqbal Karachi Eest Karachi','building': '1','phone_number': '" + CustPhone + "', " +
                                                   "'shipping_method': 'PKG','postal_code': '75010','city': 'Karachi','country': 'Pakistan', 'last_name': 'Muhammad','state': 'Sindh' },'currency': '" + prudCurr + "', " +
                                                   "'integration_id': '" + Clientid + "','lock_order_when_paid': 'false'}";
                         JObject json = JObject.Parse(creditCardJson);
@@ -161,7 +163,7 @@ namespace POS_APPLICATION.Controllers
                     {
                         Clientid = configuration.GetSection("paymentConfig").GetSection("JazzClientId").Value;
                         paymentCard = configuration.GetSection("paymentConfig").GetSection("paymentCard").Value;
-                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': 'deen.Muhammad@salaamtakaful.com','floor': '1','first_name': 'Deen Muhammad Khan', 'street': 'Gulshan-e-Iqbal Karachi Eest Karachi','building': '1','phone_number': '+92333-6499777', " +
+                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': '" + CustEmailAddr + "','floor': '1','first_name': 'Deen Muhammad Khan', 'street': 'Gulshan-e-Iqbal Karachi Eest Karachi','building': '1','phone_number': '" + CustPhone + "', " +
                                                   "'shipping_method': 'PKG','postal_code': '75010','city': 'Karachi','country': 'Pakistan', 'last_name': 'Muhammad','state': 'Sindh' },'currency': '" + prudCurr + "', " +
                                                   "'integration_id': '" + Clientid + "','lock_order_when_paid': 'false'}";
                         JObject json = JObject.Parse(creditCardJson);
@@ -187,7 +189,7 @@ namespace POS_APPLICATION.Controllers
                     try
                     {
                         paymentCard = configuration.GetSection("paymentConfig").GetSection("paymentCard").Value;
-                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': 'deen.Muhammad@salaamtakaful.com','floor': '1','first_name': 'Deen Muhammad Khan', 'street': 'Gulshan-e-Iqbal Karachi Eest Karachi','building': '1','phone_number': '+92333-6499777', " +
+                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': '" + CustEmailAddr + "','floor': '1','first_name': 'Deen Muhammad Khan', 'street': 'Gulshan-e-Iqbal Karachi Eest Karachi','building': '1','phone_number': '" + CustPhone + "', " +
                                                   "'shipping_method': 'PKG','postal_code': '75010','city': 'Karachi','country': 'Pakistan', 'last_name': 'Muhammad','state': 'Sindh' },'currency': '" + prudCurr + "', " +
                                                   "'integration_id': '" + Clientid + "','lock_order_when_paid': 'false'}";
                         JObject json = JObject.Parse(creditCardJson);

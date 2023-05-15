@@ -621,6 +621,8 @@ namespace POS_APPLICATION.Controllers
                                     UserIDValue = UserArr["NEW_USER_ID"].ToString();
                                 }
                                 TempData["UserIDValue"] = UserIDValue;
+                                HttpContext.Session.SetString("SUM_USER_EMAIL_ADDR", SUM_USER_EMAIL_ADDR);
+                                HttpContext.Session.SetString("SUM_CUST_CONTPHONE", SUM_CUST_CONTPHONE);
                             }
                             else
                             {
@@ -751,6 +753,8 @@ namespace POS_APPLICATION.Controllers
                             }
                             else
                             {
+                                //HttpContext.Session.SetString("SUM_USER_EMAIL_ADDR", SUM_USER_EMAIL_ADDR);
+                                //HttpContext.Session.SetString("SUM_CUST_CONTPHONE", SUM_CUST_CONTPHONE);
                                 var reg = new Regex("\".*?\"");
                                 var matches = reg.Matches((string)apiResponse);
                                 for (int i = 1; i < 3; i++)

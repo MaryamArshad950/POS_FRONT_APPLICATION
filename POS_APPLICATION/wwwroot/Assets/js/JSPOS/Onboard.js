@@ -779,8 +779,19 @@
                         success: function (result) {
                             if (result.length == 1) {
                                 $("#needAnalysisModal").modal("hide");
-                                alert("Your account already exists.\nPlease sign in")
-                                window.location.href = "/";
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Alert',
+                                    text: 'Something went wrong! Your account already exists.\nPlease sign in',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        sessionStorage.clear();
+                                        localStorage.clear();
+                                        $.post("/User/removeSessionValue", function (token) {
+                                            window.location.href = "/"
+                                        });
+                                    }
+                                });
                                 return false;
                             }
                             else {
@@ -1346,7 +1357,11 @@ function continueThisDocument(ID) {
                     if (result[i].FPDM_POLDOC_REFNO == custDoc && result[i].FPDM_POLICY_NO != null) {
                         $("#" + ID).attr("disabled", true);
                         $("#" + ID).removeClass("illustIcons", true);
-                        alert("Policy already issued on this document!");
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Alert',
+                            text: 'You have already issued Policy on this document!',
+                        })
                     }
                     else {
                         sessionStorage.setItem("thisDocID", thisDocID);
