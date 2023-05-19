@@ -623,6 +623,7 @@ namespace POS_APPLICATION.Controllers
                                 TempData["UserIDValue"] = UserIDValue;
                                 HttpContext.Session.SetString("SUM_USER_EMAIL_ADDR", SUM_USER_EMAIL_ADDR);
                                 HttpContext.Session.SetString("SUM_CUST_CONTPHONE", SUM_CUST_CONTPHONE);
+                                HttpContext.Session.SetString("SUM_FULL_NAME", SUM_FULL_NAME);
                             }
                             else
                             {

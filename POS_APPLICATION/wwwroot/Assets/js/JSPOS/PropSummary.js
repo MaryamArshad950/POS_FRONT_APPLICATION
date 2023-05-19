@@ -40,7 +40,6 @@
                     if (result.length != 0) {
                         for (let i = 0; i < result.length; i++) {
                             if (result[i].FPDM_POLICY_NO == null) {
-                                console.log(result)
                                 let FCDM_DOCUMENT_DATE = new Date(result[i].FCDM_DOCUMENT_DATE);
                                 let dcmntMonth = FCDM_DOCUMENT_DATE.getMonth() + 1;
                                 if (("" + dcmntMonth).length == 1) {
@@ -132,6 +131,13 @@
                 datatype: 'jsonp',
                 success: function (result) {
                     $(result).each(function () {
+                        $.post("/User/SetSessionValue", { key: "SUM_USER_EMAIL_ADDR", value: this.SUM_USER_EMAIL_ADDR }, function () {
+                            $.post("/User/SetSessionValue", { key: "SUM_CUST_CONTPHONE", value: result[0].SUM_CUST_CONTPHONE }, function () {
+                                $.post("/User/SetSessionValue", { key: "SUM_FULL_NAME", value: result[0].SUM_FULL_NAME }, function () {
+                                });
+                            });
+                        });
+                        
                         sessionStorage.setItem("customer_name", this.SUM_FULL_NAME);
                     })
                 },
