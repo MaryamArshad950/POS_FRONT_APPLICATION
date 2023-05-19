@@ -47,10 +47,17 @@ namespace POS_APPLICATION.Controllers
             string CustEmailAddr = HttpContext.Session.GetString("SUM_USER_EMAIL_ADDR");
             string CustPhone = HttpContext.Session.GetString("SUM_CUST_CONTPHONE");
             string CustFullName = HttpContext.Session.GetString("SUM_FULL_NAME");
+
+            string[] words = CustFullName.Split(' ');
+            int midpoint = words.Length / 2;
+            string firstName = string.Join(" ", words, 0, midpoint);
+            string lastName = string.Join(" ", words, midpoint, words.Length - midpoint);
+
             handler.ClientCertificateOptions = ClientCertificateOption.Manual;
             handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => { return true; };
             payMobUser.api_key = payMobSKey;
             Random rand = new Random();
+            string ProposalNumber = P_DOCUMENT_ID;
             using (var client = new HttpClient(handler))
             {
                 SendRequest = null;
@@ -109,8 +116,8 @@ namespace POS_APPLICATION.Controllers
 
                         //paymentAmount = amountpayment.ToString();
                         paymentCard = configuration.GetSection("paymentConfig").GetSection("paymentCard").Value;
-                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': '" + CustEmailAddr + "','floor': '1','first_name': '" + CustFullName + "', 'street': 'Gulshan-e-Iqbal Karachi Eest Karachi','building': '1','phone_number': '" + CustPhone + "', " +
-                                                  "'shipping_method': 'PKG','postal_code': '75010','city': 'Karachi','country': 'Pakistan', 'last_name': 'Muhammad','state': 'Sindh' },'currency': '" + prudCurr + "', " +
+                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': '" + CustEmailAddr + "','floor': '1','first_name': '" + firstName + "', 'street': '" + ProposalNumber + "','building': '1','phone_number': '" + CustPhone + "', " +
+                                                  "'shipping_method': 'PKG','postal_code': '75010','city': 'Karachi','country': 'Pakistan','last_name': '" + lastName + "','state': 'Sindh' },'currency': '" + prudCurr + "', " +
                                                   "'integration_id': '" + Clientid + "','lock_order_when_paid': 'false'}";
                         JObject json = JObject.Parse(creditCardJson);
                         SendRequest = new StringContent(JsonConvert.SerializeObject(json), Encoding.UTF8, "application/json");
@@ -137,8 +144,8 @@ namespace POS_APPLICATION.Controllers
                     {
                         Clientid = configuration.GetSection("paymentConfig").GetSection("EPClientId").Value;
                         paymentCard = configuration.GetSection("paymentConfig").GetSection("paymentCard").Value;
-                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': '" + CustEmailAddr + "','floor': '1','first_name': '" + CustFullName + "', 'street': 'Gulshan-e-Iqbal Karachi Eest Karachi','building': '1','phone_number': '" + CustPhone + "', " +
-                                                  "'shipping_method': 'PKG','postal_code': '75010','city': 'Karachi','country': 'Pakistan', 'last_name': 'Muhammad','state': 'Sindh' },'currency': '" + prudCurr + "', " +
+                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': '" + CustEmailAddr + "','floor': '1','first_name': '" + CustFullName + "', 'street': '" + ProposalNumber + "','building': '1','phone_number': '" + CustPhone + "', " +
+                                                  "'shipping_method': 'PKG','postal_code': '75010','city': 'Karachi','country': 'Pakistan','last_name': '" + lastName + "','state': 'Sindh' },'currency': '" + prudCurr + "', " +
                                                   "'integration_id': '" + Clientid + "','lock_order_when_paid': 'false'}";
                         JObject json = JObject.Parse(creditCardJson);
                         SendRequest = new StringContent(JsonConvert.SerializeObject(json), Encoding.UTF8, "application/json");
@@ -164,8 +171,8 @@ namespace POS_APPLICATION.Controllers
                     {
                         Clientid = configuration.GetSection("paymentConfig").GetSection("JazzClientId").Value;
                         paymentCard = configuration.GetSection("paymentConfig").GetSection("paymentCard").Value;
-                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': '" + CustEmailAddr + "','floor': '1','first_name': '" + CustFullName + "', 'street': 'Gulshan-e-Iqbal Karachi Eest Karachi','building': '1','phone_number': '" + CustPhone + "', " +
-                                                  "'shipping_method': 'PKG','postal_code': '75010','city': 'Karachi','country': 'Pakistan', 'last_name': 'Muhammad','state': 'Sindh' },'currency': '" + prudCurr + "', " +
+                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': '" + CustEmailAddr + "','floor': '1','first_name': '" + CustFullName + "', 'street': '" + ProposalNumber + "','building': '1','phone_number': '" + CustPhone + "', " +
+                                                  "'shipping_method': 'PKG','postal_code': '75010','city': 'Karachi','country': 'Pakistan','last_name': '" + lastName + "','state': 'Sindh' },'currency': '" + prudCurr + "', " +
                                                   "'integration_id': '" + Clientid + "','lock_order_when_paid': 'false'}";
                         JObject json = JObject.Parse(creditCardJson);
                         SendRequest = new StringContent(JsonConvert.SerializeObject(json), Encoding.UTF8, "application/json");
@@ -190,8 +197,8 @@ namespace POS_APPLICATION.Controllers
                     try
                     {
                         paymentCard = configuration.GetSection("paymentConfig").GetSection("paymentCard").Value;
-                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': '" + CustEmailAddr + "','floor': '1','first_name': '" + CustFullName + "', 'street': 'Gulshan-e-Iqbal Karachi Eest Karachi','building': '1','phone_number': '" + CustPhone + "', " +
-                                                  "'shipping_method': 'PKG','postal_code': '75010','city': 'Karachi','country': 'Pakistan', 'last_name': 'Muhammad','state': 'Sindh' },'currency': '" + prudCurr + "', " +
+                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': '" + CustEmailAddr + "','floor': '1','first_name': '" + CustFullName + "', 'street': '" + ProposalNumber + "','building': '1','phone_number': '" + CustPhone + "', " +
+                                                  "'shipping_method': 'PKG','postal_code': '75010','city': 'Karachi','country': 'Pakistan', 'last_name': '" + lastName + "','state': 'Sindh' },'currency': '" + prudCurr + "', " +
                                                   "'integration_id': '" + Clientid + "','lock_order_when_paid': 'false'}";
                         JObject json = JObject.Parse(creditCardJson);
                         SendRequest = new StringContent(JsonConvert.SerializeObject(json), Encoding.UTF8, "application/json");
