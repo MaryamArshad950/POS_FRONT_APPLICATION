@@ -81,6 +81,12 @@ namespace POS_APPLICATION.Controllers
             return View();
         }
         [HttpPost]
+        public IActionResult GetSessionValue(string key)
+        {
+            return Ok(HttpContext.Session.GetString(key));
+            //return Ok();
+        }
+        [HttpPost]
         public IActionResult SetSessionValue(string key, string value)
         {
             HttpContext.Session.SetString(key, value);
