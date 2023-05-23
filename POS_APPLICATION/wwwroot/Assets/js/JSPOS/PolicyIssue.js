@@ -1,4 +1,4 @@
-﻿!function () {
+!function () {
     $(document).ready(function () {
         const urlParams = new URLSearchParams(location.search);
         for (const [key, value] of urlParams) {
@@ -195,6 +195,7 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
                                     }).done(function (msg) {
                                     });
                                     if (this.SUM_USER_EMAIL_ADDR != null) {
+                                        
                                         let doc_code = sessionStorage.getItem("docIdPrpsl");
                                         doc_code = 'DOC' + doc_code;
                                         let email = this.SUM_USER_EMAIL_ADDR;
@@ -211,8 +212,7 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
                                                 'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
                                                 'Authorization': 'Bearer ' + getsession
                                             },
-                                            datatype: 'jsonp',
-                                            dataType: JSON,
+                                            datatype: JSON,
                                             contentType: "application/json; charset=utf-8",
                                             success: function (result) {
                                             },
