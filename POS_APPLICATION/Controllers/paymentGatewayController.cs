@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
@@ -22,6 +22,7 @@ namespace POS_APPLICATION.Controllers
                paymentNIFT = "",
                payMobSKey = "";
         StringContent SendRequest;
+
         [Obsolete]
         public paymentGatewayController(IConfiguration _Configuration)
         {
@@ -103,9 +104,10 @@ namespace POS_APPLICATION.Controllers
                         Models.SessionExtensions.Application["OrderId"] = OrderId;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw new Exception("Failed to Order ID API" + ex.Message);
+                    return View("~/Views/User/Basic_information.cshtml");
+                    //throw new Exception("Failed to Order ID API" + ex.Message);
                 }
                 if (PaymentType == "CC")
                 {
@@ -116,8 +118,8 @@ namespace POS_APPLICATION.Controllers
 
                         //paymentAmount = amountpayment.ToString();
                         paymentCard = configuration.GetSection("paymentConfig").GetSection("paymentCard").Value;
-                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': '" + CustEmailAddr + "','floor': '1','first_name': '" + firstName + "', 'street': '" + ProposalNumber + "','building': '1','phone_number': '" + CustPhone + "', " +
-                                                  "'shipping_method': 'PKG','postal_code': '75010','city': 'Karachi','country': 'Pakistan','last_name': '" + lastName + "','state': 'Sindh' },'currency': '" + prudCurr + "', " +
+                        string creditCardJson = @"{'auth_token': '" + Models.SessionExtensions.Application["JwTokenPay"] + "','amount_cents': '" + paymentAmount + "','expiration': 3600,'order_id': '" + OrderId + "','billing_data': {'apartment': 'B499','email': '" + CustEmailAddr + "','floor': '1','first_name': '" + firstName + "', 'street': '1','building': '1','phone_number': '" + CustPhone + "', " +
+                                                  "'shipping_method': 'PKG', 'extra_description': '" + ProposalNumber + "', 'postal_code': '75010','city': 'Karachi','country': 'Pakistan','last_name': '" + lastName + "','state': 'Sindh' },'currency': '" + prudCurr + "', " +
                                                   "'integration_id': '" + Clientid + "','lock_order_when_paid': 'false'}";
                         JObject json = JObject.Parse(creditCardJson);
                         SendRequest = new StringContent(JsonConvert.SerializeObject(json), Encoding.UTF8, "application/json");
@@ -133,9 +135,10 @@ namespace POS_APPLICATION.Controllers
                             return Redirect(CardPaymentURL);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        throw new Exception("Failed to load Credit Card API" + ex.Message);
+                        return View("~/Views/User/Basic_information.cshtml");
+                        //throw new Exception("Failed to load Credit Card API" + ex.Message);
                     }
                 }
                 if (PaymentType == "EP")
@@ -160,9 +163,10 @@ namespace POS_APPLICATION.Controllers
                             return Redirect(CardPaymentURL);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        throw new Exception("Failed to load Credit Card API" + ex.Message);
+                        return View("~/Views/User/Basic_information.cshtml");
+                        //throw new Exception("Failed to load Credit Card API" + ex.Message);
                     }
                 }
                 if (PaymentType == "JC")
@@ -187,9 +191,10 @@ namespace POS_APPLICATION.Controllers
                             return Redirect(CardPaymentURL);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        throw new Exception("Failed to load Credit Card API" + ex.Message);
+                        return View("~/Views/User/Basic_information.cshtml");
+                        //throw new Exception("Failed to load Credit Card API" + ex.Message);
                     }
                 }
                 if (PaymentType == "NI")
@@ -213,9 +218,10 @@ namespace POS_APPLICATION.Controllers
                             return Redirect(NIFTURL);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        throw new Exception("Failed to load Credit Card API" + ex.Message);
+                        return View("~/Views/User/Basic_information.cshtml");
+                        //throw new Exception("Failed to load Credit Card API" + ex.Message);
                     }
                 }
                 return RedirectToAction("PRO_RECEIPT");
