@@ -339,10 +339,7 @@
             let annual_income = $("#FSCU_CUST_ANNUAL_INCOME").val();
             let cnic_issuedate = $("#FSCU_IDENTISSUE_DATE").val();
             let cnic_expirydate = $("#FSCU_IDENTIEXPIRY_DATE").val();
-            
-            alert(cust_email)
-            alert(cust_phone)
-
+           
             let today = new Date();
             let todays_date = new Date();
             let todayMonth = todays_date.getMonth() + 1;
@@ -381,7 +378,7 @@
                 FSCT_CITY_ID: cust_city,
                 FSCA_ADDRESS1: cust_address,
                 FSCA_EMAIL1: cust_email,
-                FSCA_MOBILE1: cust_phone,
+                FSCA_TELNO1: cust_phone,
                 FSCA_STATUS: "Y",
                 FSCA_ADDR_ISCORSP: "Y",
                 FSCA_CRUSER: "1",

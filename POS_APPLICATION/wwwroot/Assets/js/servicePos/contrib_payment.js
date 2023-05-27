@@ -1,6 +1,6 @@
 ﻿!function () {
     $(document).ready(function () {
-        let nf = new Intl.NumberFormat('en-US');
+        var nf = new Intl.NumberFormat('en-US');
         let gross_amount = sessionStorage.getItem("GROSS_AMT");
         if (gross_amount != null) {
 
@@ -57,9 +57,42 @@ function checkValue(val) {
         $('input[name="P_DOCUMENT_ID"]').val("");
         $('input[name="FIPR_COLL_AMOUNT"]').val("");
         $('input[name="PaymentType"]').val("");
-
-        $(".indexation-contribution").removeAttr("hidden", true)
+        $(".proposal_Contribution").removeAttr("hidden", true)
+        //$(".indexation-contribution").removeAttr("hidden", true)
+        //$('.proposal_Contribution').attr("hidden", true)
         $(".topup").attr("hidden", true)
+        let custCNIC = sessionStorage.getItem("cnic.");
+        if (custCNIC && custCNIC.length === 13) {
+            custCNIC = custCNIC.slice(0, 5) + '-' + custCNIC.slice(5, 12) + '-' + custCNIC.slice(12);
+        }
+        $.ajax({
+            "crossDomain": true,
+            url: "" + Result_API + "/api/Inquiry/GetInquiryByUsername/" + custCNIC,
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Access-Control-Allow-Origin': Result_API,
+                'Access-Control-Allow-Methods': 'POST, GET',
+                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                'Authorization': 'Bearer ' + getsession
+            },
+            datatype: 'jsonp',
+            success: function (result) {
+                console.log(result)
+                if (result.length != 0) {
+                    for (let i = 0; i < result.length; i++) {
+                        if (result[i].FPDM_POLICY_NO == null) {
+                            $("#FPDM_PROPOSAL_NO").append($("<option></option>").val(result[i].FPDM_PROPOSAL_NO).html(result[i].FPDM_PROPOSAL_NO));
+                        }
+                        else {
+                            $("#FPDM_POLICY_NO").append($("<option></option>").val(result[i].FPDM_POLICY_NO).html(result[i].FPDM_POLICY_NO))
+                        }
+                    }
+                }
+            },
+            error: function (data2) { }
+        });
     } if (val == 2) {
         $(".paymode-select").attr("hidden", true);
         let proposal_no = sessionStorage.getItem("Proposal_NoF");
@@ -71,9 +104,124 @@ function checkValue(val) {
         $("#HS_TransactionReferenceNumber").val("");
         $("#TransactionReferenceNumber").val("");
         $("#TransactionAmount").val("");
+        if (proposal_no != null || proposal_no != "" || proposal_no != undefined) {
+            showFund(proposal_no);
+        }
+        $(".indexation-contribution").attr("hidden", true)
+        $(".paymode-select").attr("hidden", true)
+        //$('.proposal_Contribution').attr("hidden", true)
+        $(".topup").removeAttr("hidden", true)
+    }
+}
+function NB_Payments(Val,ID) {
+    if (Val == 1) {
+        $("#FPDM_POLICY_NO").attr("hidden", true);
+        if ($("#" + ID).length == 0) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Alert',
+                text: 'No proposal payment is left! Please generate a new proposal if you want to make a payment'
+            })
+        }
+        if ($("#" + ID).length > 0) {
+            $("#FPDM_PROPOSAL_NO").removeAttr("hidden", true);
+        }
+    }
+    if (Val == 2) {
+        $("#FPDM_PROPOSAL_NO").attr("hidden", true);
+        if ($("#" + ID).length == 0) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Alert',
+                text: 'No policy has been issued yet! Please isssue your policy if you want to make a renewal policy payment'
+            })
+        }
+        if ($("#" + ID).length > 0) {
+            $("#FPDM_POLICY_NO").removeAttr("hidden", true);
+        }
+    }
+}
+function PayContributionAmount(Val) {
+    var nf = new Intl.NumberFormat('en-US');
+    if (Val != "") {
+        let custCNIC = sessionStorage.getItem("cnic.");
+        if (custCNIC[5] != "-" && custCNIC[13] != "-") {
+            let n1 = custCNIC.substring(0, 5);
+            let n2 = custCNIC.substring(5, 12);
+            let addn = n1 + "-" + n2 + "-" + custCNIC[custCNIC.length - 1]
+            custCNIC = addn;
+        }
         $.ajax({
             "crossDomain": true,
-            url: Global_API + "/API/NEW_BUSINESS/GET_CUSTOMER_PROP_FUND/" + proposal_no + "/Y/Y",
+            url: Global_API + "/api/Inquiry/GetInquiryByUsername/" + custCNIC,
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Access-Control-Allow-Origin': Result_API,
+                'Access-Control-Allow-Methods': 'POST, GET',
+                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                'Authorization': 'Bearer ' + getsession
+            },
+            datatype: 'jsonp',
+            success: function (result) {
+                $(result).each(function () {
+                    if (this.FPDM_POLICY_NO == Val) {
+                        $(".non-index-contrib").html('<p>Non-index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
+                        $(".index-contrib").html('<p>Index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
+                    }
+                })
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 401) {
+                }
+            }
+        });
+        $(".indexation-contribution").removeAttr("hidden", true);
+    }
+}
+function showFund(ProposalNum, PolicyNumb) {
+    let custCNIC = sessionStorage.getItem("cnic.");
+    if (custCNIC[5] != "-" && custCNIC[13] != "-") {
+        let n1 = custCNIC.substring(0, 5);
+        let n2 = custCNIC.substring(5, 12);
+        let addn = n1 + "-" + n2 + "-" + custCNIC[custCNIC.length - 1]
+        custCNIC = addn;
+    }
+    if (PolicyNumb != null || PolicyNumb != undefined) {
+        $.ajax({
+            "crossDomain": true,
+            url: Global_API + "/api/Inquiry/GetInquiryByUsername/" + custCNIC,
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Access-Control-Allow-Origin': Global_API,
+                'Access-Control-Allow-Methods': 'POST, GET',
+                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                'Authorization': 'Bearer ' + getsession
+            },
+            datatype: 'jsonp',
+            success: function (result) {
+                console.log(result)
+               
+                $(result).each(function () {
+                    if (this.FPDM_POLICY_NO == PolicyNumb) {
+                        showFund(this.FPDM_PROPOSAL_NO);
+                    }
+                })
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 401) {
+                }
+            }
+        });
+    }
+    if (ProposalNum != null || ProposalNum != "") {
+        alert(ProposalNum)
+        $.ajax({
+            "crossDomain": true,
+            url: Global_API + "/API/NEW_BUSINESS/GET_CUSTOMER_PROP_FUND/" + ProposalNum + "/Y/Y",
             type: "GET",
             contentType: "application/json; charset=utf-8",
             headers: {
@@ -95,13 +243,14 @@ function checkValue(val) {
                 }
             }
         });
-        $(".indexation-contribution").attr("hidden", true)
-        $(".paymode-select").attr("hidden", true)
-        $(".topup").removeAttr("hidden", true)
     }
 }
 function calculateTotalPayment(Amount) {
-    $("#TOTAL_AMOUNT").val(Amount)
+    if (Amount == "" || Amount == undefined) {
+        $("#TOTAL_AMOUNT").val($("#fund_payment").val());
+    } else {
+        $("#TOTAL_AMOUNT").val(Amount)
+    }
 }
 function paymentSelection(elemID) {
     let gross_payment = sessionStorage.getItem("GROSS_AMT");

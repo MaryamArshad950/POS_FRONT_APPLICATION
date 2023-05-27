@@ -37,6 +37,7 @@
                 },
                 datatype: 'jsonp',
                 success: function (result) {
+                    console.log(result)
                     if (result.length != 0) {
                         for (let i = 0; i < result.length; i++) {
                             if (result[i].FPDM_POLICY_NO == null) {

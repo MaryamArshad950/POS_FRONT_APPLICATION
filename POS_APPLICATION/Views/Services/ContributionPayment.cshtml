@@ -27,24 +27,60 @@
                 <h5 class="text-danger font-weight-500 pt-1"> Please Choose Between Regular Contribution or Topup</h5>
             </div>
             <div class="row mt-2 ml-3 select_paymnt">
-                <div class="form-check form-check-success mr-4">
-                    <label for="reg_contrib" class="form-check-label">
-                        Regular Contribution
-                        <input class="form-check-input mr-5" type="radio" id="reg_contrib" name="mode" value="1" oninput="checkValue(this.value)" />
-                        <i class="input-helper"></i>
-                    </label>
+                <div class="col-md-6">
+                    <div class="form-check form-check-success mr-4">
+                        <label for="reg_contrib" class="form-check-label">
+                            Regular Contribution
+                            <input class="form-check-input mr-5" type="radio" id="reg_contrib" name="mode" value="1" oninput="checkValue(this.value)" />
+                            <i class="input-helper"></i>
+                        </label>
+                    </div>
+                    <div class="form-check form-check-success">
+                        <label for="top_up" class="form-check-label">
+                            Top up
+                            <input class="form-check-input" type="radio" id="top_up" name="mode" value="2" oninput="checkValue(this.value)" />
+                            <i class="input-helper"></i>
+                        </label>
+                    </div>
                 </div>
-                <div class="form-check form-check-success">
-                    <label for="top_up" class="form-check-label">
-                        Top up
-                        <input class="form-check-input" type="radio" id="top_up" name="mode" value="2" oninput="checkValue(this.value)" />
-                        <i class="input-helper"></i>
-                    </label>
+            </div>
+            <div class="proposal_Contribution" hidden>
+                <div class="row ml-3 mt-4">
+                    <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
+                    <h5 class="text-danger font-weight-500 pt-1"> Please select the below options</h5>
+                </div>
+                <div class="row mt-2 ml-3">
+                    <div class="col-md-6">
+                        <div class="form-check form-check-success mr-4">
+                            <label for="nb_payment" class="form-check-label">
+                                Proposal Payment
+                                <input class="form-check-input mr-5" type="radio" id="proposal_payment" name="nb_payment" value="1" oninput="NB_Payments(this.value,this.id)" />
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                        <div class="form-check form-check-success">
+                            <label for="nb_payment" class="form-check-label">
+                                Renewal Policy
+                                <input class="form-check-input" type="radio" id="renewal_policy" name="nb_payment" value="2" oninput="NB_Payments(this.value,this.id)" />
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 ml-3">
+                    <div class="col-md-3">
+                        <select class="form-control" name="FPDM_PROPOSAL_NO" id="FPDM_PROPOSAL_NO" hidden onchange="PayContributionAmount(this.value)"><option value="">Select</option></select>
+                    </div>
+                </div>
+                <div class="row mt-2 ml-3">
+                    <div class="col-md-3">
+                        <select class="form-control" name="FPDM_POLICY_NO" id="FPDM_POLICY_NO" hidden onchange="PayContributionAmount(this.value)"><option value="">Select</option></select>
+                    </div>
                 </div>
             </div>
             <div class="indexation-contribution" hidden>
-                <div class="row mt-3 justify-content-center">
-                    <div class="col-md-3 mb-2">
+                <div class="row mt-3">
+                    <div class="col-md-3 mb-2 pl-5">
                         <div class="row custom_row2 p-0">
                             <div class="col-md-10">
                                 <div class="p-4 non-index-contrib" type="button">Non-index Contribution</div>
@@ -54,7 +90,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-2">
+                    <div class="col-md-3 mb-2 pl-5">
                         <div class="row custom_row2 p-0">
                             <div class="col-md-10">
                                 <div class="p-4 index-contrib" type="button">Index Contribution</div>
@@ -65,8 +101,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-3 justify-content-center">
-                    <div class="col-md-4">
+                <div class="row mt-3">
+                    <div class="col-md-4 pl-5">
                         <button class="btn btn-success" type="button" id="btnPaymentProceed" onclick="paymentSelection(this.id)">
                             Pay Now
                         </button>
@@ -79,7 +115,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label for="policy_number" class="text-success">Policy Number</label>
-                                <input class="form-control" name="policy_number" id="policy_number" required />
+                                <input class="form-control" name="policy_number" id="policy_number" oninput="showFund(null,this.value)" required />
                             </div>
                         </div>
                         <div class="row mt-4 text-lemonade pl-3">
@@ -102,7 +138,7 @@
                                 <label for="" class="text-success">Total Amount</label>
                             </div>
                             <div class="col-md-3">
-                                <input class="form-control" name="TOTAL_AMOUNT" id="TOTAL_AMOUNT" readonly />
+                                <input class="form-control" name="TOTAL_AMOUNT" id="TOTAL_AMOUNT" readonly onclick="calculateTotalPayment()" />
                             </div>
                         </div>
                     </div>
@@ -117,8 +153,10 @@
             </div>
         </form>
         <div class="paymode-select" hidden>
-            <h3 class="text-center text-lemonade mb-2 mt-3">Please select your payment mode</h3>
-            <div class="row mt-4 justify-content-center">
+            <div class="row ml-3 mt-4 justify-content-center">
+                <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
+                <h5 class="text-danger font-weight-500 pt-1"> Please select your payment mode</h5>
+            </div>            <div class="row mt-4 justify-content-center">
                 <div class="col-md-6 p-0">
                     <div class="row mb-1">
                         <div class="col-md-6 mb-2 p-0 col-sm-12">

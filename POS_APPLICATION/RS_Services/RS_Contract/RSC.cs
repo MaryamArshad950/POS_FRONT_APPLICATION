@@ -86,7 +86,6 @@ namespace RDL_TestProject.RS_Services.RS_Contract
 
                 var message = new MailMessage();
                 message.To.Add(emailAddress);
-                message.CC.Add("mock.sftl@salaamtakaful.com");
                 message.From = new MailAddress(email.Email);
                 message.Subject = subject;
                 message.IsBodyHtml = true;
