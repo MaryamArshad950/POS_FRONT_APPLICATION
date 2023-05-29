@@ -79,7 +79,6 @@ function checkValue(val) {
             },
             datatype: 'jsonp',
             success: function (result) {
-                console.log(result)
                 if (result.length != 0) {
                     for (let i = 0; i < result.length; i++) {
                         if (result[i].FPDM_POLICY_NO == null) {
@@ -115,6 +114,7 @@ function checkValue(val) {
 }
 function NB_Payments(Val,ID) {
     if (Val == 1) {
+        sessionStorage.setItem("PayCheck", "ProposalPay");
         $("#FPDM_POLICY_NO").attr("hidden", true);
         if ($("#" + ID).length == 0) {
             Swal.fire({
@@ -128,6 +128,7 @@ function NB_Payments(Val,ID) {
         }
     }
     if (Val == 2) {
+        sessionStorage.setItem("PayCheck", "RenewalPay");
         $("#FPDM_PROPOSAL_NO").attr("hidden", true);
         if ($("#" + ID).length == 0) {
             Swal.fire({
@@ -151,6 +152,12 @@ function PayContributionAmount(Val) {
             let addn = n1 + "-" + n2 + "-" + custCNIC[custCNIC.length - 1]
             custCNIC = addn;
         }
+        if (sessionStorage.getItem("PayCheck") == "ProposalPay") {
+            sessionStorage.setItem("Proposal_NoF", $("#FPDM_PROPOSAL_NO").val());
+        }
+        if (sessionStorage.getItem("PayCheck") == "RenewalPay") {
+            sessionStorage.setItem("Policy_NoF", $("#FPDM_POLICY_NO").val());
+        }
         $.ajax({
             "crossDomain": true,
             url: Global_API + "/api/Inquiry/GetInquiryByUsername/" + custCNIC,
@@ -167,8 +174,9 @@ function PayContributionAmount(Val) {
             success: function (result) {
                 $(result).each(function () {
                     if (this.FPDM_POLICY_NO == Val) {
+                        sessionStorage.setItem("GROSS_AMT", this.FPDM_GROSSCONTRIB);
                         $(".non-index-contrib").html('<p>Non-index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
-                        $(".index-contrib").html('<p>Index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
+                        $(".index-contrib").html('<p>Index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>');
                     }
                 })
             },
@@ -202,9 +210,7 @@ function showFund(ProposalNum, PolicyNumb) {
                 'Authorization': 'Bearer ' + getsession
             },
             datatype: 'jsonp',
-            success: function (result) {
-                console.log(result)
-               
+            success: function (result) {               
                 $(result).each(function () {
                     if (this.FPDM_POLICY_NO == PolicyNumb) {
                         showFund(this.FPDM_PROPOSAL_NO);
@@ -233,7 +239,6 @@ function showFund(ProposalNum, PolicyNumb) {
             },
             datatype: 'jsonp',
             success: function (result) {
-                console.log(result)
                 $(result).each(function () {
                     $(".fund_name").html(this.FUND_NAME);
                 })
@@ -252,8 +257,9 @@ function calculateTotalPayment(Amount) {
         $("#TOTAL_AMOUNT").val(Amount)
     }
 }
-function paymentSelection(elemID) {
+function paymentSelection() {
     let gross_payment = sessionStorage.getItem("GROSS_AMT");
+    alert(gross_payment)
     let nonindexcontrib = $("#nonIndexContrib");
     let indexcontrib = $("#IndexContrib");
 
@@ -268,14 +274,24 @@ function paymentSelection(elemID) {
         //$("#FIPR_COLL_AMOUNT").val(gross_payment);
         $(".paymode-select").removeAttr("hidden", true);
         $("#btnCreditCard").click(function () {
-            $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+            if (sessionStorage.getItem("PayCheck") == "ProposalPay") {
+                $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+            }
+            if (sessionStorage.getItem("PayCheck") == "RenewalPay") {
+                $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Policy_NoF"));
+            }
             $("#FIPR_COLL_AMOUNT").val(gross_payment);
             $("#PaymentType").val("CC");
             $(".bank_charges").html("2.6%")
             $("#chargesDisclaimer").modal("show");
         })
         $("#btnNIFTPay").click(function () {
-            $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+            if (sessionStorage.getItem("PayCheck") == "ProposalPay") {
+                $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+            }
+            if (sessionStorage.getItem("PayCheck") == "RenewalPay") {
+                $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Policy_NoF"));
+            }
             $("#FIPR_COLL_AMOUNT").val(gross_payment);
             $("#PaymentType").val("NI");
             $(".disclaimer-text").html("Free! Zero bank transactional fee on Bank Transfer & Easy Paisa Premium / Loan Payments!")
@@ -283,12 +299,22 @@ function paymentSelection(elemID) {
             $("#chargesDisclaimer").modal("show");
         })
         $("#btnJazzCash").click(function () {
-            $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+            if (sessionStorage.getItem("PayCheck") == "ProposalPay") {
+                $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+            }
+            if (sessionStorage.getItem("PayCheck") == "RenewalPay") {
+                $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Policy_NoF"));
+            }
             $("#FIPR_COLL_AMOUNT").val(gross_payment);
             $("#PaymentType").val("JC");
         })
         $("#btnEasyPaisaPay").click(function () {
-            $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+            if (sessionStorage.getItem("PayCheck") == "ProposalPay") {
+                $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+            }
+            if (sessionStorage.getItem("PayCheck") == "RenewalPay") {
+                $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Policy_NoF"));
+            }
             $("#FIPR_COLL_AMOUNT").val(gross_payment);
             $("#PaymentType").val("EP");
         })

@@ -97,7 +97,7 @@
                                         <tr>
                                             <th hidden>ID</th>
                                             <th>Policy Number</th>
-                                            <th>Sum Covered</th>
+                                            <th>Sum Assured</th>
                                             <th>Contribution</th>
                                             <th>Start Date</th>
                                             <th>Maturity Date</th>
@@ -359,17 +359,19 @@
                     <label for="" class="mr-5 text-success">Date of Birth</label>
                     <input class="form-control" name="FCDM_OWCUST_DOB" id="FCDM_OWCUST_DOB" type="date" required />
                 </div>
-                <div class="col-md-3">
-                    <label for="" class="mr-5 text-success">Height</label>
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Height <span class="text-danger font-weight-light">Feet & Inches</span></label>
                     <div class="input-group slidecontainer">
-                        <input type="range" class="slider mt-3 mb-3" max="8" min="3" step="1" id="heightFt" hidden onchange="selectHeightFeet(this.value)">
-                        <input type="range" class="slider mt-3 mb-3" max="11" min="0" step="1" id="heightIn" hidden onchange="selectHeightInches(this.value)">
+                        <input type="number" class="form-control" max="8" min="3" id="heightFt" hidden onkeyup="selectHeightFeet(this.value)" placeholder="Feet">
+                        <input type="number" class="form-control" max="11" min="0" id="heightIn" hidden onkeyup="selectHeightInches(this.value)" placeholder="Inches">
+                        @*<input type="range" class="slider mt-3 mb-3" max="8" min="3" step="1" id="heightFt" hidden onchange="selectHeightFeet(this.value)">
+        <input type="range" class="slider mt-3 mb-3" max="11" min="0" step="1" id="heightIn" hidden onchange="selectHeightInches(this.value)">*@
                     </div>
                     <input class="form-control" id="FCDM_OWCUST_HEITACT" name="FCDM_OWCUST_HEITACT" placeholder="Ex. 5ft 7inches" required onfocus="setHeightMaxLength(this.value)" />
-                    <output id="heightResult" class="mb-2"></output>
+                    @*<output id="heightResult" class="mb-2"></output>*@
                 </div>
                 <div class="col-md-2">
-                    <label for="" class="mr-5 text-success">Weight</label>
+                    <label for="" class="mr-5 text-success">Weight <span class="text-danger font-weight-light">KG</span></label>
                     <input class="form-control" id="FCDM_OWCUST_WEITACT" type="number" name="FCDM_OWCUST_WEITACT" placeholder="Ex. 50 Kilograms" maxlength="3" required onkeyup="calculate_BMI()" />
                 </div>
                 <div class="col-md-4">
@@ -424,13 +426,13 @@
                     <input class="form-control" id="FCDM_PLAN_CONTRIB" type="number" name="FCDM_PLAN_CONTRIB" placeholder="Contribution" required onkeyup="calculateFaceValue()" min="1000" />
                 </div>
                 <div class="col-md-3">
-                    <label for="" class="mr-5 text-success">Sum Covered</label>
-                    <input class="form-control" id="FCDM_FACE_VALUE" type="number" name="FCDM_FACE_VALUE" placeholder="Maturity Value" onclick="calculateFaceValue()" readonly required />
+                    <label for="" class="mr-5 text-success">Sum Assured</label>
+                    <input class="form-control" id="FCDM_FACE_VALUE" type="number" name="FCDM_FACE_VALUE" placeholder="Sum Assured" onclick="calculateFaceValue()" readonly required />
                 </div>
             </div>
             <div class="row ml-1 mt-4">
                 <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
-                <h5 class="text-danger font-weight-500 pt-1"> Do you want to take any extra benefits (Riders)</h5>
+                <h5 class="text-danger font-weight-500 pt-1"> Do you want to take supplementary benefits (Riders)</h5>
             </div>
             <div class="row mt-2 ml-1">
                 <div class="form-check form-check-success mr-4">
@@ -466,7 +468,7 @@
                         <img src="~/Assets/images/medical_questionare.png" class="notebook_image align-center" title="Please answer below questions" />
                     </div>
                     <div class="col-md-10">
-                        <h3 class="text-white mb-3 text-center pt-3">Medical Questions</h3>
+                        <h3 class="text-white mb-3 text-center pt-3">Health Questionnaire</h3>
                     </div>
                 </div>
                 @*<span class="tooltiptext">Please answer all of the below questions</span>*@
@@ -528,7 +530,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-7">
-                            <h3 class="text-lemonade text-center animated animatedFadeInUpp fadeInUpp pt-5">Please select your Rider(s)</h3>
+                            <h3 class="text-lemonade text-center animated animatedFadeInUpp fadeInUpp pt-5">Please select your Supplementary Benefit (Rider)</h3>
                         </div>
                         <div class="col-md-3">
                             <img src="~/Assets/images/life-insurance-rider.png" class="medical-checkup animated animatedFadeInUpp fadeInUpp" alt="life-insurance-rider" />
@@ -548,7 +550,7 @@
                                                         <th hidden>RiderID</th>
                                                         <th>Rider</th>
                                                         <th>Term (Years)</th>
-                                                        <th>Face Value</th>
+                                                        <th>Sum Assured</th>
                                                         <th>Delete</th>
                                                     </tr>
                                                 </thead>
@@ -563,7 +565,7 @@
                     </div>
                     <div class="row m-3 justify-content-center">
                         <div class="col-md-3">
-                            <button class="btn btn-outline-primary closeRidersForm" type="button">Close</button>
+                            <button class="btn btn-outline-primary closeRidersForm" type="button">Save &amp; Continue</button>
                         </div>
                     </div>
                 </div>
@@ -935,13 +937,13 @@
                                         <tr>
                                             <th hidden>Document ID</th>
                                             <th hidden>Document Code</th>
+                                            <th>Continue</th>
                                             <th>Document Name</th>
                                             <th>Coverage Amount</th>
                                             <th>Takaful Contribution</th>
                                             <th>Plan Term</th>
                                             <th>Download</th>
                                             <th>View</th>
-                                            <th>Continue</th>
                                         </tr>
                                     </thead>
                                     <tbody>

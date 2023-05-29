@@ -110,7 +110,14 @@ function ProcessGlobalCore(coresession) {
             $("#CUOCP_FSCD_ID").empty();
             $("#CUOCP_FSCD_ID").append($("<option value=''>Select</option>"));
             $(result).each(function () {
-                $("#CUOCP_FSCD_ID").append($("<option></option>").val(this.PARAM_VALUE).html(this.PARAM_NAME));
+                if (!(this.PARAM_VALUE >= '77' && this.PARAM_VALUE <= '111')) {
+                    $("#CUOCP_FSCD_ID").append($("<option></option>").val(this.PARAM_VALUE).html(this.PARAM_NAME));
+                }
+            });
+            $(result).each(function () {
+                if (this.PARAM_VALUE >= '77' && this.PARAM_VALUE <= '111') {
+                    $("#CUOCP_FSCD_ID").append($("<option></option>").val(this.PARAM_VALUE).html(this.PARAM_NAME));
+                }
             });
         },
         error: function (data) { }

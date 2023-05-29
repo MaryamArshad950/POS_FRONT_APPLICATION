@@ -231,6 +231,7 @@
                                 $(result).each(function () {
                                     $("#FSCT_CITY_ID").val(this.FSCT_CITY_ID);
                                     $("#FSCA_ADDRESS1").val(this.FSCA_ADDRESS1);
+                                    $("#FSCA_ADDRESS2").val(this.FSCA_ADDRESS2);
                                     $("#FSSP_PROVINCE_ID").val(this.FSSP_PROVINCE_ID)
                                 })
                             },
@@ -304,6 +305,7 @@
                                 $(result).each(function () {
                                     $("#FSCT_CITY_ID").val(this.FSCT_CITY_ID);
                                     $("#FSCA_ADDRESS1").val(this.FSCA_ADDRESS1);
+                                    $("#FSCA_ADDRESS2").val(this.FSCA_ADDRESS2);
                                     $("#FSSP_PROVINCE_ID").val(this.FSSP_PROVINCE_ID)
                                 })
                             },
@@ -348,6 +350,7 @@
             }
             todays_date = todays_date.getFullYear() + "-" + todayMonth + "-" + todays_date.getDate();
             let cust_address = $("#FSCA_ADDRESS1").val();
+            let cust_address2 = $("#FSCA_ADDRESS2").val();
             let cust_city = $("#FSCT_CITY_ID").val();
             let cust_province = $("#FSSP_PROVINCE_ID").val();
             //let custDate = new Date();
@@ -377,6 +380,7 @@
                 FSSP_PROVINCE_ID: cust_province,
                 FSCT_CITY_ID: cust_city,
                 FSCA_ADDRESS1: cust_address,
+                FSCA_ADDRESS2: cust_address2,
                 FSCA_EMAIL1: cust_email,
                 FSCA_TELNO1: cust_phone,
                 FSCA_STATUS: "Y",

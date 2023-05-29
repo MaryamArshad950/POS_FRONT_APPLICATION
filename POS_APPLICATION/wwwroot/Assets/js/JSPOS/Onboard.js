@@ -342,13 +342,13 @@
                             $("#tableSavedillust tbody").append("<tr>" +
                                 "<td hidden><input class='form-control' style='width:40px;' name='DOCUMENT_ID' id='DOCUMENT_ID" + count + "' value='" + data[i].DOCUMENT_ID + "'>" + data[i].DOCUMENT_ID + "</td>" +
                                 "<td hidden><input class='form-control' style='width:40px;' name='DOCUMENT_CODE' id='DOCUMENT_CODE" + count + "' value='" + data[i].DOCUMENT_CODE + "'></td>" +
+                                "<td><img src='/Assets/images/continue_btn.png' class='illustIcons' id='continueDoc" + count + "' onclick='continueThisDocument(this.id)'/></td>" +
                                 "<td>" + data[i].DOCUMENT_CODE + "</td>" +
                                 "<td>PKR " + nf.format(data[i].POL_COVGE_SUMASSURD) + "</td>" +
                                 "<td>PKR " + nf.format(data[i].BASIC_CONTRIBUTION) + "</td>" +
                                 "<td>" + data[i].MEMBERSHIP_TERM + "</td>" +
                                 "<td><img src='/Assets/images/down-arrow.png' class='illustIcons' id='downloadDoc" + count + "' onclick='downloadThisDocument(this.id)'/></td>" +
                                 "<td><img src='/Assets/images/edit_pencil.png' class='illustIcons' id='editDoc" + count + "' onclick='editThisDocument(this.id)'/></td>" +
-                                "<td><img src='/Assets/images/continue_btn.png' class='illustIcons' id='continueDoc" + count + "' onclick='continueThisDocument(this.id)'/></td>" +
                                 "</tr>");
                             count += 1;
                         }
@@ -395,13 +395,13 @@
                             $("#tableSavedillust tbody").append("<tr>" +
                                 "<td hidden><input class='form-control' style='width:40px;' name='DOCUMENT_ID' id='DOCUMENT_ID" + count + "' value='" + data[i].DOCUMENT_ID + "'>" + data[i].DOCUMENT_ID + "</td>" +
                                 "<td hidden><input class='form-control' style='width:40px;' name='DOCUMENT_CODE' id='DOCUMENT_CODE" + count + "' value='" + data[i].DOCUMENT_CODE + "'></td>" +
+                                "<td><img src='/Assets/images/continue_btn.png' class='illustIcons' id='continueDoc" + count + "' onclick='continueThisDocument(this.id)'/></td>" +
                                 "<td>" + data[i].DOCUMENT_CODE + "</td>" +
                                 "<td>PKR " + nf.format(data[i].POL_COVGE_SUMASSURD) + "</td>" +
                                 "<td>PKR " + nf.format(data[i].BASIC_CONTRIBUTION) + "</td>" +
                                 "<td>" + data[i].MEMBERSHIP_TERM + "</td>" +
                                 "<td><img src='/Assets/images/down-arrow.png' class='illustIcons' id='downloadDoc" + count + "' onclick='downloadThisDocument(this.id)'/></td>" +
                                 "<td><img src='/Assets/images/edit_pencil.png' class='illustIcons' id='editDoc" + count + "' onclick='editThisDocument(this.id)'/></td>" +
-                                "<td><img src='/Assets/images/continue_btn.png' class='illustIcons' id='continueDoc" + count + "' onclick='continueThisDocument(this.id)'/></td>" +
                                 "</tr>");
                             count += 1;
                         }
@@ -605,13 +605,13 @@
                                                 $("#tableSavedillust tbody").append("<tr>" +
                                                     "<td hidden><input class='form-control' style='width:40px;' name='DOCUMENT_ID' id='DOCUMENT_ID" + count + "' value='" + data[i].DOCUMENT_ID + "'>" + data[i].DOCUMENT_ID + "</td>" +
                                                     "<td hidden><input class='form-control' style='width:40px;' name='DOCUMENT_CODE' id='DOCUMENT_CODE" + count + "' value='" + data[i].DOCUMENT_CODE + "'></td>" +
+                                                    "<td><img src='/Assets/images/continue_btn.png' class='illustIcons' id='continueDoc" + count + "' onclick='continueThisDocument(this.id)'/></td>" +
                                                     "<td>" + data[i].DOCUMENT_CODE + "</td>" +
                                                     "<td>PKR " + nf.format(data[i].POL_COVGE_SUMASSURD) + "</td>" +
                                                     "<td>PKR " + nf.format(data[i].BASIC_CONTRIBUTION) + "</td>" +
                                                     "<td>" + data[i].MEMBERSHIP_TERM + "</td>" +
                                                     "<td><img src='/Assets/images/down-arrow.png' class='illustIcons' id='downloadDoc" + count + "' onclick='downloadThisDocument(this.id)'/></td>" +
                                                     "<td><img src='/Assets/images/edit_pencil.png' class='illustIcons' id='editDoc" + count + "' onclick='editThisDocument(this.id)'/></td>" +
-                                                    "<td><img src='/Assets/images/continue_btn.png' class='illustIcons' id='continueDoc" + count + "' onclick='continueThisDocument(this.id)'/></td>" +
                                                     "</tr>");
                                                 count += 1;
                                             }
@@ -921,6 +921,10 @@ function fillCustomerInfo(CNIC, session) {
                     $("#FCDM_OW_GENDR_FSCD_ID").val(this.FSCU_GENDR_FSCD_DID);
                     $("#FCDM_OWCUST_DOB").val(DATEOFBIRTH);
                     $("#FCDM_OWCUST_HEITACT").val(this.FSCU_CUST_HEIGHT);
+                    let numberString = this.FSCU_CUST_HEIGHT.toString();
+                    let [wholeNumber, decimalPart] = numberString.split('.');
+                    $("#heightFt").val(wholeNumber);
+                    $("#heightIn").val(decimalPart)
                     $("#FCDM_OWCUST_WEITACT").val(this.FSCU_CUST_WEIGHT);
                     $("#FCDM_OWCUST_BMI").val(this.FSCU_CUST_BMI);
                     $("#FCDM_OW_CUOCP_FSCD_ID").val(this.FSCU_CUOCP_FSCD_DID);
@@ -1165,13 +1169,13 @@ function checkCNICQuotations(Val, ID2) {
                         $("#tableSavedillust tbody").append("<tr>" +
                             "<td hidden><input class='form-control' style='width:40px;' name='DOCUMENT_ID' id='DOCUMENT_ID" + count + "' value='" + data[i].DOCUMENT_ID + "'>" + data[i].DOCUMENT_ID + "</td>" +
                             "<td hidden><input class='form-control' style='width:40px;' name='DOCUMENT_CODE' id='DOCUMENT_CODE" + count + "' value='" + data[i].DOCUMENT_CODE + "'></td>" +
+                            "<td><img src='/Assets/images/continue_btn.png' class='illustIcons' id='continueDoc" + count + "' onclick='continueThisDocument(this.id)'/></td>" +
                             "<td>" + data[i].DOCUMENT_CODE + "</td>" +
                             "<td>PKR " + nf.format(data[i].POL_COVGE_SUMASSURD) + "</td>" +
                             "<td>PKR " + nf.format(data[i].BASIC_CONTRIBUTION) + "</td>" +
                             "<td>" + data[i].MEMBERSHIP_TERM + "</td>" +
                             "<td><img src='/Assets/images/down-arrow.png' class='illustIcons' id='downloadDoc" + count + "' onclick='downloadThisDocument(this.id)'/></td>" +
                             "<td><img src='/Assets/images/edit_pencil.png' class='illustIcons' id='editDoc" + count + "' onclick='editThisDocument(this.id)'/></td>" +
-                            "<td><img src='/Assets/images/continue_btn.png' class='illustIcons' id='continueDoc" + count + "' onclick='continueThisDocument(this.id)'/></td>" +
                             "</tr>");
                         count += 1;
                     }
@@ -1205,16 +1209,16 @@ function selectHeightFeet(Val) {
     }
 }
 function selectHeightInches(Val) {
-    $("#heightResult").val("");
+    //$("#heightResult").val("");
     let heightInFt = $("#heightFt").val();
     if (heightInFt != "") {
         if ($("#heightIn").val() == 1) {
-            $("#heightResult").val(heightInFt + " Feet " + Val + " Inch");
+            //$("#heightResult").val(heightInFt + " Feet " + Val + " Inch");
             $("#FCDM_OWCUST_HEITACT").val(heightInFt + "." + Val);
             calculate_BMI();
         }
         else {
-            $("#heightResult").val(heightInFt + " Feet " + Val + " Inches");
+            //$("#heightResult").val(heightInFt + " Feet " + Val + " Inches");
             $("#FCDM_OWCUST_HEITACT").val(heightInFt + "." + Val);
             calculate_BMI();
         }
@@ -1227,19 +1231,19 @@ function setHeightMaxLength(Val) {
     $("#heightFt").addClass("w-50")
     $("#heightIn").addClass("w-50")
 
-    $("#heightResult").removeAttr("hidden", true)
+    //$("#heightResult").removeAttr("hidden", true)
     let heightFeet = $("#heightFt").val();
     let heightInch = $("#heightIn").val();
-    $("#heightResult").val(heightFeet + " Feet " + heightInch + " Inches");
+    //$("#heightResult").val(heightFeet + " Feet " + heightInch + " Inches");
     $("#FCDM_OWCUST_HEITACT").val(heightFeet + "." + heightInch);
     calculate_BMI();
 }
 function setHeightDescp(Val) {
     if (Val[1] == ".") {
-        $("#heightResult").val(Val + " Inches");
+    //    $("#heightResult").val(Val + " Inches");
     }
     else {
-        $("#heightResult").val(Val + " Feet");
+    //    $("#heightResult").val(Val + " Feet");
     }
 }
 //---------------------------BMI CALCULATION-------------------------------//
@@ -1267,65 +1271,65 @@ function calculate_BMI() {
                         calculated_bmi = Number(calculated_bmi.slice(0, i)) + 1;
                         $("#FCDM_OWCUST_BMI").val(calculated_bmi);
                         if (calculated_bmi < 18) {
-                            $("#bmi_unhealthy").removeAttr("hidden", true)
-                            $("#bmi_healthy").attr("hidden", true)
-                            $("#bmi_obesity").attr("hidden", true)
-                            $("#bmi_serious").attr("hidden", true)
+                        //    $("#bmi_unhealthy").removeAttr("hidden", true)
+                        //    $("#bmi_healthy").attr("hidden", true)
+                        //    $("#bmi_obesity").attr("hidden", true)
+                        //    $("#bmi_serious").attr("hidden", true)
                         }
                         if (calculated_bmi >= 18 && calculated_bmi <= 30) {
-                            $("#bmi_healthy").removeAttr("hidden", true)
-                            $("#bmi_unhealthy").attr("hidden", true)
-                            $("#bmi_obesity").attr("hidden", true)
-                            $("#bmi_serious").attr("hidden", true)
+                        //    $("#bmi_healthy").removeAttr("hidden", true)
+                        //    $("#bmi_unhealthy").attr("hidden", true)
+                        //    $("#bmi_obesity").attr("hidden", true)
+                        //    $("#bmi_serious").attr("hidden", true)
                         }
                         if (calculated_bmi >= 31) {
-                            $("#bmi_obesity").removeAttr("hidden", true)
-                            $("#bmi_unhealthy").attr("hidden", true)
-                            $("#bmi_healthy").attr("hidden", true)
-                            $("#bmi_serious").attr("hidden", true)
+                        //    $("#bmi_obesity").removeAttr("hidden", true)
+                        //    $("#bmi_unhealthy").attr("hidden", true)
+                        //    $("#bmi_healthy").attr("hidden", true)
+                        //    $("#bmi_serious").attr("hidden", true)
                         }
                     }
                     if (Number(calculated_bmi[i + 1]) < 5) {
                         calculated_bmi = calculated_bmi.slice(0, i);
                         $("#FCDM_OWCUST_BMI").val(calculated_bmi);
                         if (calculated_bmi < 18) {
-                            $("#bmi_unhealthy").removeAttr("hidden", true)
-                            $("#bmi_healthy").attr("hidden", true)
-                            $("#bmi_obesity").attr("hidden", true)
-                            $("#bmi_serious").attr("hidden", true)
+                        //    $("#bmi_unhealthy").removeAttr("hidden", true)
+                        //    $("#bmi_healthy").attr("hidden", true)
+                        //    $("#bmi_obesity").attr("hidden", true)
+                        //    $("#bmi_serious").attr("hidden", true)
                         }
                         if (calculated_bmi >= 18 && calculated_bmi <= 30) {
-                            $("#bmi_healthy").removeAttr("hidden", true)
-                            $("#bmi_unhealthy").attr("hidden", true)
-                            $("#bmi_obesity").attr("hidden", true)
-                            $("#bmi_serious").attr("hidden", true)
+                        //    $("#bmi_healthy").removeAttr("hidden", true)
+                        //    $("#bmi_unhealthy").attr("hidden", true)
+                        //    $("#bmi_obesity").attr("hidden", true)
+                        //    $("#bmi_serious").attr("hidden", true)
                         }
                         if (calculated_bmi >= 31) {
-                            $("#bmi_obesity").removeAttr("hidden", true)
-                            $("#bmi_unhealthy").attr("hidden", true)
-                            $("#bmi_healthy").attr("hidden", true)
-                            $("#bmi_serious").attr("hidden", true)
+                        //    $("#bmi_obesity").removeAttr("hidden", true)
+                        //    $("#bmi_unhealthy").attr("hidden", true)
+                        //    $("#bmi_healthy").attr("hidden", true)
+                        //    $("#bmi_serious").attr("hidden", true)
                         }
                     }
                 }
                 else {
                     if (calculated_bmi < 18) {
-                        $("#bmi_unhealthy").removeAttr("hidden", true)
-                        $("#bmi_healthy").attr("hidden", true)
-                        $("#bmi_obesity").attr("hidden", true)
-                        $("#bmi_serious").attr("hidden", true)
+                    //    $("#bmi_unhealthy").removeAttr("hidden", true)
+                    //    $("#bmi_healthy").attr("hidden", true)
+                    //    $("#bmi_obesity").attr("hidden", true)
+                    //    $("#bmi_serious").attr("hidden", true)
                     }
                     if (calculated_bmi >= 18 && calculated_bmi <= 30) {
-                        $("#bmi_healthy").removeAttr("hidden", true)
-                        $("#bmi_unhealthy").attr("hidden", true)
-                        $("#bmi_obesity").attr("hidden", true)
-                        $("#bmi_serious").attr("hidden", true)
+                    //    $("#bmi_healthy").removeAttr("hidden", true)
+                    //    $("#bmi_unhealthy").attr("hidden", true)
+                    //    $("#bmi_obesity").attr("hidden", true)
+                    //    $("#bmi_serious").attr("hidden", true)
                     }
                     if (calculated_bmi >= 31) {
-                        $("#bmi_obesity").removeAttr("hidden", true)
-                        $("#bmi_unhealthy").attr("hidden", true)
-                        $("#bmi_healthy").attr("hidden", true)
-                        $("#bmi_serious").attr("hidden", true)
+                    //    $("#bmi_obesity").removeAttr("hidden", true)
+                    //    $("#bmi_unhealthy").attr("hidden", true)
+                    //    $("#bmi_healthy").attr("hidden", true)
+                    //    $("#bmi_serious").attr("hidden", true)
                     }
                     $("#FCDM_OWCUST_BMI").val(calculated_bmi);
                 }
