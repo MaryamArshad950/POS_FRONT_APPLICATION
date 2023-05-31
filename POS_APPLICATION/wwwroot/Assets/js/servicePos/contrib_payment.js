@@ -112,32 +112,39 @@ function checkValue(val) {
         $(".topup").removeAttr("hidden", true)
     }
 }
-function NB_Payments(Val,ID) {
+function NB_Payments(Val, ID) {
+    let proposalIn = document.getElementById("FPDM_PROPOSAL_NO");
+    let policyIn = document.getElementById("FPDM_POLICY_NO");
     if (Val == 1) {
+        $("#FPDM_POLICY_NO").attr("hidden", true);
+        $(".indexation-contribution").attr("hidden", true);
         sessionStorage.setItem("PayCheck", "ProposalPay");
         $("#FPDM_POLICY_NO").attr("hidden", true);
-        if ($("#" + ID).length == 0) {
+        $("#FPDM_PROPOSAL_NO").val("");
+        if (proposalIn.options.length == 1) {
             Swal.fire({
                 icon: 'info',
                 title: 'Alert',
                 text: 'No proposal payment is left! Please generate a new proposal if you want to make a payment'
             })
         }
-        if ($("#" + ID).length > 0) {
+        if (proposalIn.options.length > 1) {
             $("#FPDM_PROPOSAL_NO").removeAttr("hidden", true);
         }
     }
     if (Val == 2) {
         sessionStorage.setItem("PayCheck", "RenewalPay");
         $("#FPDM_PROPOSAL_NO").attr("hidden", true);
-        if ($("#" + ID).length == 0) {
+        $(".indexation-contribution").attr("hidden", true);
+        $("#FPDM_POLICY_NO").val("");
+        if (policyIn.options.length == 1) {
             Swal.fire({
                 icon: 'info',
                 title: 'Alert',
                 text: 'No policy has been issued yet! Please isssue your policy if you want to make a renewal policy payment'
             })
         }
-        if ($("#" + ID).length > 0) {
+        if (policyIn.options.length > 1) {
             $("#FPDM_POLICY_NO").removeAttr("hidden", true);
         }
     }
@@ -174,6 +181,10 @@ function PayContributionAmount(Val) {
             success: function (result) {
                 $(result).each(function () {
                     if (this.FPDM_POLICY_NO == Val) {
+                        sessionStorage.setItem("GROSS_AMT", this.FPDM_GROSSCONTRIB);
+                        $(".non-index-contrib").html('<p>Non-index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
+                        $(".index-contrib").html('<p>Index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>');
+                    } if (this.FPDM_PROPOSAL_NO == Val) {
                         sessionStorage.setItem("GROSS_AMT", this.FPDM_GROSSCONTRIB);
                         $(".non-index-contrib").html('<p>Non-index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
                         $(".index-contrib").html('<p>Index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>');
@@ -259,7 +270,6 @@ function calculateTotalPayment(Amount) {
 }
 function paymentSelection() {
     let gross_payment = sessionStorage.getItem("GROSS_AMT");
-    alert(gross_payment)
     let nonindexcontrib = $("#nonIndexContrib");
     let indexcontrib = $("#IndexContrib");
 

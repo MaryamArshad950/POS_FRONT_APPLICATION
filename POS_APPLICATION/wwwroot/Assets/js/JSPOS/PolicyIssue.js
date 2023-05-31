@@ -50,6 +50,12 @@
     })
 }()
 function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GWAY_STATUS, GWAY_REFNO, PROFILE_ID, TRANS_REF_ID, PENDING_STATUS, INTGN_ID, TRANS_STATUS, TRANS_DATE) {
+    if (sessionStorage.getItem("PayCheck") == "RenewalPay" && sessionStorage.getItem("Policy_NoF") != null) {
+        FPDM_PROPOSAL_NO = sessionStorage.getItem("Policy_NoF");
+    }
+    if (sessionStorage.getItem("PayCheck") == "ProposalPay" && sessionStorage.getItem("Proposal_NoF") != null) {
+        FPDM_PROPOSAL_NO = sessionStorage.getItem("Proposal_NoF");
+    }
     $.ajax({
         "crossDomain": true,
         url: "" + Result_API + "/API/RECEIPT/SAVEorUPDATE_RECEIPT_INFO?FPDM_PROPOSAL_NO=" + FPDM_PROPOSAL_NO + "&FPDM_APPROVED=" + FPDM_APPROVED + "&CURR_CODE=" + CURR_CODE +
@@ -66,185 +72,190 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
         },
         datatype: 'jsonp',
         success: function (result) {
-            $(result).each(function () {
-                sessionStorage.setItem("NEW_POL_NO", this.NEW_POL_NO);
-                let NEW_POL_NO = sessionStorage.getItem("NEW_POL_NO");
-                let message = this.APP_ALTMSG;
-                if (this.APP_STS == "Y") {
-                    $("#policyText").removeAttr("hidden", true);
-                    let policyNumber = document.getElementById("policy-number");
-                    policyNumber.innerHTML = NEW_POL_NO;
-                    let userID = sessionStorage.getItem("User");
-                    if (userID != null) {
-                        $.ajax({
-                            "crossDomain": true,
-                            url: "" + Result_API + "/api/PosUser/GetPOSUserDetails/" + userID,
-                            type: "GET",
-                            contentType: "application/json; charset=utf-8",
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded',
-                                'Access-Control-Allow-Origin': Result_API,
-                                'Access-Control-Allow-Methods': 'POST, GET',
-                                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
-                                'Authorization': 'Bearer ' + getsession
-                            },
-                            datatype: 'jsonp',
-                            success: function (result) {
-                                $(result).each(function () {
-                                    let cust_name = this.SUM_FULL_NAME;
-                                    let cust_number = (this.SUM_CUST_CONTPHONE).slice(1);
-                                    CLLCT_AMOUNT = CLLCT_AMOUNT.slice(0, CLLCT_AMOUNT.length - 2);
-                                    let nf = new Intl.NumberFormat('en-US');
-                                    CLLCT_AMOUNT = nf.format(CLLCT_AMOUNT);
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "/User/SendSMS",
-                                        timeout: 1000,
-                                        data: {
-                                            username: cust_name, Txtmessage: ", Thank you for paying the contribution PKR " + CLLCT_AMOUNT + " for your Takaful application " + NEW_POL_NO + ". For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.", phoneNumber: cust_number
-                                        }
-                                    }).done(function (msg) {
-                                    });
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "/User/SendSMS",
-                                        timeout: 5000,
-                                        data: {
-                                            username: cust_name, Txtmessage: ", Thank you for selecting Salaam Life And Savings for your financial protection. The relevant documents of your membership no " + NEW_POL_NO + " have been sent to you via email. The PMD also contains 14 days free look cancellation clause. To confirm receipt of membership documents, please respond to this message with '1'. In case you have not received the documents, please immediately contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.", phoneNumber: cust_number
-                                        }
-                                    }).done(function (msg) {
-                                    });
-                                    if (this.SUM_USER_EMAIL_ADDR != null) {
-                                        let doc_code = sessionStorage.getItem("docIdPrpsl");
-                                        doc_code = 'DOC' + doc_code;
-                                        let email = this.SUM_USER_EMAIL_ADDR;
-                                        let subject = "Welcome Email(Your Policy No " + NEW_POL_NO + ")";
-                                        let msgEmail = "M";
+            if (sessionStorage.getItem("PayCheck") == "RenewalPay" && sessionStorage.getItem("Policy_NoF") != null) {
+                console.log(result)
+            }
+            else {
+                $(result).each(function () {
+                    sessionStorage.setItem("NEW_POL_NO", this.NEW_POL_NO);
+                    let NEW_POL_NO = sessionStorage.getItem("NEW_POL_NO");
+                    let message = this.APP_ALTMSG;
+                    if (this.APP_STS == "Y") {
+                        $("#policyText").removeAttr("hidden", true);
+                        let policyNumber = document.getElementById("policy-number");
+                        policyNumber.innerHTML = NEW_POL_NO;
+                        let userID = sessionStorage.getItem("User");
+                        if (userID != null) {
+                            $.ajax({
+                                "crossDomain": true,
+                                url: "" + Result_API + "/api/PosUser/GetPOSUserDetails/" + userID,
+                                type: "GET",
+                                contentType: "application/json; charset=utf-8",
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                    'Access-Control-Allow-Origin': Result_API,
+                                    'Access-Control-Allow-Methods': 'POST, GET',
+                                    'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                                    'Authorization': 'Bearer ' + getsession
+                                },
+                                datatype: 'jsonp',
+                                success: function (result) {
+                                    $(result).each(function () {
+                                        let cust_name = this.SUM_FULL_NAME;
+                                        let cust_number = (this.SUM_CUST_CONTPHONE).slice(1);
+                                        CLLCT_AMOUNT = CLLCT_AMOUNT.slice(0, CLLCT_AMOUNT.length - 2);
+                                        let nf = new Intl.NumberFormat('en-US');
+                                        CLLCT_AMOUNT = nf.format(CLLCT_AMOUNT);
                                         $.ajax({
-                                            "crossDomain": true,
-                                            url: "" + Result_API + "/api/EMAIL/POST_SendEmailNotification/" + email + "/" + FPDM_PROPOSAL_NO + "/" + doc_code + "/" + subject + "/" + cust_name + "/" + msgEmail,
                                             type: "POST",
-                                            headers: {
-                                                'Content-Type': 'application/x-www-form-urlencoded',
-                                                'Access-Control-Allow-Origin': Result_API,
-                                                'Access-Control-Allow-Methods': 'POST, GET',
-                                                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
-                                                'Authorization': 'Bearer ' + getsession
-                                            },
-                                            datatype: JSON,
-                                            contentType: "application/json; charset=utf-8",
-                                            success: function (result) {
-                                            },
-                                            error: function (jqXHR, textStatus, errorThrown) {
-                                                if (jqXHR.status === 401) {
-                                                }
+                                            url: "/User/SendSMS",
+                                            timeout: 1000,
+                                            data: {
+                                                username: cust_name, Txtmessage: ", Thank you for paying the contribution PKR " + CLLCT_AMOUNT + " for your Takaful application " + NEW_POL_NO + ". For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.", phoneNumber: cust_number
                                             }
+                                        }).done(function (msg) {
                                         });
-                                        window.setTimeout(function () {
-                                            sessionStorage.clear();
-                                            localStorage.clear();
-                                            $.post("/User/removeSessionValue", function (token) {
-                                                window.location.href = "/"
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/User/SendSMS",
+                                            timeout: 5000,
+                                            data: {
+                                                username: cust_name, Txtmessage: ", Thank you for selecting Salaam Life And Savings for your financial protection. The relevant documents of your membership no " + NEW_POL_NO + " have been sent to you via email. The PMD also contains 14 days free look cancellation clause. To confirm receipt of membership documents, please respond to this message with '1'. In case you have not received the documents, please immediately contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.", phoneNumber: cust_number
+                                            }
+                                        }).done(function (msg) {
+                                        });
+                                        if (this.SUM_USER_EMAIL_ADDR != null) {
+                                            let doc_code = sessionStorage.getItem("docIdPrpsl");
+                                            doc_code = 'DOC' + doc_code;
+                                            let email = this.SUM_USER_EMAIL_ADDR;
+                                            let subject = "Welcome Email(Your Policy No " + NEW_POL_NO + ")";
+                                            let msgEmail = "M";
+                                            $.ajax({
+                                                "crossDomain": true,
+                                                url: "" + Result_API + "/api/EMAIL/POST_SendEmailNotification/" + email + "/" + FPDM_PROPOSAL_NO + "/" + doc_code + "/" + subject + "/" + cust_name + "/" + msgEmail,
+                                                type: "POST",
+                                                headers: {
+                                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                                    'Access-Control-Allow-Origin': Result_API,
+                                                    'Access-Control-Allow-Methods': 'POST, GET',
+                                                    'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                                                    'Authorization': 'Bearer ' + getsession
+                                                },
+                                                datatype: JSON,
+                                                contentType: "application/json; charset=utf-8",
+                                                success: function (result) {
+                                                },
+                                                error: function (jqXHR, textStatus, errorThrown) {
+                                                    if (jqXHR.status === 401) {
+                                                    }
+                                                }
                                             });
-                                        },7000)
+                                            window.setTimeout(function () {
+                                                sessionStorage.clear();
+                                                localStorage.clear();
+                                                $.post("/User/removeSessionValue", function (token) {
+                                                    window.location.href = "/"
+                                                });
+                                            }, 7000)
+                                        }
+                                    })
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    if (jqXHR.status === 401) {
                                     }
-                                })
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                if (jqXHR.status === 401) {
                                 }
-                            }
-                        });
-                    }
-                    if (userID == null) {
-                        $.ajax({
-                            "crossDomain": true,
-                            url: "" + Result_API + "/api/PosUser/GetUserByUserCd/" + sessionStorage.getItem("cnic."),
-                            type: "GET",
-                            contentType: "application/json; charset=utf-8",
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded',
-                                'Access-Control-Allow-Origin': Result_API,
-                                'Access-Control-Allow-Methods': 'POST, GET',
-                                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
-                                'Authorization': 'Bearer ' + getsession
-                            },
-                            datatype: 'jsonp',
-                            success: function (result) {
-                                $(result).each(function () {
-                                    let cust_name = this.SUM_FULL_NAME;
-                                    let cust_number = (this.SUM_CUST_CONTPHONE).slice(1);
-                                    CLLCT_AMOUNT = CLLCT_AMOUNT.slice(0, CLLCT_AMOUNT.length - 2);
-                                    let nf = new Intl.NumberFormat('en-US');
-                                    CLLCT_AMOUNT = nf.format(CLLCT_AMOUNT);
+                            });
+                        }
+                        if (userID == null) {
+                            $.ajax({
+                                "crossDomain": true,
+                                url: "" + Result_API + "/api/PosUser/GetUserByUserCd/" + sessionStorage.getItem("cnic."),
+                                type: "GET",
+                                contentType: "application/json; charset=utf-8",
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                    'Access-Control-Allow-Origin': Result_API,
+                                    'Access-Control-Allow-Methods': 'POST, GET',
+                                    'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                                    'Authorization': 'Bearer ' + getsession
+                                },
+                                datatype: 'jsonp',
+                                success: function (result) {
+                                    $(result).each(function () {
+                                        let cust_name = this.SUM_FULL_NAME;
+                                        let cust_number = (this.SUM_CUST_CONTPHONE).slice(1);
+                                        CLLCT_AMOUNT = CLLCT_AMOUNT.slice(0, CLLCT_AMOUNT.length - 2);
+                                        let nf = new Intl.NumberFormat('en-US');
+                                        CLLCT_AMOUNT = nf.format(CLLCT_AMOUNT);
 
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "/User/SendSMS",
-                                        data: {
-                                            username: cust_name, Txtmessage: ", Thank you for paying the contribution PKR " + CLLCT_AMOUNT + " for your Takaful application " + NEW_POL_NO + ". For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.", phoneNumber: cust_number
-                                        }
-                                    }).done(function (msg) {
-                                    });
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "/User/SendSMS",
-                                        data: {
-                                            username: cust_name, Txtmessage: ", Thank you for selecting Salaam Life & Savings for your financial protection. The relevant documents of your membership no " + NEW_POL_NO + " have been sent to you via email. The PMD also contains 14 days free look cancellation clause. To confirm receipt of membership documents, please respond to this message with '1'. In case you have not received the documents, please immediately contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.", phoneNumber: cust_number
-                                        }
-                                    }).done(function (msg) {
-                                    });
-                                    if (this.SUM_USER_EMAIL_ADDR != null) {
-                                        
-                                        let doc_code = sessionStorage.getItem("docIdPrpsl");
-                                        doc_code = 'DOC' + doc_code;
-                                        let email = this.SUM_USER_EMAIL_ADDR;
-                                        let subject = "Welcome Email(Your Policy No " + NEW_POL_NO + ")";
-                                        let msgEmail = "M";
                                         $.ajax({
-                                            "crossDomain": true,
-                                            url: "" + Result_API + "/api/EMAIL/POST_SendEmailNotification/" + email + "/" + FPDM_PROPOSAL_NO + "/" + doc_code + "/" + subject + "/" + cust_name + "/" + msgEmail,
                                             type: "POST",
-                                            headers: {
-                                                'Content-Type': 'application/x-www-form-urlencoded',
-                                                'Access-Control-Allow-Origin': Result_API,
-                                                'Access-Control-Allow-Methods': 'POST, GET',
-                                                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
-                                                'Authorization': 'Bearer ' + getsession
-                                            },
-                                            datatype: JSON,
-                                            contentType: "application/json; charset=utf-8",
-                                            success: function (result) {
-                                            },
-                                            error: function (jqXHR, textStatus, errorThrown) {
-                                                if (jqXHR.status === 401) {
-                                                }
+                                            url: "/User/SendSMS",
+                                            data: {
+                                                username: cust_name, Txtmessage: ", Thank you for paying the contribution PKR " + CLLCT_AMOUNT + " for your Takaful application " + NEW_POL_NO + ". For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.", phoneNumber: cust_number
                                             }
+                                        }).done(function (msg) {
                                         });
-                                        window.setTimeout(function () {
-                                            sessionStorage.clear();
-                                            localStorage.clear();
-                                            $.post("/User/removeSessionValue", function (token) {
-                                                window.location.href = "/"
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/User/SendSMS",
+                                            data: {
+                                                username: cust_name, Txtmessage: ", Thank you for selecting Salaam Life & Savings for your financial protection. The relevant documents of your membership no " + NEW_POL_NO + " have been sent to you via email. The PMD also contains 14 days free look cancellation clause. To confirm receipt of membership documents, please respond to this message with '1'. In case you have not received the documents, please immediately contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.", phoneNumber: cust_number
+                                            }
+                                        }).done(function (msg) {
+                                        });
+                                        if (this.SUM_USER_EMAIL_ADDR != null) {
+
+                                            let doc_code = sessionStorage.getItem("docIdPrpsl");
+                                            doc_code = 'DOC' + doc_code;
+                                            let email = this.SUM_USER_EMAIL_ADDR;
+                                            let subject = "Welcome Email(Your Policy No " + NEW_POL_NO + ")";
+                                            let msgEmail = "M";
+                                            $.ajax({
+                                                "crossDomain": true,
+                                                url: "" + Result_API + "/api/EMAIL/POST_SendEmailNotification/" + email + "/" + FPDM_PROPOSAL_NO + "/" + doc_code + "/" + subject + "/" + cust_name + "/" + msgEmail,
+                                                type: "POST",
+                                                headers: {
+                                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                                    'Access-Control-Allow-Origin': Result_API,
+                                                    'Access-Control-Allow-Methods': 'POST, GET',
+                                                    'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                                                    'Authorization': 'Bearer ' + getsession
+                                                },
+                                                datatype: JSON,
+                                                contentType: "application/json; charset=utf-8",
+                                                success: function (result) {
+                                                },
+                                                error: function (jqXHR, textStatus, errorThrown) {
+                                                    if (jqXHR.status === 401) {
+                                                    }
+                                                }
                                             });
-                                        }, 7000)
+                                            window.setTimeout(function () {
+                                                sessionStorage.clear();
+                                                localStorage.clear();
+                                                $.post("/User/removeSessionValue", function (token) {
+                                                    window.location.href = "/"
+                                                });
+                                            }, 7000)
+                                        }
+                                    })
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    if (jqXHR.status === 401) {
                                     }
-                                })
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                if (jqXHR.status === 401) {
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
-                }
-                else {
-                    $("#policyfailed").removeAttr("hidden", true);
-                    $("#policyText").attr("hidden", true);
-                    let policyFailure = document.getElementById("policyfailed");
-                    policyFailure.innerHTML = 'Please check your email for policy attachments or respond to sms sent to your provided contact Number';
-                }
-            });
+                    else {
+                        $("#policyfailed").removeAttr("hidden", true);
+                        $("#policyText").attr("hidden", true);
+                        let policyFailure = document.getElementById("policyfailed");
+                        policyFailure.innerHTML = 'Please check your email for policy attachments or respond to sms sent to your provided contact Number';
+                    }
+                });
+            }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             if (jqXHR.status === 401) {
