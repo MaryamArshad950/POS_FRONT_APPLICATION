@@ -365,12 +365,12 @@
     font-size: 1rem;
 }
 
-.chatbotImg {
+/*.chatbotImg {
     height: 167px;
     position: fixed;
     bottom: 49px;
     right: -4px;
-}
+}*/
 
 .alert-dismissible {
     border-radius: 8px;
@@ -1185,17 +1185,17 @@ label {
 
         #custBankDtls > .modal-dialog .modal-content {
             width: 826px !important;
-            height: 30rem !important;
+            height: 40rem !important;
         }
 }
 @media (max-width: 575px) {
     #custBankDtls > .modal-dialog .modal-content {
-        height: 42rem !important;
+        height: 50rem !important;
     }
 }
 @media (max-width: 327px) {
     #custBankDtls > .modal-dialog .modal-content {
-        height: 50rem !important;
+        height: 55rem !important;
     }
 }
 #custBankDtls > .modal-dialog .modal-content {
