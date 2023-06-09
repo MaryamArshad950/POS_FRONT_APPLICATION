@@ -20,7 +20,10 @@ namespace POS_APPLICATION.Controllers
                paymentCard = "",
                paymentEasyPaisa = "",
                paymentNIFT = "",
-               payMobSKey = "";
+               payMobSKey = "",
+               firstName = "",
+               lastName = "";
+
         StringContent SendRequest;
 
         [Obsolete]
@@ -48,11 +51,17 @@ namespace POS_APPLICATION.Controllers
             string CustEmailAddr = HttpContext.Session.GetString("SUM_USER_EMAIL_ADDR");
             string CustPhone = HttpContext.Session.GetString("SUM_CUST_CONTPHONE");
             string CustFullName = HttpContext.Session.GetString("SUM_FULL_NAME");
-
-            string[] words = CustFullName.Split(' ');
-            int midpoint = words.Length / 2;
-            string firstName = string.Join(" ", words, 0, midpoint);
-            string lastName = string.Join(" ", words, midpoint, words.Length - midpoint);
+            if (CustFullName.Contains(" "))
+            {
+                string[] words = CustFullName.Split(' ');
+                int midpoint = words.Length / 2;
+                firstName = string.Join(" ", words, 0, midpoint);
+                lastName = string.Join(" ", words, midpoint, words.Length - midpoint);
+                if (lastName == "" || lastName == null)
+                {
+                    lastName = firstName;
+                }
+            }
 
             handler.ClientCertificateOptions = ClientCertificateOption.Manual;
             handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => { return true; };

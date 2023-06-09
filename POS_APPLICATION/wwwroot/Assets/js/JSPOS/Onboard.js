@@ -1225,11 +1225,11 @@ function selectHeightInches(Val) {
     }
 }
 function setHeightMaxLength(Val) {
-    $("#FCDM_OWCUST_HEITACT").attr("hidden", true);
-    $("#heightFt").removeAttr("hidden", true)
-    $("#heightIn").removeAttr("hidden", true)
-    $("#heightFt").addClass("w-50")
-    $("#heightIn").addClass("w-50")
+    //$("#FCDM_OWCUST_HEITACT").attr("hidden", true);
+    //$("#heightFt").removeAttr("hidden", true)
+    //$("#heightIn").removeAttr("hidden", true)
+    //$("#heightFt").addClass("w-50")
+    //$("#heightIn").addClass("w-50")
 
     //$("#heightResult").removeAttr("hidden", true)
     let heightFeet = $("#heightFt").val();
@@ -1470,6 +1470,11 @@ function editThisDocument(ID) {
             }
         }
     });
+}
+function formatNumber(input) {
+  let value = input.value.replace(/,/g, ''); // Remove existing commas
+  let formattedValue = Number(value).toLocaleString(); // Format the number with commas
+  input.value = formattedValue;
 }
 function DeleteTblRecord(elem) {
     $(elem).closest('tr').remove();

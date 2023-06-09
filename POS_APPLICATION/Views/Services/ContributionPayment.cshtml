@@ -31,14 +31,14 @@
                     <div class="form-check form-check-success mr-4">
                         <label for="reg_contrib" class="form-check-label">
                             Regular Contribution
-                            <input class="form-check-input mr-5" type="radio" id="reg_contrib" name="mode" value="1" oninput="checkValue(this.value)" />
+                            <input class="form-check-input mr-5" type="radio" id="reg_contrib" name="mode" value="1" onclick="checkValue(this.value)" />
                             <i class="input-helper"></i>
                         </label>
                     </div>
                     <div class="form-check form-check-success">
                         <label for="top_up" class="form-check-label">
                             Top up
-                            <input class="form-check-input" type="radio" id="top_up" name="mode" value="2" oninput="checkValue(this.value)" />
+                            <input class="form-check-input" type="radio" id="top_up" name="mode" value="2" onclick="checkValue(this.value)" />
                             <i class="input-helper"></i>
                         </label>
                     </div>
@@ -54,14 +54,14 @@
                         <div class="form-check form-check-success mr-4">
                             <label for="nb_payment" class="form-check-label">
                                 Proposal Payment
-                                <input class="form-check-input mr-5" type="radio" id="proposal_payment" name="nb_payment" value="1" oninput="NB_Payments(this.value,this.id)" />
+                                <input class="form-check-input mr-5" type="radio" id="proposal_payment" name="nb_payment" value="1" onclick="NB_Payments(this.value,this.id)" />
                                 <i class="input-helper"></i>
                             </label>
                         </div>
                         <div class="form-check form-check-success">
                             <label for="nb_payment" class="form-check-label">
                                 Renewal Policy
-                                <input class="form-check-input" type="radio" id="renewal_policy" name="nb_payment" value="2" oninput="NB_Payments(this.value,this.id)" />
+                                <input class="form-check-input" type="radio" id="renewal_policy" name="nb_payment" value="2" onclick="NB_Payments(this.value,this.id)" />
                                 <i class="input-helper"></i>
                             </label>
                         </div>
@@ -109,18 +109,19 @@
                     </div>
                 </div>
             </div>
-            <div class="topup" hidden>
+            <div class="topup">
                 <div class="row mt-3 justify-content-center pl-3">
                     <div class="col-12">
-                        <div class="row">
+                        <div class="row policy-topup-no" hidden>
                             <div class="col-md-3">
                                 <label for="policy_number" class="text-success">Policy Number</label>
-                                <input class="form-control" name="policy_number" id="policy_number" oninput="showFund(null,this.value)" required />
+                                <select class="form-control" name="policy_number" id="policy_number" onchange="showFund(null,this.value)" required></select>
                             </div>
                         </div>
-                        <div class="row mt-4 text-lemonade pl-3">
+                        @*<div class="row mt-4 text-lemonade pl-3">
                             You have only <span class="policy_fund_count"></span>  against your policy number
-                        </div>
+                        </div>*@
+                    <div class="topup-data" hidden>
                         <div class="row ml-1 mt-4">
                             <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
                             <h5 class="text-danger font-weight-500 pt-1"> Please enter your payment value for below fund</h5>
@@ -130,7 +131,7 @@
                                 <label for="" class="text-success fund_name"></label>
                             </div>
                             <div class="col-md-3">
-                                <input class="form-control" name="fund_payment" id="fund_payment" onkeyup="calculateTotalPayment(this.value)"/>
+                                <input class="form-control" name="fund_payment" id="fund_payment" onkeyup="calculateTotalPayment(this.value)" />
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -141,13 +142,14 @@
                                 <input class="form-control" name="TOTAL_AMOUNT" id="TOTAL_AMOUNT" readonly onclick="calculateTotalPayment()" />
                             </div>
                         </div>
+                        <div class="row mt-3 justify-content-center">
+                            <div class="col-md-4">
+                                <button class="btn btn-success" type="button" id="btnPaymentopup">
+                                    Pay Now
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="row mt-3 justify-content-center">
-                    <div class="col-md-4">
-                        <button class="btn btn-success" type="button" id="btnPaymentopup">
-                            Pay Now
-                        </button>
                     </div>
                 </div>
             </div>

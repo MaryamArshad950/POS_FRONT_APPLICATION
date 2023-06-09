@@ -56,6 +56,7 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
     if (sessionStorage.getItem("PayCheck") == "ProposalPay" && sessionStorage.getItem("Proposal_NoF") != null) {
         FPDM_PROPOSAL_NO = sessionStorage.getItem("Proposal_NoF");
     }
+
     $.ajax({
         "crossDomain": true,
         url: "" + Result_API + "/API/RECEIPT/SAVEorUPDATE_RECEIPT_INFO?FPDM_PROPOSAL_NO=" + FPDM_PROPOSAL_NO + "&FPDM_APPROVED=" + FPDM_APPROVED + "&CURR_CODE=" + CURR_CODE +

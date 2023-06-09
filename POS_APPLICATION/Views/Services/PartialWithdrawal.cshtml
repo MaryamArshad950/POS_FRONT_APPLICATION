@@ -9,6 +9,7 @@
     const core_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("GLOBAL_API_IP").Value);
     const Global_API = (core_host_API);
     var getsession = window.sessionStorage.getItem("tokenIndex");
+    sessionStorage.setItem("successWithdrawal", '@TempData["successMessage"]');
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script src="~/Assets/js/servicePos/partialWthdrwl.js"></script>
@@ -23,7 +24,10 @@
                     <h2 class="text-lemonade text-primary text-center mt-3 mb-4">Partial Withdrawal</h2>
                 </div>
             </div>
-            @if (TempData["successMessage"] != null)
+            <h4 class="text-center partial-wthdrwl-policy mt-3" hidden>Partial withdrawal against my Policy No. <span class="policy_no"></span></h4>
+            <input name="FSSH_POL_CODE" id="FSSH_POL_CODE" hidden/>
+            <h4 class="text-center"><a class="change-policy-num">Select Policy Number</a></h4>
+            @*@if (TempData["successMessage"] != null)
             {<div class="modal fade" id="successRequest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -39,7 +43,8 @@
                         </div>
                     </div>
                 </div>
-            }
+            }*@
+        <div class="partialWthdrwlProcess" hidden>
             <div class="row mt-4 justify-content-center">
                 <div class="col-md-6">
                     <div class="row mb-1">
@@ -64,7 +69,7 @@
             <div class="row mt-5 justify-content-center mb-2">
                 <div class="col-md-4">
                     <p class="text-primary text-center text-withdraw">Amount to be withdrawn</p>
-                    <input class="form-control" name="inputWithdrawal" id="inputWithdrawal" type="number" min="1" required />
+                    <input class="form-control" name="FSSH_PW_AMT" id="FSSH_PW_AMT" type="number" min="1" required />
                     <input class="form-control" name="SUM_CUST_CONTPHONE" id="SUM_CUST_CONTPHONE" hidden />
                     <input class="form-control" name="SUM_FULL_NAME" id="SUM_FULL_NAME" hidden />
                     <input class="form-control" name="SUM_USER_EMAIL_ADDR" id="SUM_USER_EMAIL_ADDR" hidden />
@@ -76,6 +81,7 @@
                     <button class="btn btn-outline-info w-100 mt-4" type="button" id="btnProceedWthdrw">Proceed</button>
                 </div>
             </div>
+        </div>
         </div>
     </div>
     <div class="modal fade" id="custBankDtls" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -91,15 +97,21 @@
                             <input class="form-control" name="FSBK_BANK_NAME" id="FSBK_BANK_NAME" placeholder="HBL" required />
                         </div>
                         <div class="col-md-6">
-                            <label class="text-primary">Account Title</label>
-                            <input class="form-control" name="FSCB_ACCOUNT_TITLE" id="FSCB_ACCOUNT_TITLE" placeholder="Ali Ahmed" required />
+                            <label class="text-primary">Branch Name</label>
+                            <input class="form-control" name="FSCB_BRANCH_NAME" id="FSCB_BRANCH_NAME" placeholder="Branch Name" required />
                         </div>
                     </div>
                     <div class="row mt-5">
                         <div class="col-md-6">
+                            <label class="text-primary">Account Title</label>
+                            <input class="form-control" name="FSCB_ACCOUNT_TITLE" id="FSCB_ACCOUNT_TITLE" placeholder="Ali Ahmed" required />
+                        </div>
+                        <div class="col-md-6">
                             <label class="text-primary">Account Number</label>
                             <input class="form-control" name="FSCB_ACCOUNT_NO" id="FSCB_ACCOUNT_NO" type="number" placeholder="054956235463256" required />
                         </div>
+                    </div>
+                    <div class="row mt-5">
                         <div class="col-md-6">
                             <label class="text-primary">IBAN</label>
                             <input class="form-control" name="" id="" placeholder="012549" />
@@ -111,6 +123,23 @@
                         </div>
                         <div class="col-md-3">
                             <button class="btn btn-outline-success w-100" type="submit" id="submitRequest">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="selectPolicyNo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content card-onboard">
+                <div class="modal-body">
+                    <div class="modal-icon">
+                    </div>
+                    <h2 class="text-lemonade">Please Select Your Policy Number</h2>
+                    <div class="row mt-5">
+                        <div class="col-md-12">
+                            <label class="text-primary">Policy Number</label>
+                            <select class="form-control" name="FPDM_POLICY_NO" id="FPDM_POLICY_NO"></select>
                         </div>
                     </div>
                 </div>

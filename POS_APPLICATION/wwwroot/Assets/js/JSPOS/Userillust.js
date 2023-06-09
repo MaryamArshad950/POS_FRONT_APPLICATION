@@ -27,6 +27,12 @@
         }
 
         let document_code = sessionStorage.getItem("DocCODE");
+        var today = new Date();
+        today.setDate(today.getDate() + 5);
+        var yeartoday = today.getFullYear();
+        var monthtoday = String(today.getMonth() + 1).padStart(2, '0');
+        var day = String(today.getDate()).padStart(2, '0');
+        var finalDate = yeartoday + '-' + monthtoday + '-' + day;
         $.ajax({
             "crossDomain": true,
 
@@ -113,6 +119,8 @@
                     }
                     birth_date = birth_date.getDate() + "-" + birthMonth + "-" + birth_date.getFullYear();
                     $("#p_fcdm_document_code").val(this.DOCUMENT_CODE);
+                    $("#p_reference_no").val(this.DOCUMENT_CODE);
+                    $("#p_commencement_date").val(finalDate)
                     if (this.BASIC_PLAN == '28') {
                         $("#FSPM_PRODUCT_ID").val("Salaam Life & Saving Plan")
                     }

@@ -5,13 +5,14 @@
     const app_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value);
     const api_port_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_PNO").Value);
     const Result_API = (app_host_API + ":" + api_port_API);
-    const global_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("GLOBAL_API_IP").Value);
-    const Global_API = (global_host_API);
+
+    const core_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("GLOBAL_API_IP").Value);
+    const Global_API = (core_host_API);
     var getsession = window.sessionStorage.getItem("tokenIndex");
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-<script src="~/Assets/js/servicePos/policySurrender.js"></script>
-<form class="form-horizontal">
+<script src="~/Assets/js/servicePos/freeLook.js"></script>
+<form class="form-horizontal" action="/Services/REQUEST_FREE_LOOK" method="post">
     <div class="card">
         <div class="card-body card-funds">
             <div class="row flex-div">
@@ -22,6 +23,23 @@
                     <h2 class="text-lemonade text-primary text-center mt-3 mb-4">Policy Surrender</h2>
                 </div>
             </div>
+            @if (TempData["successMessage"] != null)
+            {<div class="modal fade" id="successRequest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <button type="button" class="close closeRequestSuccess" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <div class="modal-body">
+                                <div class="modal-icon">
+                                    <img src="~/Assets/images/check.png" class="notebook_image center-img w-25" />
+                                </div>
+                                <h3 class="font-cursive text-center mt-3">Your Request has been received!</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
             <div class="row mt-4 justify-content-center">
                 <div class="col-md-6">
                     <div class="row mb-1">
@@ -38,9 +56,104 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-3 justify-content-center">
+            <div class="row mt-1 justify-content-center mb-2">
+                <div class="col-md-6 alert alert-danger">
+                    <p class="line-height-2">Before you cancel your Life Takaful membership, consider the long-term impact, it may have on your family's financial security.<br />Speak with us to explore options that can better meet your needs and ensure your loved ones are protected.</p>
+                </div>
+            </div>
+            <div class="row mt-2 justify-content-center mb-2">
                 <div class="col-md-6">
-                    <p class="text-lemonade font-25">Before you cancel your life Takaful Membership, consider the long-term impact it may have on your family's financial'</p>
+                    <div class="font-cursive withdrwlText salaam-color p-3 animated animatedFadeInUpp fadeInUpp text-center text-white line-height-2">
+                        Refundable Amount <br />PKR <span class="refund_amount"></span>
+                    </div>
+                </div>
+            </div>
+            <input class="form-control" name="SUM_CUST_CONTPHONE" id="SUM_CUST_CONTPHONE" hidden />
+            <input class="form-control" name="SUM_FULL_NAME" id="SUM_FULL_NAME" hidden />
+            <input class="form-control" name="SUM_USER_EMAIL_ADDR" id="SUM_USER_EMAIL_ADDR" hidden />
+            <input class="form-control" name="FSCU_CUSTOMER_CODE" id="FSCU_CUSTOMER_CODE" hidden />
+            <div class='row mt-3 mb-3 justify-content-center text-danger'>
+                <div class="col-md-3">
+                    <button class="btn btn-outline-info w-100 mt-4" type="button" id="btnProceedFreeLook">Proceed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="custBankDtls" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content card-onboard">
+                <div class="modal-body">
+                    <div class="modal-icon">
+                    </div>
+                    <h2 class="text-lemonade">Please Enter Your Bank Details</h2>
+                    <div class="row mt-5">
+                        <div class="col-md-6">
+                            <label class="text-primary">Bank Name</label>
+                            <input class="form-control" name="FSBK_BANK_NAME" id="FSBK_BANK_NAME" placeholder="HBL" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-primary">Account Title</label>
+                            <input class="form-control" name="FSCB_ACCOUNT_TITLE" id="FSCB_ACCOUNT_TITLE" placeholder="Ali Ahmed" required />
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-md-6">
+                            <label class="text-primary">Account Number</label>
+                            <input class="form-control" name="FSCB_ACCOUNT_NO" id="FSCB_ACCOUNT_NO" type="number" placeholder="054956235463256" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-primary">IBAN</label>
+                            <input class="form-control" name="" id="" placeholder="012549" />
+                        </div>
+                    </div>
+                    <div class="row justify-content-center mt-5">
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-info w-100" type="button" id="closeRequest">Cancel</button>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-success w-100" type="submit" id="submitRequest">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade animated animatedFadeInUpp fadeInUpp" id="AgreementModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h3 class="text-lemonade">Do you want to continue?</h3>
+                    <button class="btn btn-rounded btn-danger" type="button" id="btnDisAgreeTerms">Change my Mind</button>
+                    <button class="btn btn-rounded btn-success" type="button" id="btnAgreeTermsCond">I want to proceed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="VerifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="modal-icon">
+                        <img src="~/Assets/images/password.png" class="phoneVerifyImage" />
+                    </div>
+                    <h3 class="title">Verification code</h3>
+                    <p class="description">We have sent an OTP to your phone number ... Please verify</p>
+                    <div class="alert alert-success alert-dismissible alert-otp fade show p-3 mt-2" role="alert" hidden>
+                        <i class="fa fa-check p-2 me-3 text-white bg-success rounded-circle" aria-hidden="true"></i>
+                        <strong>
+                            OTP verified sucessfully
+                        </strong>
+                    </div>
+                    <ul class="code-number">
+                        <li><input id="firstDigit" class="border-0 bg-transparent" placeholder="1" maxlength="1" /></li>
+                        <li><input id="secondDigit" class="border-0 bg-transparent" placeholder="0" maxlength="1" /></li>
+                        <li><input id="thirdDigit" class="border-0 bg-transparent" placeholder="5" maxlength="1" /></li>
+                        <li><input id="fourthDigit" class="border-0 bg-transparent" placeholder="3" maxlength="1" /></li>
+                        <li><input id="fifthDigit" class="border-0 bg-transparent" placeholder="9" maxlength="1" /></li>
+                        <li><input id="sixthDigit" class="border-0 bg-transparent" placeholder="2" maxlength="1" /></li>
+                    </ul>
+                    <button class="btn btn-outline-success" type="button" id="verifyOTP">Submit</button>
+                    <button class="btn bg-transparent mt-2 text-danger font-weight-bold" id="resendCode" type="button">Didn't get the code? Send Again</button>
                 </div>
             </div>
         </div>

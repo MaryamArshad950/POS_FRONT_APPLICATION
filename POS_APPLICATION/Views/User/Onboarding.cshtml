@@ -179,7 +179,8 @@
                                 </div>
                             </div>
                             <div class="row mt-3 card-blue border-rad-25 p-3">
-                                <h3 class="card-title col-md-12 mt-4 text-white text-center mb-4">Financial Priorities &amp; Objectives</h3>
+                                <h3 class="card-title col-md-12 mt-4 text-white text-center mb-2">Financial Priorities &amp; Objectives</h3>
+                                <h6 class="col-md-12 mt-3 text-white text-center mb-4">* 1 means highest priority and 7 means the lowest one</h6>
                                 <div class="col-md-4">
                                     <div class="card card-objectives">
                                         <div class="m-auto">
@@ -229,8 +230,8 @@
                                                     Protection Needs
                                                 </div>
                                                 <div class="col-md-5">
-                                                    <input type="checkbox" id="" value="" checked /> <span>Life &amp; Health</span>
-                                                    <input type="checkbox" id="" value="" checked /> <span>Savings &amp; Investment</span>
+                                                    <input type="checkbox" id="" value="" /> <span>Life &amp; Health</span><br />
+                                                    <input type="checkbox" id="" value="" checked /> <span>Savings &amp; Investment</span><br />
                                                     <input type="checkbox" id="" value="" /> <span>Pension</span>
                                                 </div>
                                             </div>
@@ -362,17 +363,17 @@
                 <div class="col-md-3 mb-3">
                     <label for="" class="mr-5 text-success">Height <span class="text-danger font-weight-light">Feet & Inches</span></label>
                     <div class="input-group slidecontainer">
-                        <input type="number" class="form-control" max="8" min="3" id="heightFt" hidden onkeyup="selectHeightFeet(this.value)" placeholder="Feet">
-                        <input type="number" class="form-control" max="11" min="0" id="heightIn" hidden onkeyup="selectHeightInches(this.value)" placeholder="Inches">
+                        <input type="number" class="form-control" max="8" min="3" id="heightFt" onkeyup="selectHeightFeet(this.value)" placeholder="Feet" value="5" onfocus="setHeightMaxLength(this.value)">
+                        <input type="number" class="form-control" max="11" min="0" id="heightIn" onkeyup="selectHeightInches(this.value)" placeholder="Inches" value="7" onfocus="setHeightMaxLength(this.value)">
                         @*<input type="range" class="slider mt-3 mb-3" max="8" min="3" step="1" id="heightFt" hidden onchange="selectHeightFeet(this.value)">
         <input type="range" class="slider mt-3 mb-3" max="11" min="0" step="1" id="heightIn" hidden onchange="selectHeightInches(this.value)">*@
                     </div>
-                    <input class="form-control" id="FCDM_OWCUST_HEITACT" name="FCDM_OWCUST_HEITACT" placeholder="Ex. 5ft 7inches" required onfocus="setHeightMaxLength(this.value)" />
+                    <input class="form-control" id="FCDM_OWCUST_HEITACT" name="FCDM_OWCUST_HEITACT" placeholder="Ex. 5ft 7inches" required onfocus="setHeightMaxLength(this.value)" value="5.7" hidden/>
                     @*<output id="heightResult" class="mb-2"></output>*@
                 </div>
                 <div class="col-md-2">
                     <label for="" class="mr-5 text-success">Weight <span class="text-danger font-weight-light">KG</span></label>
-                    <input class="form-control" id="FCDM_OWCUST_WEITACT" type="number" name="FCDM_OWCUST_WEITACT" placeholder="Ex. 50 Kilograms" maxlength="3" required onkeyup="calculate_BMI()" />
+                    <input class="form-control" id="FCDM_OWCUST_WEITACT" type="number" name="FCDM_OWCUST_WEITACT" placeholder="Ex. 50 Kilograms" maxlength="3" required onkeyup="calculate_BMI()" onfocus="calculate_BMI()" />
                 </div>
                 <div class="col-md-4">
                     <div class="row mt-2">
@@ -423,7 +424,7 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="" class="mr-5 text-success">Takaful Contribution</label>
-                    <input class="form-control" id="FCDM_PLAN_CONTRIB" type="number" name="FCDM_PLAN_CONTRIB" placeholder="Contribution" required onkeyup="calculateFaceValue()" min="100" />
+                    <input class="form-control" id="FCDM_PLAN_CONTRIB" type="number" name="FCDM_PLAN_CONTRIB" placeholder="Contribution" required onkeyup="calculateFaceValue()" min="100"/>
                 </div>
                 <div class="col-md-3">
                     <label for="" class="mr-5 text-success">Sum Assured</label>
@@ -431,7 +432,7 @@
                 </div>
             </div>
             <div class="row ml-1 mt-4">
-                <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
+                @*<img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />*@
                 <h5 class="text-danger font-weight-500 pt-1"> Do you want to take supplementary benefits (Riders)</h5>
             </div>
             <div class="row mt-2 ml-1">
@@ -486,9 +487,9 @@
                 <button class="btn btn-rounded btn-outline-primary w-50" type="button" id="btnProcessFlagship">CONTINUE</button>
             </div>
         </div>
-        <div class="chatbot-helper">
+        @*<div class="chatbot-helper">
             <img src="~/Assets/images/helping_chatbot.png" class="chatbotImg animated animatedFadeInUpp fadeInUpp" />
-        </div>
+        </div>*@
     </div>
     <div class="spinner-box" hidden>
         <img src="~/Assets/images/maleUserLogedin.gif" class="loaderImage" />
