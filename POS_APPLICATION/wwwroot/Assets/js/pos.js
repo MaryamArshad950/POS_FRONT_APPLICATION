@@ -173,6 +173,7 @@ function PolicyNumberSelection() {
 }
 
 function ProposalCashValues(selectdProposalNo) {
+    $("#FPDM_PROPOSAL_NO").val(selectdProposalNo);
     let thisCustCNIC = sessionStorage.getItem("cnic.");
     thisCustCNIC = thisCustCNIC.replace(/^(\d{5})(\d{7})(\d)$/, "$1-$2-$3");
     let nf = new Intl.NumberFormat('en-US');

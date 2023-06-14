@@ -270,12 +270,13 @@ namespace POS_APPLICATION.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> REQUEST_PARTIAL_WITHDRW(int FSCU_CUSTOMER_CODE, string SUM_FULL_NAME, string SUM_USER_EMAIL_ADDR, string SUM_CUST_CONTPHONE, string FSBK_BANK_NAME, string FSCB_BRANCH_NAME, string FSCB_ACCOUNT_TITLE, string FSCB_ACCOUNT_NO, string FSSH_POL_CODE, int FSSH_PW_AMT)
+        public async Task<ActionResult> REQUEST_PARTIAL_WITHDRW(int FSCU_CUSTOMER_CODE, string SUM_FULL_NAME, string SUM_USER_EMAIL_ADDR, string SUM_CUST_CONTPHONE, string FSBK_BANK_NAME, string FSCB_BRANCH_NAME, string FSCB_ACCOUNT_TITLE, string FSCB_ACCOUNT_NO, string FSSH_POL_CODE, int FSSH_PW_AMT, string FPDM_PROPOSAL_NO)
         {
             CUSTOMER_BANK_DETL cust_bnk = new CUSTOMER_BANK_DETL();
             cust_bnk.FSCU_CUSTOMER_CODE = FSCU_CUSTOMER_CODE;
             cust_bnk.FSSH_POL_CODE = FSSH_POL_CODE;
             cust_bnk.FSSH_PW_AMT = FSSH_PW_AMT;
+            cust_bnk.FPDM_PROPOSAL_NO = FPDM_PROPOSAL_NO;
             cust_bnk.FSBK_BANK_NAME = FSBK_BANK_NAME;
             cust_bnk.FSCB_BRANCH_NAME = FSCB_BRANCH_NAME;
             cust_bnk.FSCB_ACCOUNT_NO = FSCB_ACCOUNT_NO;
@@ -334,11 +335,12 @@ namespace POS_APPLICATION.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> REQUEST_FREE_LOOK(int FSCU_CUSTOMER_CODE, string FSSH_POL_CODE, int FSSH_SURRNDR_AMT, string SUM_FULL_NAME, string SUM_USER_EMAIL_ADDR, string SUM_CUST_CONTPHONE, string FSBK_BANK_NAME, string FSCB_BRANCH_NAME, string FSCB_ACCOUNT_TITLE, string FSCB_ACCOUNT_NO)
+        public async Task<ActionResult> REQUEST_FREE_LOOK(int FSCU_CUSTOMER_CODE, string FSSH_POL_CODE, int FSSH_SURRNDR_AMT, string SUM_FULL_NAME, string SUM_USER_EMAIL_ADDR, string SUM_CUST_CONTPHONE, string FSBK_BANK_NAME, string FSCB_BRANCH_NAME, string FSCB_ACCOUNT_TITLE, string FSCB_ACCOUNT_NO, string FPDM_PROPOSAL_NO)
         {
             CUSTOMER_BANK_DETL cust_bnk = new CUSTOMER_BANK_DETL();
             cust_bnk.FSCU_CUSTOMER_CODE = FSCU_CUSTOMER_CODE;
             cust_bnk.FSSH_POL_CODE = FSSH_POL_CODE;
+            cust_bnk.FPDM_PROPOSAL_NO = FPDM_PROPOSAL_NO;
             cust_bnk.FSSH_SURRNDR_AMT = FSSH_SURRNDR_AMT;
             cust_bnk.FSBK_BANK_NAME = FSBK_BANK_NAME;
             cust_bnk.FSCB_BRANCH_NAME = FSCB_BRANCH_NAME;

@@ -9,6 +9,7 @@ namespace POS_APPLICATION.Models.CUSTOMER
     {
         public int FSCU_CUSTOMER_CODE { get; set; }
         public string FSSH_POL_CODE { get; set; }
+        public string FPDM_PROPOSAL_NO { get; set; }
         public int FSSH_PW_AMT { get; set; }
         public int FSSH_SURRNDR_AMT { get; set; }
         public string FSBK_BANK_NAME { get; set; }
