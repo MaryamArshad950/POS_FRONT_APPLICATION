@@ -98,7 +98,7 @@
                                 randomNum = randomNum.toString();
                                 $.ajax({
                                     "crossDomain": true,
-                                    url: "" + Result_API + "/api/DcmntNominee/GetPrpslDetails/" + this.NEW_PROPOSAL_NO,
+                                    url: "" + Result_API + "/api/DcmntNominee/GetPrpslDetails/" + this.NEW_PROPOSAL_NO + "/N",
                                     type: "GET",
                                     contentType: "application/json; charset=utf-8",
                                     headers: {
