@@ -1508,7 +1508,10 @@ function ExistInsValNo(ID, VAL) {
 function calcTotalIncome(VAL) {
     let annualIncome = $("#FCFA_ANNUAL_INCOME").val();
     let otherIncome = $("#FCFA_OTHER_INCOME").val();
+    let expensesLastYr = $("#FCFA_EXPENSES_LASTYR").val();
+    let expensesCurrYr = $("#FCFA_EXPENSES_CURRENTYR").val();
     $("#FCFA_TOTAL_INCOME").val(Number(annualIncome) + Number(otherIncome));
+    $("#FCFA_NET_SAVINGS").val(Number(annualIncome) + Number(otherIncome) + Number(expensesLastYr) + Number(expensesCurrYr));
 }
 function DiseaseAnalysis(QuesID) {
     QuesID = QuesID.slice(21);
