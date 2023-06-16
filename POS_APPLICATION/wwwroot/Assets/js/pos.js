@@ -288,6 +288,34 @@ function ProposalCashValues(selectdProposalNo) {
         success: function (result) {
             $(result).each(function () {
                 $("#FSCU_CUSTOMER_CODE").val(this.FSCU_CUSTOMER_CODE);
+                $.ajax({
+                    "crossDomain": true,
+                    url: "" + Global_API + "/API/CUSTOMER_BANK_DETL/GET_CUST_BANK_DETAILS/" + this.FSCU_CUSTOMER_CODE,
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Access-Control-Allow-Origin': Global_API,
+                        'Access-Control-Allow-Methods': 'POST, GET',
+                        'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                        'Authorization': 'Bearer ' + getsession
+                    },
+                    datatype: 'jsonp',
+                    success: function (result) {
+                        if (result.length != 0) {
+                            $(result).each(function () {
+                                $("#FSBK_BANK_NAME").val(this.FSBK_BANK_NAME);
+                                $("#FSCB_BRANCH_NAME").val(this.FSCB_BRANCH_NAME);
+                                $("#FSCB_ACCOUNT_TITLE").val(this.FSCB_ACCOUNT_TITLE);
+                                $("#FSCB_ACCOUNT_NO").val(this.FSCB_ACCOUNT_NO);
+                            })
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status === 401) {
+                        }
+                    }
+                });
             })
         },
         error: function (jqXHR, textStatus, errorThrown) {
