@@ -145,6 +145,9 @@ namespace POS_APPLICATION
                 endpoints.MapControllerRoute(
                   name: "ContributionPayment",
                   pattern: "ContributionPayment/{controller=Services}/{action=ContributionPayment}");
+                endpoints.MapControllerRoute(
+                  name: "CheckEmail",
+                  pattern: "CheckEmail/{controller=Services}/{action=CheckEmail}");
             });
         }
     }

@@ -1511,7 +1511,7 @@ function calcTotalIncome(VAL) {
     let expensesLastYr = $("#FCFA_EXPENSES_LASTYR").val();
     let expensesCurrYr = $("#FCFA_EXPENSES_CURRENTYR").val();
     $("#FCFA_TOTAL_INCOME").val(Number(annualIncome) + Number(otherIncome));
-    $("#FCFA_NET_SAVINGS").val(Number(annualIncome) + Number(otherIncome) + Number(expensesLastYr) + Number(expensesCurrYr));
+    $("#FCFA_NET_SAVINGS").val((Number(annualIncome) + Number(otherIncome)) - (Number(expensesLastYr) + Number(expensesCurrYr)));
 }
 function DiseaseAnalysis(QuesID) {
     QuesID = QuesID.slice(21);
@@ -1673,6 +1673,7 @@ function checkRider(RdrYN) {
         $("#tableRiders tbody").empty();
     }
 }
+const rdersIDArr = [];
 function AddRdr(elem, ID) {
     let rdrName = elem.innerText;
     ID = ID.slice(8);
@@ -1684,14 +1685,24 @@ function AddRdr(elem, ID) {
         $("#rdrInput" + ID).attr("checked", true);
         $(elem).addClass("bg-info");
         if ($('#tableRiders tbody tr').length == 0) {
+            rdersIDArr.push(ID)
             RidersUniqueAdd(ID, rdrName)
         }
         else {
+            rdersIDArr.push(ID)
             $('#tableRiders tbody tr').each(function (index, row) {
                 rdrsArray.push(row.children[0].children[0].id);
             });
             if (rdrsArray.includes('FCDR_DOC_RDR_ID' + ID)) {
-            } else {
+            } if (rdersIDArr.includes('19') && rdersIDArr.includes('20')) {
+                $(elem).removeClass("bg-info");
+                $("#rdrInput" + ID).removeAttr("checked", true);
+                Swal.fire({
+                    icon: 'info',
+                    //title: 'Alert',
+                    text: 'You cannot select ADB & ADD together!',
+                })
+            }else {
                 RidersUniqueAdd(ID, rdrName)
             }
         }

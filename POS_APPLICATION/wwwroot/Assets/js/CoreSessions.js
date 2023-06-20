@@ -346,6 +346,7 @@ function ProcessGlobalCore(coresession) {
     });
 
     let riderName = '';
+    let colSize = '';
     $.ajax({
         //"async": false,
         "crossDomain": true,
@@ -364,8 +365,14 @@ function ProcessGlobalCore(coresession) {
             $(".ridersList").empty();
             for (let i = 0; i < result.length; i++) {
                 riderName = result[i].FSPM_PRODUCT_NAME;
+                if (result[i].FSPM_PRODUCT_ID == '20') {
+                    colSize = 'col-md-4'
+                }
+                else {
+                    colSize = 'col-md-3'
+                }
                 $(".ridersList").append(
-                    "<div class='col-md-3 mb-2'>" +
+                    "<div class='" + colSize + " mb-2'>" +
                     "<div class='input-group btn btn-outline-info p-1 border-1 box-shadow-1' id='rdrGroup" + result[i].FSPM_PRODUCT_ID + "' onclick='AddRdr(this, this.id)'>" +
                     "<div class='input-group-append'>" +
                     "<span class='m-0 pt-3 px-4'>" +
