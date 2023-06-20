@@ -69,6 +69,10 @@ namespace POS_APPLICATION.Controllers
         {
             return View();
         }
+        public IActionResult CheckEmail()
+        {
+            return View();
+        }
         public IActionResult PartialWithdrawal()
         {
             return View();

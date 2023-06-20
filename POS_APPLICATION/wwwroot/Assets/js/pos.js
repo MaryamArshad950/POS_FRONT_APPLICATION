@@ -21,6 +21,9 @@
         sessionStorage.clear();
         localStorage.clear();
     })
+    $('.form-horizontal').submit(function () {
+        $("#spinner").show();
+    });
 }();
 
 $('.form-horizontal').submit(function () {
@@ -40,7 +43,20 @@ function togglePasswordVisibility() {
         icon.classList.add("fa-eye");
     }
 }
-
+//function showAgreementModal(Text) {
+//    Swal.fire({
+//        title: 'Terms & Condition',
+//        html: select,
+//        icon: 'info',
+//        confirmButtonText: 'Agree',
+//        showCancelButton: true,
+//        allowOutsideClick: () => false
+//    }).then((result) => {
+//        if (result.isConfirmed) {
+//            window.location.href = '';
+//        }
+//    });
+//}
 function readURLFront(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -326,65 +342,43 @@ function ProposalCashValues(selectdProposalNo) {
 
     $("#btnProceedWthdrw").click(function () {
         if ($("#SUM_CUST_CONTPHONE").val() != null && $("#FSSH_POL_CODE").val() != null && $("#FSSH_PW_AMT").val() != "" && $("#FSSH_PW_AMT").val() <= Number(sessionStorage.getItem("withdrwlAmount"))) {
-            $("#AgreementModal").modal("show");
+            Swal.fire({
+                title: 'Please Confirm',
+                html: AgreementInfo,
+                confirmButtonText: 'I want to proceed',
+                showCancelButton: true,
+                cancelButtonText: 'Change my Mind',
+                allowOutsideClick: () => false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    AgreeFinService();
+                }
+            });
         }
     })
     $("#btnProceedFreeLook").click(function () {
         if ($("#SUM_CUST_CONTPHONE").val() != null && $("#FSSH_POL_CODE").val() != null) {
-            $("#AgreementModal").modal("show");
+            //$("#AgreementModal").modal("show");
+            Swal.fire({
+                title: 'Please Confirm',
+                html: AgreementInfo,
+                confirmButtonText: 'I want to proceed',
+                showCancelButton: true,
+                cancelButtonText: 'Change my Mind',
+                allowOutsideClick: () => false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    AgreeFinService();
+                }
+            });
         }
     })
-    $("#btnAgreeTermsCond").click(function () {
-        $("#AgreementModal").modal("hide");
-        let cust_number = ($("#SUM_CUST_CONTPHONE").val()).slice(1);
-        let cust_name = $("#SUM_FULL_NAME").val();
-        let cust_email = $("#SUM_USER_EMAIL_ADDR").val();
-        let digits = "0123456789";
-        let transactionID = '';
-        for (let i = 0; i < 8; i++) {
-            transactionID += digits[Math.floor(Math.random() * 10)]
-        }
-        sessionStorage.setItem("code", (transactionID).slice(0, 6));
-        sendCode(transactionID, cust_number, cust_name, cust_email);
-        $("#VerifyModal").modal("show");
-        $("#firstDigit").keyup(function () {
-            if ($(this).val() != "") {
-                $("#secondDigit").focus();
-            }
-        })
-        $('#secondDigit').keyup(function (e) {
-            if ($(this).val() != "") {
-                $("#thirdDigit").focus();
-            }
-        });
-        $('#thirdDigit').keyup(function (e) {
-            if ($(this).val() != "") {
-                $("#fourthDigit").focus();
-            }
-        });
-        $('#fourthDigit').keyup(function (e) {
-            if ($(this).val() != "") {
-                $("#fifthDigit").focus();
-            }
-        });
-        $('#fifthDigit').keyup(function (e) {
-            if ($(this).val() != "") {
-                $("#sixthDigit").focus();
-            }
-        });
-        $("#resendCode").click(function (e) {
-            let transactionID2 = '';
-            for (let i = 0; i < 8; i++) {
-                transactionID2 += digits[Math.floor(Math.random() * 10)]
-            }
-            sessionStorage.removeItem("code");
-            sessionStorage.setItem("code", (transactionID2).slice(0, 6));
-            sendCode(transactionID2, cust_number, cust_name, cust_email);
-        })
-    });
-    $("#btnDisAgreeTerms").click(function () {
-        $("#AgreementModal").modal("hide");
-    });
+    //$("#btnAgreeTermsCond").click(function () {
+
+    //});
+    //$("#btnDisAgreeTerms").click(function () {
+    //    $("#AgreementModal").modal("hide");
+    //});
 
     $("#verifyOTP").click(function () {
         let digitsArray = [];
@@ -413,6 +407,7 @@ function ProposalCashValues(selectdProposalNo) {
     //    $("#successRequest").modal("hide");
     //})
 }
+
 function sendCode(transactionID, cust_number, cust_name, cust_email) {
     $.ajax({
         url: "https://api.itelservices.net/send.php?transaction_id=" + transactionID + "&user=salaamtakaf&pass=kdPre&number=" + cust_number + "&text=Dear " + cust_name + ", your OTP verification code is " + (transactionID).slice(0, 6) + "&from=44731&type=sms",
@@ -430,4 +425,52 @@ function sendCode(transactionID, cust_number, cust_name, cust_email) {
         data: { username: cust_name, messageEmail: "<p>Your OTP verification code is " + transactionID + "</p>", emailAddress: cust_email, subject: "OTP" }
     }).done(function (msg) {
     });
+}
+function AgreeFinService() {
+    $("#AgreementModal").modal("hide");
+    let cust_number = ($("#SUM_CUST_CONTPHONE").val()).slice(1);
+    let cust_name = $("#SUM_FULL_NAME").val();
+    let cust_email = $("#SUM_USER_EMAIL_ADDR").val();
+    let digits = "0123456789";
+    let transactionID = '';
+    for (let i = 0; i < 8; i++) {
+        transactionID += digits[Math.floor(Math.random() * 10)]
+    }
+    sessionStorage.setItem("code", (transactionID).slice(0, 6));
+    sendCode(transactionID, cust_number, cust_name, cust_email);
+    $("#VerifyModal").modal("show");
+    $("#firstDigit").keyup(function () {
+        if ($(this).val() != "") {
+            $("#secondDigit").focus();
+        }
+    })
+    $('#secondDigit').keyup(function (e) {
+        if ($(this).val() != "") {
+            $("#thirdDigit").focus();
+        }
+    });
+    $('#thirdDigit').keyup(function (e) {
+        if ($(this).val() != "") {
+            $("#fourthDigit").focus();
+        }
+    });
+    $('#fourthDigit').keyup(function (e) {
+        if ($(this).val() != "") {
+            $("#fifthDigit").focus();
+        }
+    });
+    $('#fifthDigit').keyup(function (e) {
+        if ($(this).val() != "") {
+            $("#sixthDigit").focus();
+        }
+    });
+    $("#resendCode").click(function (e) {
+        let transactionID2 = '';
+        for (let i = 0; i < 8; i++) {
+            transactionID2 += digits[Math.floor(Math.random() * 10)]
+        }
+        sessionStorage.removeItem("code");
+        sessionStorage.setItem("code", (transactionID2).slice(0, 6));
+        sendCode(transactionID2, cust_number, cust_name, cust_email);
+    })
 }

@@ -66,6 +66,7 @@
             },
             datatype: 'jsonp',
             success: function (result) {
+                console.log(result)
                 if (result.length != 0) {
                     $("#basicInfo-tab").attr("disabled", true);
                     $("#userIdentification-tab").attr("disabled", true);
@@ -88,6 +89,7 @@
                         },
                         datatype: 'jsonp',
                         success: function (result) {
+                            console.log(result)
                             sessionStorage.setItem("docIdPrpsl", document_code.slice(3));
                             sessionStorage.getItem("docIdPrpsl");
                             $(result).each(function () {
@@ -110,6 +112,7 @@
                                     },
                                     datatype: 'jsonp',
                                     success: function (result) {
+                                        console.log(result)
                                         if (result.length == 0) {
                                             $("#proposalMesg").attr("hidden", true);
                                             $(".returnToFlagship").removeAttr("hidden", true);
@@ -672,6 +675,22 @@
             }
             else {
                 $("#AgreementModal").modal("show");
+                //let AgreementInfo = '<img src="/Assets/images/investigation_magnify.png" class="notebook_image terms-cond" alt="Agreement"><br>I, <span class="customer-name"></span>, understand and acknowledge that this proposal form, along with any additional documents or information submitted in connection with this application, shall form the basis of the takaful contract between me and Salaam Family Takaful Limited<br/>I hereby declare and confirm, under the principles of utmost good faith, that all the information provided in this proposal form and the accompanying documents is true, accurate, and complete to the best of my knowledge and belief.I understand that any false statement or misrepresentation, whether intentional or unintentional, may result in the rejection of my takaful application, cancellation of my policy, or denial of any future claims < br />By signing this declaration, I also authorize Salaam Family Takaful to obtain relevant information from any necessary sources, including Government Authorities like NADRA, CDC etc.to verify the accuracy and completeness of the information provided in this proposal form.< br />For the underwriting and claim process, I give my permission to any physician or other medical practitioner, hospital, clinic, other medical or medically related facility, takaful / insurance company, or employer to give Salaam Family Takaful Limited or its authorized representative "ALL INFORMATION" on my behalf including copies of records with reference to any sickness, accidental disability, treatment, examination medical investigation, advice or hospitalization underwent.I hereby apply for the Family Takaful coverage under the terms and conditions of the Participant Membership Document(PMD).<br><b>Disclaimer:</b><br>The Participant can cancel the Membership within fourteen (14) days of the receipt of the Participants Membership Document (PMD) by the Participant.<br>In case of cancellation during this free look period(subject to Terms and Conditions), the paid contribution is refundable.';
+                //Swal.fire({
+                //    title: 'Terms & Condition',
+                //    html: AgreementInfo,
+                //    confirmButtonText: 'Agree',
+                //    showCancelButton: true,
+                //    cancelButtonText: 'Disagree',
+                //    allowOutsideClick: () => false
+                //}).then((result) => {
+                //    if (result.isConfirmed) {
+                //        $("#policyConfirm-tab").removeAttr("disabled", true);
+                //        $("#policyConfirm-tab").click();
+                //        $(window).scrollTop(0);
+                //        $("#regQuestions-tab").attr("disabled", true);
+                //    }
+                //});
                 let customer_name = sessionStorage.getItem("customer_name");
                 $(".customer-name").html(customer_name)
             }
