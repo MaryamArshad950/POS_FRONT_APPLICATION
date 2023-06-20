@@ -292,7 +292,7 @@ namespace POS_APPLICATION.Controllers
                                                                   int[] FCUQ_CHNLUW_QSN_ID, int[] FSPQS_QSTNR_FSCD_ID, string[] FCUQ_ANSR_YN, int[] FCUQ_PARENT_ID,
                                                                   int[] FCIH_INSUREREXIST_ID, string FCIH_INSUREREXIST_YN, string[] FCIH_POLICY_NO, int[] FCIH_SA_AMOUNT,                        int[] FCIH_CONTRIB_AMT, DateTime[] FCIH_START_DATE, DateTime[] FCIH_MATURITY_DATE,                                             string[] FCIH_INSURER_PURPOSE, string [] FCIH_INSURER_NM, string[] FCIH_COND_ACCPTNCE,
                                                                   int FCFA_FIN_ID, int FCFA_ANNUAL_INCOME, int FCFA_OTHER_INCOME, int FCFA_TOTAL_INCOME, 
-                                                                  int FCFA_CUST_EXPENSES, int FCFA_EXPENSES_LASTYR, int FCFA_EXPENSES_CURRENTYR,
+                                                                  int FCFA_CUST_EXPENSES, int FCFA_EXPENSES_LASTYR, int FCFA_EXPENSES_CURRENTYR, int FCFA_NET_SAVINGS, string FCFA_ADDTNL_DTLS,
                                                                   int[] FSFP_FINQUEST_FSCD_ID, int[] FSFP_FINQUEST_TYPE, int[] FCFN_FINQUEST_PRIORITYNO,
                                                                   int[] FSDI_DISEASE_ID, string[] FCDS_DISEASE_DURATION, string[] FCDS_DISEASE_DETAILS, int CHECK_RIDER, int[] FCDR_DOC_RDR_ID, int[] FSPM_PRODRDR_ID, int[] FCDR_PAYING_TERM, int[] FCDR_FACE_VALUE)
         {
@@ -321,7 +321,7 @@ namespace POS_APPLICATION.Controllers
             participant.FCDM_OWCUST_WEITUNT = FCDM_OWCUST_WEITUNT;
             participant.FCDM_OWCUST_BMI = FCDM_OWCUST_BMI;
             participant.FCDM_OW_CUOCP_FSCD_ID = FCDM_OW_CUOCP_FSCD_ID;
-            participant.FCDM_OWCUST_ANNUINCOME = FCFA_ANNUAL_INCOME;
+            participant.FCDM_OWCUST_ANNUINCOME = FCFA_NET_SAVINGS;
             participant.FCDM_PFREQ_FSCD_ID = FCDM_PFREQ_FSCD_ID;
             participant.FCDM_PLAN_CONTRIB = FCDM_PLAN_CONTRIB;
             participant.FCDM_PAYING_TERM = FCDM_PAYING_TERM;
@@ -527,6 +527,8 @@ namespace POS_APPLICATION.Controllers
                         fin_dtls.FCFA_CUST_EXPENSES = FCFA_CUST_EXPENSES;
                         fin_dtls.FCFA_EXPENSES_LASTYR = FCFA_EXPENSES_LASTYR;
                         fin_dtls.FCFA_EXPENSES_CURRENTYR = FCFA_EXPENSES_CURRENTYR;
+                        fin_dtls.FCFA_NET_SAVINGS = FCFA_NET_SAVINGS;
+                        fin_dtls.FCFA_ADDTNL_DTLS = FCFA_ADDTNL_DTLS;
                         fin_dtls.FCFA_CRDATE = DateTime.Today;
                         try
                         {

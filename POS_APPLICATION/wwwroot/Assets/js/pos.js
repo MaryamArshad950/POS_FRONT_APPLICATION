@@ -344,7 +344,6 @@ function ProposalCashValues(selectdProposalNo) {
         if ($("#SUM_CUST_CONTPHONE").val() != null && $("#FSSH_POL_CODE").val() != null && $("#FSSH_PW_AMT").val() != "" && $("#FSSH_PW_AMT").val() <= Number(sessionStorage.getItem("withdrwlAmount"))) {
             Swal.fire({
                 title: 'Please Confirm',
-                html: AgreementInfo,
                 confirmButtonText: 'I want to proceed',
                 showCancelButton: true,
                 cancelButtonText: 'Change my Mind',
@@ -361,7 +360,6 @@ function ProposalCashValues(selectdProposalNo) {
             //$("#AgreementModal").modal("show");
             Swal.fire({
                 title: 'Please Confirm',
-                html: AgreementInfo,
                 confirmButtonText: 'I want to proceed',
                 showCancelButton: true,
                 cancelButtonText: 'Change my Mind',
