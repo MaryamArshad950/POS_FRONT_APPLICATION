@@ -173,6 +173,8 @@
                         $("#FCFA_CUST_EXPENSES").val(this.FCFA_CUST_EXPENSES);
                         $("#FCFA_EXPENSES_LASTYR").val(this.FCFA_EXPENSES_LASTYR);
                         $("#FCFA_EXPENSES_CURRENTYR").val(this.FCFA_EXPENSES_CURRENTYR);
+                        $("#FCFA_NET_SAVINGS").val(this.FCFA_NET_SAVINGS);
+                        $("#FCFA_ADDTNL_DTLS").val(this.FCFA_ADDTNL_DTLS);
                     })
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -283,6 +285,8 @@
                             $("#FCFA_CUST_EXPENSES").val(this.FCFA_CUST_EXPENSES);
                             $("#FCFA_EXPENSES_LASTYR").val(this.FCFA_EXPENSES_LASTYR);
                             $("#FCFA_EXPENSES_CURRENTYR").val(this.FCFA_EXPENSES_CURRENTYR);
+                            $("#FCFA_NET_SAVINGS").val(this.FCFA_NET_SAVINGS);
+                            $("#FCFA_ADDTNL_DTLS").val(this.FCFA_ADDTNL_DTLS);
                         })
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
