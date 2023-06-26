@@ -172,7 +172,7 @@ function PolicyNumberSelection() {
                 success: function (result) {
                     $(result).each(function () {
                         if (this.FPDM_POLICY_NO == selectedPolicy) {
-                            ProposalCashValues(this.FPDM_PROPOSAL_NO);
+                            ProposalCashValues(this.FPDM_PROPOSAL_NO, this.FPDM_APPROVED);
                         }
                     })
                 },
@@ -188,7 +188,7 @@ function PolicyNumberSelection() {
     });
 }
 
-function ProposalCashValues(selectdProposalNo) {
+function ProposalCashValues(selectdProposalNo, status) {
     $("#FPDM_PROPOSAL_NO").val(selectdProposalNo);
     let thisCustCNIC = sessionStorage.getItem("cnic.");
     thisCustCNIC = thisCustCNIC.replace(/^(\d{5})(\d{7})(\d)$/, "$1-$2-$3");
@@ -200,7 +200,7 @@ function ProposalCashValues(selectdProposalNo) {
     //}
     $.ajax({
         "crossDomain": true,
-        url: Global_API + "/API/NEW_BUSINESS/GET_CUSTOMER_PROP_FUND/" + selectdProposalNo + "/Y/Y",
+        url: Global_API + "/API/NEW_BUSINESS/GET_CUSTOMER_PROP_FUND/" + selectdProposalNo + "/Y/" + status,
         type: "GET",
         contentType: "application/json; charset=utf-8",
         headers: {
