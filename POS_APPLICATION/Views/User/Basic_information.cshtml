@@ -7,6 +7,7 @@
     const Result_API = (app_host_API + ":" + api_port_API);
     const global_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("GLOBAL_API_IP").Value);
     const Global_API = (global_host_API);
+    const Global_doc = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("Global_Doc").Value);
     var getsession = window.sessionStorage.getItem("tokenIndex");
     if (getsession == null) {
         getsession = sessionStorage.getItem("token");
@@ -35,7 +36,7 @@
                     <button disabled class="nav-link fw-bold bg-transparent border-0" id="policyConfirm-tab" data-toggle="tab" data-target="#policyConfirm" type="button" role="tab" aria-controls="policyConfirm" aria-selected="false"><img src="~/Assets/images/number5.png" class="icon_gif mr-2" />Confirmation</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button disabled class="nav-link fw-bold bg-transparent border-0" id="paymentMode-tab" data-toggle="tab" data-target="#paymentMode" type="button" role="tab" aria-controls="paymentMode" aria-selected="false"><img src="~/Assets/images/number6.png" class="icon_gif mr-2" />Payment Details</button>
+                    <button class="nav-link fw-bold bg-transparent border-0" id="paymentMode-tab" data-toggle="tab" data-target="#paymentMode" type="button" role="tab" aria-controls="paymentMode" aria-selected="false"><img src="~/Assets/images/number6.png" class="icon_gif mr-2" />Payment Details</button>
                 </li>
             </ul>
             <div class="tab-content border-0">
@@ -517,8 +518,8 @@
                                 <div class="col-md-6 p-0">
                                     <div class="row mb-1">
                                         <div class="col-md-6 mb-2 p-0 col-sm-12">
-                                            <button class="custom_row2" type="button">
-                                                <img src="~/Assets/images/paypro.png" class="debitCardsImg p-2 mr-5" />                                                    PayPro
+                                            <button class="custom_row2" type="button" id="btnPayCash" onclick="PaymentByCash()">
+                                                <img src="~/Assets/images/cheque.png" class="debitCardsImg p-2 mr-5" />                                                    Cash/ Cheque
                                             </button>
                                         </div>
                                         <div class="col-md-6 mb-2 p-0 col-sm-12">
@@ -593,7 +594,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
                                                 <button class="btnPayment custom_row2" id="btnCreditCard" type="button">
                                                     <img src="~/Assets/images/visa.png" class="debitCardsImg p-2 mr-5" />
                                                     Debit/Credit by Pymob

@@ -791,7 +791,7 @@
                                     if (result.isConfirmed) {
                                         sessionStorage.clear();
                                         localStorage.clear();
-                                        $.post("/User/removeSessionValue", function (token) {
+                                        $.post("/User/uploadimage", function (token) {
                                             window.location.href = "/"
                                         });
                                     }

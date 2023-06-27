@@ -186,7 +186,9 @@ namespace POS_APPLICATION.Controllers
             var reportPath = Configuration.GetSection("ReportServer").GetSection("ReportFolder").Value + "POS_Illust";
             var queryString = $"&P_DOCUMENT_CODE={P_DOCUMENT_CODE}";
             string url = $"{reportServerUrl}?/{reportPath}&rs:Command=Render{queryString}&rs:Format=PDF";
+
             return url;
+            
         }
         public IActionResult GetUrl(string Src_CODE)
         {
