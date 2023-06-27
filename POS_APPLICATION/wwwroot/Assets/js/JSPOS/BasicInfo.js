@@ -136,6 +136,7 @@
                                             $("#HS_TransactionReferenceNumber").val(randomNum);
                                             $("#TransactionReferenceNumber").val(randomNum);
                                             $("#FIPR_COLL_AMOUNT").val(this.CONTRIB_AMOUNT);
+                                            sessionStorage.setItem("CONTRIB_AMOUNT_DMS", this.CONTRIB_AMOUNT)
                                             $("#TransactionAmount").val(this.CONTRIB_AMOUNT);
                                             $("#PARTICIPANT_NAME").val(this.FSCU_FULL_NAME);
                                             $("#PARTICIPANT_DOB").val(birth_date);

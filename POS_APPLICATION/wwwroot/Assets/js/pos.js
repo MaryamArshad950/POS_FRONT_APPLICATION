@@ -110,6 +110,164 @@ function openGuardianInfo(Val) {
         $("#guardian_age").val("");
     }
 }
+const formData = new FormData();
+let nf = new Intl.NumberFormat('en-US');
+
+let objDmsHdr = {
+    FPDH_POLICY_NO: null,
+    FPDH_DMSCUS_CNIC: null,
+    FPDH_DESCRIPTION: "Cash Slip",
+    FPDH_SHORT_DESCR: "Cash Slip",
+    FPDH_APPROVED_YN: 'Y',
+    FPDH_STATUS: 'Y'
+}
+//console.log(selectedOption)
+if (sessionStorage.getItem("cnic.") != null) {
+    objDmsHdr.FPDH_DMSCUS_CNIC = sessionStorage.getItem("cnic.");
+} else {
+    objDmsHdr.FPDH_DMSCUS_CNIC = sessionStorage.getItem("DocCNIC").replaceAll("-", "");
+}
+objDmsHdr = JSON.stringify(objDmsHdr);
+
+function PaymentByCash() {
+    let paymentAmount = '';
+    if ($(".ContribAmtoPay").html() != undefined) {
+        paymentAmount = $(".ContribAmtoPay").html();
+    } else {
+        paymentAmount = sessionStorage.getItem("CONTRIB_AMOUNT_DMS");
+    }
+    const select = document.createElement('select');
+    select.className = 'swal2-input'
+    const optionselect = document.createElement('option');
+    optionselect.textContent = 'Select';
+    optionselect.value = '';
+    select.appendChild(optionselect);
+    if (sessionStorage.getItem("proposalResult") != null) {
+        let ProposalNumbers = sessionStorage.getItem("proposalResult").split(",");
+        ProposalNumbers.forEach((proposalNo) => {
+            const option = document.createElement('option');
+            option.textContent = proposalNo;
+            option.value = proposalNo;
+            select.appendChild(option);
+        });
+    }
+    else {
+        let Prpsl_No = sessionStorage.getItem("Prpsl_No");
+        const option = document.createElement('option');
+        option.textContent = Prpsl_No;
+        option.value = Prpsl_No;
+        select.appendChild(option);
+    }
+
+    Swal.fire({
+        title: 'Cash/ Cheque',
+        html: `
+        <h4 class="mt-3 line-height-2">Dear customer, you have to pay amount PKR ${paymentAmount}, after paying the contribution amount please upload your slip here</p>
+        <input type="file" id="fileUpload" name="FPDD_PATH" class="swal2-input mb-2">`,
+        confirmButtonText: 'Submit',
+        showCancelButton: true,
+        preConfirm: () => {
+            //const selectedOption = select.value;
+            //const bankName = document.getElementById('bankName').value;
+            const fileUpload = document.getElementById('fileUpload').files[0];
+            formData.append('file', fileUpload);
+
+            //if (selectedOption === '') {
+            //    Swal.showValidationMessage('Please select your proposal number');
+            //}
+        //    if (bankName === '') {
+        //        Swal.showValidationMessage('Please enter the bank name');
+        //}
+        if(!fileUpload) {
+                Swal.showValidationMessage('Please upload a file');
+            } else {
+                return {
+                    //selectedOption: selectedOption,
+                    //bankName: bankName,
+                    fileUpload: fileUpload
+                }
+            }
+        },
+        allowOutsideClick: () => false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                "crossDomain": true,
+                url: Result_API + "/API/DMS/POST_DMS_HDR",
+                type: "POST",
+                headers: {
+                    //'Content-Type': 'application/x-www-form-urlencoded',
+                    'Access-Control-Allow-Origin': Result_API,
+                    'Access-Control-Allow-Methods': 'POST, GET',
+                    'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                    'Authorization': 'Bearer ' + getsession
+                },
+                contentType: "application/json; charset=utf-8",
+                datatype: JSON,
+                data: objDmsHdr,
+                success: function (result) {
+                    console.log(result);
+                    let dmsHdrId = result[0].NEW_DMSHDR_ID;
+                    $.ajax({
+                        url: '/User/uploadimage',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (result) {
+                            console.log(result);
+                            let objDmsDtls = {
+                                FPDH_DMSHDR_ID: dmsHdrId,
+                                FPDD_PATH: result,
+                            }
+                            objDmsDtls = JSON.stringify(objDmsDtls);
+                            $.ajax({
+                                "crossDomain": true,
+                                url: Result_API + "/API/DMS/POST_DMS_DETAILS",
+                                type: "POST",
+                                headers: {
+                                    //'Content-Type': 'application/x-www-form-urlencoded',
+                                    'Access-Control-Allow-Origin': Result_API,
+                                    'Access-Control-Allow-Methods': 'POST, GET',
+                                    'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                                    'Authorization': 'Bearer ' + getsession
+                                },
+                                contentType: "application/json; charset=utf-8",
+                                datatype: JSON,
+                                data: objDmsDtls,
+                                success: function (result) {
+                                    console.log(result);
+                                    if (result[0].NEW_DMSDTL_ID != null) {
+                                        Swal.fire({
+                                            text: 'Thanks for paying the contribution',
+                                            icon: 'success'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                PolicyNumberSelection();
+                                                $(".change-policy-num").click(function () {
+                                                    PolicyNumberSelection();
+                                                })
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    if (jqXHR.status === 401) {
+                                    }
+                                }
+                            });
+
+                        }
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.status === 401) {
+                    }
+                }
+            });
+        }
+    });
+}
 function PolicyNumberSelection() {
     let thisCustCNIC = sessionStorage.getItem("cnic.");
 

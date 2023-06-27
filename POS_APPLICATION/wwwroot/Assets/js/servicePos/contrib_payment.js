@@ -55,17 +55,18 @@
         }
     })
 }()
+var PolicyNumbers = '';
+var ProposalNumbers = '';
+
 function checkValue(val) {
     let custCNIC = sessionStorage.getItem("cnic.");
     if (custCNIC && custCNIC.length === 13) {
         custCNIC = custCNIC.slice(0, 5) + '-' + custCNIC.slice(5, 12) + '-' + custCNIC.slice(12);
     }
-    let PolicyNumbers = '';
-    let ProposalNumbers = '';
     if (sessionStorage.getItem("policyResult") != null) {
         PolicyNumbers = sessionStorage.getItem("policyResult").split(",");
     }
-    if (sessionStorage.getItem("ProposalResult") != null) {
+    if (sessionStorage.getItem("proposalResult") != null) {
         ProposalNumbers = sessionStorage.getItem("proposalResult").split(",");
     }
     if (val == 1) {
@@ -81,7 +82,7 @@ function checkValue(val) {
         //$('.proposal_Contribution').attr("hidden", true)
         $(".policy-topup-no").attr("hidden", true)
         $(".topup-data").attr("hidden", true)
-        if (PolicyNumbers != null) {
+        if (PolicyNumbers != '') {
             $("#FPDM_POLICY_NO").empty();
             $("#FPDM_POLICY_NO").append($("<option value=''>Select</option>"))
             PolicyNumbers.forEach((policyNo) => {
@@ -91,7 +92,7 @@ function checkValue(val) {
                 $("#FPDM_POLICY_NO").append(option);
             });
         }
-        if (ProposalNumbers != null) {
+        if (ProposalNumbers != '') {
             $("#FPDM_PROPOSAL_NO").empty();
             $("#FPDM_PROPOSAL_NO").append($("<option value=''>Select</option>"))
             ProposalNumbers.forEach((Proposal) => {
@@ -121,7 +122,7 @@ function checkValue(val) {
         //}
         $("#policy_number").empty();
         $("#policy_number").append($("<option value=''>Select</option>"))
-        if (PolicyNumbers != null) {
+        if (PolicyNumbers != '') {
             $(".policy-topup-no").removeAttr("hidden")
             PolicyNumbers.forEach((policyNo) => {
                 const option = document.createElement('option');
@@ -130,7 +131,7 @@ function checkValue(val) {
                 $("#policy_number").append(option);
             });
         }
-        if (PolicyNumbers == null) {
+        if (PolicyNumbers == '') {
             $(".policy-topup-no").attr("hidden")
             Swal.fire({
                 icon: 'info',
@@ -247,12 +248,12 @@ function PayContributionAmount(Val) {
                 $(result).each(function () {
                     if (this.FPDM_POLICY_NO == Val) {
                         sessionStorage.setItem("GROSS_AMT", this.FPDM_GROSSCONTRIB);
-                        $(".non-index-contrib").html('<p>Non-index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
-                        $(".index-contrib").html('<p>Index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>');
+                        $(".non-index-contrib").html('<p>Non-index Contribution</p><p class="ContribAmtoPay">PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
+                        $(".index-contrib").html('<p>Index Contribution</p><p class="ContribAmtoPay">PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>');
                     } if (this.FPDM_PROPOSAL_NO == Val) {
                         sessionStorage.setItem("GROSS_AMT", this.FPDM_GROSSCONTRIB);
-                        $(".non-index-contrib").html('<p>Non-index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
-                        $(".index-contrib").html('<p>Index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>');
+                        $(".non-index-contrib").html('<p>Non-index Contribution</p><p class="ContribAmtoPay">PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
+                        $(".index-contrib").html('<p>Index Contribution</p><p class="ContribAmtoPay">PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>');
                     }
                 })
             },
