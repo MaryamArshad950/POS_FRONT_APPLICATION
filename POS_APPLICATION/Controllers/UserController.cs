@@ -697,6 +697,7 @@ namespace POS_APPLICATION.Controllers
             user_master.UserName = SUM_SYS_USER_CODE;
             var key = Configuration.GetSection("Credentials").GetSection("SymKey").Value;
             user_master.Password = EncryptString(key, SUM_USER_PASSWORD);
+            //user_master.Password = DecryptString( SUM_USER_PASSWORD);
             core_user.UserName = "POSTEST";
             core_user.Password = "POSTEST";
 
