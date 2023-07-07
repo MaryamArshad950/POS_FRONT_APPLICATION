@@ -15,7 +15,8 @@ namespace POS_APPLICATION.Models.CUST_NEED_ANALYSIS
         public int FCFA_CUST_EXPENSES { get; set; }
         public int FCFA_EXPENSES_LASTYR { get; set; }
         public int FCFA_EXPENSES_CURRENTYR { get; set; }
-        public int FCFA_CRUSER { get; set; }
+        public int FCFA_NET_SAVINGS { get; set; }
+        public string FCFA_ADDTNL_DTLS { get; set; }
         public DateTime FCFA_CRDATE { get; set; }
     }
 }

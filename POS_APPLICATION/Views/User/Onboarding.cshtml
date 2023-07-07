@@ -40,9 +40,9 @@
                 </div>
                 <div class="col-md-6">
                     @if (TempData["WrongStatus"] != null)
-                     {
+                    {
                         <div class='alert alert-danger alert-dismissible fade show p-3 mt-2' role='alert'>@TempData["WrongStatus"] </div>
-                     }
+                    }
                 </div>
             </div>
 
@@ -74,52 +74,89 @@
                                 <h4 class="mb-4 mt-3">
                                     <i>Do you have any existing life assurance plan?</i>
                                 </h4>
-                                <div class="form-check form-check-success">
-                                    <label for="INSUREREXIST_Y" class="form-check-label">
-                                        Yes
-                                        <input class="form-check-input" type="radio" id="INSUREREXIST_YN" name="FCIH_INSUREREXIST_YN" value="Y" onchange='ExistInsValYes(this.id, this.value)' required />
-                                        <i class="input-helper"></i>
-                                    </label>
-                                </div>
-                                <div class="form-check form-check-success">
-                                    <label for="INSUREREXIST_N" class="form-check-label">
-                                        No
-                                        <input class="form-check-input" type="radio" id="INSUREREXIST_N" name="FCIH_INSUREREXIST_YN" value="N" checked onchange="ExistInsValNo(this.id, this.value)" required />
-                                        <i class="input-helper"></i>
-                                    </label>
+                                <div class="row ml-1">
+                                    <div class="form-check form-check-success mr-3">
+                                        <label for="INSUREREXIST_Y" class="form-check-label">
+                                            Yes
+                                            <input class="form-check-input" type="radio" id="INSUREREXIST_YN" name="FCIH_INSUREREXIST_YN" value="Y" onchange='ExistInsValYes(this.id, this.value)' required />
+                                            <i class="input-helper"></i>
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-success">
+                                        <label for="INSUREREXIST_N" class="form-check-label">
+                                            No
+                                            <input class="form-check-input" type="radio" id="INSUREREXIST_N" name="FCIH_INSUREREXIST_YN" value="N" checked onchange="ExistInsValNo(this.id, this.value)" required />
+                                            <i class="input-helper"></i>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-12 mt-3 table-responsive ExistingLifePlans" hidden>
-                                <h4 class="card-title text-primary pl-3 pt-2 pb-2"></h4>
-                                <hr />
-                                <table class="table table-borderless" id="tblMyExistingLifePlans">
-                                    <thead>
-                                        <tr>
-                                            <th hidden>ID</th>
-                                            <th>Policy Number</th>
-                                            <th>Sum Assured</th>
-                                            <th>Contribution</th>
-                                            <th>Start Date</th>
-                                            <th>Maturity Date</th>
-                                            <th>Purpose</th>
-                                            <th>Company</th>
-                                            <th>Condition of Acceptance</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td hidden><input class="form-control" name="FCIH_INSUREREXIST_ID" id="FCIH_INSUREREXIST_ID" value="0"></td>
-                                            <td><input class="form-control" name="FCIH_POLICY_NO" id="FCIH_POLICY_NO"></td>
-                                            <td><input class="form-control" name="FCIH_SA_AMOUNT" id="FCIH_SA_AMOUNT" type="number" min="1"></td>
-                                            <td><input class="form-control" name="FCIH_CONTRIB_AMT" id="FCIH_CONTRIB_AMT" type="number" min="1"></td>
-                                            <td><input class="form-control" name="FCIH_START_DATE" id="FCIH_START_DATE" type="date"></td>
-                                            <td><input class="form-control" name="FCIH_MATURITY_DATE" id="FCIH_MATURITY_DATE" type="date"></td>
-                                            <td><input class="form-control" name="FCIH_INSURER_PURPOSE" id="FCIH_INSURER_PURPOSE"></td>
-                                            <td><input class="form-control" name="FCIH_INSURER_NM" id="FCIH_INSURER_NM"></td>
-                                            <td><input class="form-control" name="FCIH_COND_ACCPTNCE" id="FCIH_COND_ACCPTNCE"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="row mt-3 ml-1 ExistingLifePlans" hidden>
+                                <div class="row w-100 mb-2">
+                                    <div class="col-md-3">
+                                        <input class="form-control" name="FCIH_INSUREREXIST_ID" id="FCIH_INSUREREXIST_ID" value="0" hidden>
+                                        <label for="" class="font-size-2 text-success">Policy Number</label>
+                                        <input class="form-control" name="FCIH_POLICY_NO" id="FCIH_POLICY_NO" placeholder="Policy Number" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="" class="font-size-2 text-success">Sum Assured</label>
+                                        <input class="form-control" name="FCIH_SA_AMOUNT" id="FCIH_SA_AMOUNT" type="number" placeholder="500,000" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="" class="font-size-2 text-success">Contribution/Deposit</label>
+                                        <input class="form-control" name="FCIH_CONTRIB_AMT" id="FCIH_CONTRIB_AMT" type="number" placeholder="100,000"/>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="" class="font-size-2 text-success">Start Date</label>
+                                        <input class="form-control" name="FCIH_START_DATE" id="FCIH_START_DATE" type="date" />
+                                    </div>
+                                </div>
+                                <div class="row w-100">
+                                    <div class="col-md-3">
+                                        <label for="" class="font-size-2 text-success">Maturity Date</label>
+                                        <input class="form-control" name="FCIH_MATURITY_DATE" id="FCIH_MATURITY_DATE" type="date" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="" class="font-size-2 text-success">Purpose</label>
+                                        <input class="form-control" name="FCIH_INSURER_PURPOSE" id="FCIH_INSURER_PURPOSE" placeholder="Purpose" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="" class="font-size-2 text-success">Company</label>
+                                        <input class="form-control" name="FCIH_INSURER_NM" id="FCIH_INSURER_NM" placeholder="Company" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="" class="font-size-2 text-success">Condition of Acceptance</label>
+                                        <input class="form-control" name="FCIH_COND_ACCPTNCE" id="FCIH_COND_ACCPTNCE" placeholder="Condition of Acceptance" />
+                                    </div>
+                                </div>
+                                @*<table class="table table-borderless" id="tblMyExistingLifePlans">
+            <thead>
+                <tr>
+                    <th hidden>ID</th>
+                    <th>Policy Number</th>
+                    <th>Sum Assured</th>
+                    <th>Contribution/Deposit</th>
+                    <th>Start Date</th>
+                    <th>Maturity Date</th>
+                    <th>Purpose</th>
+                    <th>Company</th>
+                    <th>Condition of Acceptance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td hidden><input class="form-control" name="FCIH_INSUREREXIST_ID" id="FCIH_INSUREREXIST_ID" value="0"></td>
+                    <td><input class="form-control" name="FCIH_POLICY_NO" id="FCIH_POLICY_NO"></td>
+                    <td><input class="form-control" name="FCIH_SA_AMOUNT" id="FCIH_SA_AMOUNT" type="number" min="1"></td>
+                    <td><input class="form-control" name="FCIH_CONTRIB_AMT" id="FCIH_CONTRIB_AMT" type="number" min="1"></td>
+                    <td><input class="form-control" name="FCIH_START_DATE" id="FCIH_START_DATE" type="date"></td>
+                    <td><input class="form-control" name="FCIH_MATURITY_DATE" id="FCIH_MATURITY_DATE" type="date"></td>
+                    <td><input class="form-control" name="FCIH_INSURER_PURPOSE" id="FCIH_INSURER_PURPOSE"></td>
+                    <td><input class="form-control" name="FCIH_INSURER_NM" id="FCIH_INSURER_NM"></td>
+                    <td><input class="form-control" name="FCIH_COND_ACCPTNCE" id="FCIH_COND_ACCPTNCE"></td>
+                </tr>
+            </tbody>
+        </table>*@
                             </div>
 
                             <h3 class="card-title mt-5">Financial Details</h3>
@@ -142,6 +179,7 @@
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label for="" class="font-size-2 text-success">Other Income</label>
+                                            <i class="text-danger text-sml">(Bonuses/Commission/Dividends/Share of Profit)</i>
                                         </div>
                                         <div class="col-md-6">
                                             <input class="form-control" name="FCFA_OTHER_INCOME" id="FCFA_OTHER_INCOME" type="number" onkeyup="calcTotalIncome(this.value)" min="0" />
@@ -149,7 +187,8 @@
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
-                                            <label for="" class="font-size-2 text-success">Total Income</label>
+                                            <label for="" class="font-size-2 text-success">Total Income</label><br />
+                                            <i class="text-danger text-sml">All sources</i>
                                         </div>
                                         <div class="col-md-6">
                                             <input class="form-control readonly" name="FCFA_TOTAL_INCOME" id="FCFA_TOTAL_INCOME" onclick="calcTotalIncome(this.value)" readonly />
@@ -157,24 +196,42 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <h3 class="card-title mt-3">Expenses <i class="text-danger text-sml">All sources</i></h3>
+                                    <h3 class="card-title mt-3">Expenses / Liabilities <i class="text-danger text-sml">All sources</i></h3>
                                     <div class="row mb-3">
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
-                                            <label for="" class="font-size-2 text-success">Expenses Last Year</label>
+                                            <label for="" class="font-size-2 text-success">Expenses last year</label>
                                         </div>
                                         <div class="col-md-6">
-                                            <input class="form-control" name="FCFA_EXPENSES_LASTYR" id="FCFA_EXPENSES_LASTYR" type="number" required />
+                                            <input class="form-control" name="FCFA_EXPENSES_LASTYR" id="FCFA_EXPENSES_LASTYR" type="number" onkeyup="calcTotalIncome(this.value)" required />
                                         </div>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
-                                            <label for="" class="font-size-2 text-success">Expenses Current Year</label>
+                                            <label for="" class="font-size-2 text-success">Loans / Other expenses</label>
+                                            <i class="text-danger text-sml">(Yearly)</i>
                                         </div>
                                         <div class="col-md-6">
-                                            <input class="form-control" name="FCFA_EXPENSES_CURRENTYR" id="FCFA_EXPENSES_CURRENTYR" type="number" required />
+                                            <input class="form-control" name="FCFA_EXPENSES_CURRENTYR" id="FCFA_EXPENSES_CURRENTYR" type="number" onkeyup="calcTotalIncome(this.value)" required />
                                         </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="" class="font-size-2 text-success">Net Savings</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input class="form-control" name="FCFA_NET_SAVINGS" id="FCFA_NET_SAVINGS" type="number" required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3 ml-1">
+                                    <div class="col-md-12">
+                                        <label for="" class="font-size-2 text-success">Are you dependent financially on anybody?</label>
+                                        <i class="text-danger text-sml">If yes, details please</i>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <textarea class="form-control" name="FCFA_ADDTNL_DTLS" id="FCFA_ADDTNL_DTLS" type="number"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -299,9 +356,9 @@
                 <select class="form-control" name="FCDM_OW_FSNT_IDENTYPE_ID" id="FCDM_OW_FSNT_IDENTYPE_ID" required></select>
             </div>
             @*<div class="col-md-4" hidden>
-                    <label for="" class="mr-5 text-success">Contrib Frequency</label>
-                    <select class="form-control" name="FCDM_PFREQ_FSCD_ID" id="FCDM_PFREQ_FSCD_ID" required></select>
-                </div>*@
+            <label for="" class="mr-5 text-success">Contrib Frequency</label>
+            <select class="form-control" name="FCDM_PFREQ_FSCD_ID" id="FCDM_PFREQ_FSCD_ID" required></select>
+        </div>*@
             <div class="col-md-4" hidden>
                 <label for="" class="mr-5 text-success">Cover MultipleType</label>
                 <select class="form-control" name="FCDM_PLAN_CASE_STATUS" id="FCDM_PLAN_CASE_STATUS" required></select>
@@ -344,7 +401,7 @@
                 <div class="col-md-3 mb-3">
                     <label for="CUOCP_FSCD_ID" class="mr-5 text-success">Occupation</label>
                     <select class="form-control" name="CUOCP_FSCD_ID" id="CUOCP_FSCD_ID" title="Select a number" data-hide-disabled="true" onchange="selectOccup(this.value)"></select>
-                    <input class="form-control" name="FCDM_OW_CUOCP_FSCD_ID" id="FCDM_OW_CUOCP_FSCD_ID" hidden required/>
+                    <input class="form-control" name="FCDM_OW_CUOCP_FSCD_ID" id="FCDM_OW_CUOCP_FSCD_ID" hidden required />
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="" class="mr-5 text-success">Mobile Number</label><br />
@@ -363,17 +420,20 @@
                 <div class="col-md-3 mb-3">
                     <label for="" class="mr-5 text-success">Height <span class="text-danger font-weight-light">Feet & Inches</span></label>
                     <div class="input-group slidecontainer">
-                        <input type="number" class="form-control" max="8" min="3" id="heightFt" onkeyup="selectHeightFeet(this.value)" placeholder="Feet" value="5" onfocus="setHeightMaxLength(this.value)">
-                        <input type="number" class="form-control" max="11" min="0" id="heightIn" onkeyup="selectHeightInches(this.value)" placeholder="Inches" value="7" onfocus="setHeightMaxLength(this.value)">
+
+                        <input type="number" class="form-control" max="8" min="3" id="heightFt" onkeyup="selectHeightFeet(this.value)" placeholder="Feet" value="5" onclick="setHeightMaxLength(this.value)">
+                        <input type="number" class="form-control" max="11" min="0" id="heightIn" onkeyup="selectHeightInches(this.value)" placeholder="Inches" value="7" onclick="setHeightMaxLength(this.value)">
+
                         @*<input type="range" class="slider mt-3 mb-3" max="8" min="3" step="1" id="heightFt" hidden onchange="selectHeightFeet(this.value)">
-        <input type="range" class="slider mt-3 mb-3" max="11" min="0" step="1" id="heightIn" hidden onchange="selectHeightInches(this.value)">*@
+                    <input type="range" class="slider mt-3 mb-3" max="11" min="0" step="1" id="heightIn" hidden onchange="selectHeightInches(this.value)">*@
                     </div>
-                    <input class="form-control" id="FCDM_OWCUST_HEITACT" name="FCDM_OWCUST_HEITACT" placeholder="Ex. 5ft 7inches" required onfocus="setHeightMaxLength(this.value)" value="5.7" hidden/>
+                    <input class="form-control" id="FCDM_OWCUST_HEITACT" name="FCDM_OWCUST_HEITACT" placeholder="Ex. 5ft 7inches" required onclick="setHeightMaxLength(this.value)" value="5.7" hidden />
+
                     @*<output id="heightResult" class="mb-2"></output>*@
                 </div>
                 <div class="col-md-2">
                     <label for="" class="mr-5 text-success">Weight <span class="text-danger font-weight-light">KG</span></label>
-                    <input class="form-control" id="FCDM_OWCUST_WEITACT" type="number" name="FCDM_OWCUST_WEITACT" placeholder="Ex. 50 Kilograms" maxlength="3" required onkeyup="calculate_BMI()" onfocus="calculate_BMI()" />
+                    <input class="form-control" id="FCDM_OWCUST_WEITACT" type="number" name="FCDM_OWCUST_WEITACT" placeholder="Ex. 50 Kilograms" maxlength="3" required onkeyup="calculate_BMI()" onclick="calculate_BMI()"/>
                 </div>
                 <div class="col-md-4">
                     <div class="row mt-2">
@@ -382,7 +442,7 @@
                         </div>
                         <div class="col-md-4">
                             <label for="" class="mr-5 text-success">BMI:</label>
-                            <input class="form-control form-control-custom readonly" placeholder="BMI" id="FCDM_OWCUST_BMI" name="FCDM_OWCUST_BMI" onclick="calculate_BMI()" readonly required />
+                            <input class="form-control form-control-custom readonly" placeholder="BMI" id="FCDM_OWCUST_BMI" name="FCDM_OWCUST_BMI" readonly required />
                         </div>
                         <div class="col">
                             <img id="bmi_unhealthy" src="~/Assets/images/unhealthy_boy.png" class="icon_size animated animatedFadeInUpp fadeInUpp" hidden />
@@ -394,25 +454,25 @@
                 </div>
             </div>
             @*<div class="row ml-1 mt-4">
-                    <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
-                    <h5 class="text-danger font-weight-500 pt-1"> Please Choose Between Takaful Contribution or Maturity Value</h5>
-                </div>
-                <div class="row mt-2 ml-1">
-                    <div class="form-check form-check-success mr-4">
-                        <label for="Annual_savings" class="form-check-label">
-                            Takaful Contribution
-                            <input class="form-check-input mr-5" type="radio" id="Annual_savings" name="mode" value="A" oninput="checkValue(this.value)" />
-                            <i class="input-helper"></i>
-                        </label>
-                    </div>
-                    <div class="form-check form-check-success">
-                        <label for="maturity_value" class="form-check-label">
-                            Maturity Value
-                            <input class="form-check-input" type="radio" id="maturity_value" name="mode" value="M" oninput="checkValue(this.value)" disabled />
-                            <i class="input-helper"></i>
-                        </label>
-                    </div>
-                </div>*@
+            <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
+            <h5 class="text-danger font-weight-500 pt-1"> Please Choose Between Takaful Contribution or Maturity Value</h5>
+        </div>
+        <div class="row mt-2 ml-1">
+            <div class="form-check form-check-success mr-4">
+                <label for="Annual_savings" class="form-check-label">
+                    Takaful Contribution
+                    <input class="form-check-input mr-5" type="radio" id="Annual_savings" name="mode" value="A" oninput="checkValue(this.value)" />
+                    <i class="input-helper"></i>
+                </label>
+            </div>
+            <div class="form-check form-check-success">
+                <label for="maturity_value" class="form-check-label">
+                    Maturity Value
+                    <input class="form-check-input" type="radio" id="maturity_value" name="mode" value="M" oninput="checkValue(this.value)" disabled />
+                    <i class="input-helper"></i>
+                </label>
+            </div>
+        </div>*@
             <div class="row mt-3 mb-3">
                 <div class="col-md-3 mb-3">
                     <label for="" class="mr-5 text-success">Takaful Contribution Mode</label>
@@ -420,15 +480,22 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="" class="mr-5 text-success">Plan Terms (Years)</label>
-                    <input class="form-control" placeholder="Ex 10 years" type="number" name="FCDM_PAYING_TERM" id="FCDM_PAYING_TERM" required onkeyup="calculateFaceValue()" min="5" max="35"/>
+                    <input class="form-control" placeholder="Ex 10 years" type="number" name="FCDM_PAYING_TERM" id="FCDM_PAYING_TERM" required onkeyup="calculateFaceValue()" min="5" max="30" />
                 </div>
                 <div class="col-md-3 mb-3">
-                    <label for="" class="mr-5 text-success">Takaful Contribution</label>
-                    <input class="form-control" id="FCDM_PLAN_CONTRIB" type="number" name="FCDM_PLAN_CONTRIB" placeholder="Contribution" required onkeyup="calculateFaceValue()" min="100"/>
+
+                    <label for="" class="mr-5 text-success">Takaful Contribution/ Deposit</label>
+                    <input class="form-control" id="FCDM_PLAN_CONTRIB" type="number" name="FCDM_PLAN_CONTRIB" placeholder="Contribution" required onkeyup="calculateFaceValue()" onchange=" maxlimitVal(this.value)" min="100" max="10000000" />
                 </div>
                 <div class="col-md-3">
                     <label for="" class="mr-5 text-success">Sum Assured</label>
                     <input class="form-control" id="FCDM_FACE_VALUE" type="number" name="FCDM_FACE_VALUE" placeholder="Sum Assured" onclick="calculateFaceValue()" readonly required />
+                </div>
+            </div>
+            <div class="row mt-3 mb-3">
+                <div class="col-md-3 mb-3">
+                    <label for="" class="mr-5 text-success">Industry Type</label>
+                    <select class="form-control" id="" name=""><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="2">2</option></select>
                 </div>
             </div>
             <div class="row ml-1 mt-4">
@@ -941,7 +1008,7 @@
                                             <th>Continue</th>
                                             <th>Document Name</th>
                                             <th>Coverage Amount</th>
-                                            <th>Takaful Contribution</th>
+                                            <th>Takaful Contribution/ Deposit</th>
                                             <th>Plan Term</th>
                                             <th>Download</th>
                                             <th>View</th>
@@ -958,7 +1025,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="VerifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+@*<div class="modal fade" id="VerifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
@@ -999,7 +1066,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
 <div class="modal fade animated animatedFadeInUpp fadeInUpp videographyModal" id="videographyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content salaam-color">

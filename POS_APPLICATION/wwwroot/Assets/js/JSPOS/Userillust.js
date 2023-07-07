@@ -7,20 +7,20 @@
             sessionStorage.getItem("DocCODE");
         }
 
-        if (sessionStorage.getItem("User") != null) {
-            $("#btnAgreeTermsCond").removeAttr("type", true);
-            $("#btnAgreeTermsCond").attr("type", "button");
-            $("#btnAgreeTermsCond").click(function () {
-                window.location.href = "/Onboarding"
-            })
-        }
+        //if (sessionStorage.getItem("User") != null) {
+        //    $("#btnAgreeTermsCond").removeAttr("type", true);
+        //    $("#btnAgreeTermsCond").attr("type", "button");
+        //    $("#btnAgreeTermsCond").click(function () {
+        //        window.location.href = "/Onboarding"
+        //    })
+        //}
 
-        if (sessionStorage.getItem("tokenIndex") != null && sessionStorage.getItem("tokenIndex") != "" && sessionStorage.getItem("User") == null) {
-            $("#btnAgreeTermsCond").attr("type", "button");
-            $("#btnAgreeTermsCond").click(function () {
-                window.location.href = "/Onboarding"
-            })
-        }
+        //if (sessionStorage.getItem("tokenIndex") != null && sessionStorage.getItem("tokenIndex") != "" && sessionStorage.getItem("User") == null) {
+        //    $("#btnAgreeTermsCond").attr("type", "button");
+        //    $("#btnAgreeTermsCond").click(function () {
+        //        window.location.href = "/Onboarding"
+        //    })
+        //}
 
         if (sessionStorage.getItem("tokenIndex") == null && sessionStorage.getItem("token") != "" && localStorage.getItem("token1") == null && localStorage.getItem("token3") == null) {
             localStorage.setItem("token3", sessionStorage.getItem("token"));
@@ -155,7 +155,7 @@
                     $("#p_NUMBER_OF_PROJECTION_YEARS").val(this.NUMBER_OF_PROJECTION_YEARS + " Years");
                     $("#p_PROPOSAL_NUMBER").val(this.PROPOSAL_NUMBER);
                     $("#p_SA").val("PKR " + POL_COVGE_SUMASSURD);
-                    $(".customer-name").html(this.PARTICIPANT_NAME);
+                    //$(".customer-name").html(this.PARTICIPANT_NAME);
                     if (sessionStorage.getItem("customer_name") == null && sessionStorage.getItem("cust_gender") == null) {
                         sessionStorage.setItem("customer_name", (this[i].FULL_NAME).replace(/\s{2,}/g, ' '));
                         sessionStorage.setItem("cust_gender", this.GENDER)
@@ -326,11 +326,37 @@
             window.location.href = "/Onboarding";
         })
         $("#saveIllustration").click(function () {
-            $("#AgreementModal").modal("show");
+            //$("#AgreementModal").modal("show");
+            let name = sessionStorage.getItem("customer_name");
+            let AgreementInfo = '<img src="/Assets/images/investigation_magnify.png" class="notebook_image terms-cond" alt="Agreement"><br>I, <span class="customer-name">' + name + '</span>, accept, studied and understood the above Illustration and Notes carefully and found it according to my needs.<br>I also confirm that no other illustration verbal, written or electronic in contradiction to this illustration has been given to me.<br>I understand in case of any misconduct on part of the takaful operator, the SECP shall have the authority to take any action in light of the Insurance Ordinance 2000.<br/><b>Disclaimer:</b><br>The Participant can cancel the Membership within fourteen (14) days of the receipt of the Participant Membership Document (PMD) by the Participant.<br>In case of cancellation during this free look period(subject to Terms and Conditions), the paid contribution is refundable';
+            Swal.fire({
+                title: 'Terms & Condition',
+                html: AgreementInfo,
+                confirmButtonText: 'Agree',
+                showCancelButton: true,
+                cancelButtonText: 'Disagree',
+                customClass: {
+                    confirmButton: 'btnAgreeTermsCond',
+                },
+                allowOutsideClick: () => false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (sessionStorage.getItem("User") != null) {
+                        window.location.href = "/Onboarding"
+                    }
+                    if (sessionStorage.getItem("tokenIndex") != null && sessionStorage.getItem("tokenIndex") != "" && sessionStorage.getItem("User") == null) {
+                        window.location.href = "/Onboarding"
+                    }
+                    if (sessionStorage.getItem("User") == null && sessionStorage.getItem("tokenIndex") == null) {
+                        document.getElementById('SummaryData').submit();
+                    }
+                //    window.location.href = '/Onboarding';
+                }
+            });
         });
-        $("#btnDisAgreeTerms").click(function () {
-            $("#AgreementModal").modal("hide");
-        })
+        //$("#btnDisAgreeTerms").click(function () {
+        //    $("#AgreementModal").modal("hide");
+        //})
     })
 }()
 $(document).ajaxStart(function () {

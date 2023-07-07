@@ -20,6 +20,7 @@
                 if ($("#policy_number").val() != "" && $("#TOTAL_AMOUNT").val() != "") {
                     let orderId = Math.floor(Math.random() * 9000000) + 1000000;
                     orderId = orderId.toString();
+                    sessionStorage.setItem("Policy_NoF", $("#policy_number").val());
 
                     $("#HS_TransactionReferenceNumber").val(orderId);
                     $("#TransactionReferenceNumber").val(orderId);
@@ -55,10 +56,20 @@
         }
     })
 }()
+var PolicyNumbers = '';
+var ProposalNumbers = '';
+
 function checkValue(val) {
     let custCNIC = sessionStorage.getItem("cnic.");
     if (custCNIC && custCNIC.length === 13) {
         custCNIC = custCNIC.slice(0, 5) + '-' + custCNIC.slice(5, 12) + '-' + custCNIC.slice(12);
+    }
+
+    if (sessionStorage.getItem("policyResult") != null) {
+        PolicyNumbers = sessionStorage.getItem("policyResult").split(",");
+    }
+    if (sessionStorage.getItem("proposalResult") != null) {
+        ProposalNumbers = sessionStorage.getItem("proposalResult").split(",");
     }
     if (val == 1) {
         $(".paymode-select").attr("hidden", true);
@@ -73,39 +84,30 @@ function checkValue(val) {
         //$('.proposal_Contribution').attr("hidden", true)
         $(".policy-topup-no").attr("hidden", true)
         $(".topup-data").attr("hidden", true)
-        $.ajax({
-            "crossDomain": true,
-            url: "" + Result_API + "/api/Inquiry/GetInquiryByUsername/" + custCNIC,
-            type: "GET",
-            contentType: "application/json; charset=utf-8",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Access-Control-Allow-Origin': Result_API,
-                'Access-Control-Allow-Methods': 'POST, GET',
-                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
-                'Authorization': 'Bearer ' + getsession
-            },
-            datatype: 'jsonp',
-            success: function (result) {
-                if (result.length != 0) {
-                    for (let i = 0; i < result.length; i++) {
-                        if (result[i].FPDM_POLICY_NO == null) {
-                            $("#FPDM_PROPOSAL_NO").empty();
-                            $("#FPDM_PROPOSAL_NO").append($("<option value=''>Select</option>"))
-                            $("#FPDM_PROPOSAL_NO").append($("<option></option>").val(result[i].FPDM_PROPOSAL_NO).html(result[i].FPDM_PROPOSAL_NO));
-                        }
-                        else {
-                            $("#FPDM_POLICY_NO").empty();
-                            $("#FPDM_POLICY_NO").append($("<option value=''>Select</option>"))
-                            $("#FPDM_POLICY_NO").append($("<option></option>").val(result[i].FPDM_POLICY_NO).html(result[i].FPDM_POLICY_NO))
-                        }
-                    }
-                }
-            },
-            error: function (data2) { }
-        });
-    } if (val == 2) {
-        $(".proposal_Contribution").attr("hidden",true)
+        if (PolicyNumbers != '') {
+            $("#FPDM_POLICY_NO").empty();
+            $("#FPDM_POLICY_NO").append($("<option value=''>Select</option>"))
+            PolicyNumbers.forEach((policyNo) => {
+                const option = document.createElement('option');
+                option.textContent = policyNo;
+                option.value = policyNo;
+                $("#FPDM_POLICY_NO").append(option);
+            });
+        }
+        if (ProposalNumbers != '') {
+            $("#FPDM_PROPOSAL_NO").empty();
+            $("#FPDM_PROPOSAL_NO").append($("<option value=''>Select</option>"))
+            ProposalNumbers.forEach((Proposal) => {
+                const option = document.createElement('option');
+                option.textContent = Proposal;
+                option.value = Proposal;
+                $("#FPDM_PROPOSAL_NO").append(option);
+            });
+        }
+    }
+    if (val == 2) {
+        sessionStorage.setItem("PayCheck", "TopupPay");
+        $(".proposal_Contribution").attr("hidden", true)
         $(".paymode-select").attr("hidden", true);
         let proposal_no = sessionStorage.getItem("Proposal_NoF");
         $("#policy_number").val(sessionStorage.getItem("PolicyNo"));
@@ -117,48 +119,68 @@ function checkValue(val) {
         $("#TransactionAmount").val("");
         $(".indexation-contribution").attr("hidden", true)
         $(".paymode-select").attr("hidden", true)
-        $(".topup-data").attr("hidden",true)
+        $(".topup-data").attr("hidden", true)
         //if (proposal_no != null || proposal_no != "" || proposal_no != undefined) {
         //    showFund(proposal_no);
         //}
-        $.ajax({
-            "crossDomain": true,
-            url: "" + Result_API + "/api/Inquiry/GetInquiryByUsername/" + custCNIC,
-            type: "GET",
-            contentType: "application/json; charset=utf-8",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Access-Control-Allow-Origin': Result_API,
-                'Access-Control-Allow-Methods': 'POST, GET',
-                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
-                'Authorization': 'Bearer ' + getsession
-            },
-            datatype: 'jsonp',
-            success: function (result) {
-                console.log(result)
-                if (result.length >= 1) {
-                    $(".policy-topup-no").removeAttr("hidden")
-                    for (let i = 0; i < result.length; i++) {
-                        if (result[i].FPDM_POLICY_NO != null) {
-                            $("#policy_number").empty();
-                            $("#policy_number").append($("<option value=''>Select</option>"))
-                            $("#policy_number").append($("<option></option>").val(result[i].FPDM_POLICY_NO).html(result[i].FPDM_POLICY_NO));
-                        }
-                    }
-                }
-                if (result.length == 0) {
-                    $(".policy-topup-no").attr("hidden")
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'Alert',
-                        text: 'No policy has been issued yet! Please isssue your policy if you want to make a topup policy payment'
-                    })
-                }
-            },
-            error: function (data2) { }
-        });
+        $("#policy_number").empty();
+        $("#policy_number").append($("<option value=''>Select</option>"))
+        if (PolicyNumbers != '') {
+            $(".policy-topup-no").removeAttr("hidden")
+            PolicyNumbers.forEach((policyNo) => {
+                const option = document.createElement('option');
+                option.textContent = policyNo;
+                option.value = policyNo;
+                $("#policy_number").append(option);
+            });
+        }
+        if (PolicyNumbers == '') {
+            $(".policy-topup-no").attr("hidden")
+            Swal.fire({
+                icon: 'info',
+                title: 'Alert',
+                text: 'No policy has been issued yet! Please isssue your policy if you want to make a topup policy payment'
+            })
+        }
+    //    $.ajax({
+    //        "crossDomain": true,
+    //        url: "" + Result_API + "/api/Inquiry/GetInquiryByUsername/" + custCNIC,
+    //        type: "GET",
+    //        contentType: "application/json; charset=utf-8",
+    //        headers: {
+    //            'Content-Type': 'application/x-www-form-urlencoded',
+    //            'Access-Control-Allow-Origin': Result_API,
+    //            'Access-Control-Allow-Methods': 'POST, GET',
+    //            'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+    //            'Authorization': 'Bearer ' + getsession
+    //        },
+    //        datatype: 'jsonp',
+    //        success: function (result) {
+    //            console.log(result)
+    //            if (result.length >= 1) {
+    //                $(".policy-topup-no").removeAttr("hidden")
+    //                for (let i = 0; i < result.length; i++) {
+    //                    if (result[i].FPDM_POLICY_NO != null) {
+    //                        $("#policy_number").empty();
+    //                        $("#policy_number").append($("<option value=''>Select</option>"))
+    //                        $("#policy_number").append($("<option></option>").val(result[i].FPDM_POLICY_NO).html(result[i].FPDM_POLICY_NO));
+    //                    }
+    //                }
+    //            }
+    //            if (result.length == 0) {
+    //                $(".policy-topup-no").attr("hidden")
+    //                Swal.fire({
+    //                    icon: 'info',
+    //                    title: 'Alert',
+    //                    text: 'No policy has been issued yet! Please isssue your policy if you want to make a topup policy payment'
+    //                })
+    //            }
+    //        },
+    //        error: function (data2) { }
+    //    });
     }
 }
+
 function NB_Payments(Val, ID) {
     let proposalIn = document.getElementById("FPDM_PROPOSAL_NO");
     let policyIn = document.getElementById("FPDM_POLICY_NO");
@@ -209,7 +231,7 @@ function PayContributionAmount(Val) {
         if (sessionStorage.getItem("PayCheck") == "ProposalPay") {
             sessionStorage.setItem("Proposal_NoF", $("#FPDM_PROPOSAL_NO").val());
         }
-        if (sessionStorage.getItem("PayCheck") == "RenewalPay") {
+        if (sessionStorage.getItem("PayCheck") == "RenewalPay" || sessionStorage.getItem("PayCheck") == "TopupPay") {
             sessionStorage.setItem("Policy_NoF", $("#FPDM_POLICY_NO").val());
         }
         $.ajax({
@@ -229,12 +251,12 @@ function PayContributionAmount(Val) {
                 $(result).each(function () {
                     if (this.FPDM_POLICY_NO == Val) {
                         sessionStorage.setItem("GROSS_AMT", this.FPDM_GROSSCONTRIB);
-                        $(".non-index-contrib").html('<p>Non-index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
-                        $(".index-contrib").html('<p>Index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>');
+                        $(".non-index-contrib").html('<p>Non-index Contribution</p><p class="ContribAmtoPay">PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
+                        $(".index-contrib").html('<p>Index Contribution</p><p class="ContribAmtoPay">PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>');
                     } if (this.FPDM_PROPOSAL_NO == Val) {
                         sessionStorage.setItem("GROSS_AMT", this.FPDM_GROSSCONTRIB);
-                        $(".non-index-contrib").html('<p>Non-index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
-                        $(".index-contrib").html('<p>Index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>');
+                        $(".non-index-contrib").html('<p>Non-index Contribution</p><p class="ContribAmtoPay">PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
+                        $(".index-contrib").html('<p>Index Contribution</p><p class="ContribAmtoPay">PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>');
                     }
                 })
             },
@@ -335,9 +357,12 @@ function paymentSelection() {
             if (sessionStorage.getItem("PayCheck") == "ProposalPay") {
                 $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
             }
-            if (sessionStorage.getItem("PayCheck") == "RenewalPay") {
+            if (sessionStorage.getItem("PayCheck") == "RenewalPay" || sessionStorage.getItem("PayCheck") == "TopupPay") {
                 $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Policy_NoF"));
             }
+            //if (sessionStorage.getItem("PayCheck") == "TopupPay") {
+            //    $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Policy_NoF"));
+            //}
             $("#FIPR_COLL_AMOUNT").val(gross_payment);
             $("#PaymentType").val("CC");
             $(".bank_charges").html("2.6%")

@@ -94,21 +94,23 @@
                                 let policy_apprvd = "";
                                 if (result[i].FPDM_APPROVED == "Y") {
                                     policy_apprvd = "Approved";
+                                } else {
+                                    policy_apprvd = result[i].FPDM_APPROVED;
                                 }
-                                $("#FPDM_POLICY_NO").val(result[i].FPDM_POLICY_NO);
-                                $("#FPDM_POLISSU_DATE").val(FPDM_POLISSU_DATE);
-                                $("#FPDM_APPROVED").val(policy_apprvd);
-                                $("#FPDM_POLDOC_REFNO").val(result[i].FPDM_POLDOC_REFNO);
-                                $("#FCDM_DOCUMENT_DATE").val(FCDM_DOCUMENT_DATE);
-                                $("#FPDM_GROSSCONTRIB").val(nf.format(result[i].FPDM_GROSSCONTRIB));
-                                $("#FCDM_FACE_VALUE").val(nf.format(result[i].FCDM_FACE_VALUE));
-                                $("#FCDM_PAYING_TERM").val(result[i].FCDM_PAYING_TERM + " years");
-                                $("#FPDM_PROPOSAL_NO").val(result[i].FPDM_PROPOSAL_NO);
-                                $("#FPDM_PROP_ENT_DATE").val(FPDM_PROP_ENT_DATE);
+                                //$("#FPDM_POLICY_NO").val(result[i].FPDM_POLICY_NO);
+                                //$("#FPDM_POLISSU_DATE").val(FPDM_POLISSU_DATE);
+                                //$("#FPDM_APPROVED").val(policy_apprvd);
+                                //$("#FPDM_POLDOC_REFNO").val(result[i].FPDM_POLDOC_REFNO);
+                                //$("#FCDM_DOCUMENT_DATE").val(FCDM_DOCUMENT_DATE);
+                                //$("#FPDM_GROSSCONTRIB").val(nf.format(result[i].FPDM_GROSSCONTRIB));
+                                //$("#FCDM_FACE_VALUE").val(nf.format(result[i].FCDM_FACE_VALUE));
+                                //$("#FCDM_PAYING_TERM").val(result[i].FCDM_PAYING_TERM + " years");
+                                //$("#FPDM_PROPOSAL_NO").val(result[i].FPDM_PROPOSAL_NO);
+                                //$("#FPDM_PROP_ENT_DATE").val(FPDM_PROP_ENT_DATE);
                                 $("#tblMyAccptdPrpsls tbody").append("<tr>" +
                                     "<td><a id='" + i + "' href='/Services/Funds' onclick='searchCashValue(this.id, this.text)'>" + result[i].FPDM_POLICY_NO + "</a></td>" +
                                     "<td>" + FPDM_POLISSU_DATE + "</td>" +
-                                    "<td>" + policy_apprvd + "</td>" +
+                                    "<td id='policyStatus" + i + "'>" + policy_apprvd + "</td>" +
                                     "<td id='proposalAccpted" + i + "'>" + result[i].FPDM_PROPOSAL_NO + "</td>" +
                                     "<td id='grossContrib" + i + "'>PKR " + nf.format(result[i].FPDM_GROSSCONTRIB) + "</td>" +
                                     "<td>PKR " + nf.format(result[i].FPDM_GROSSCONTRIB) + "</td>" +
@@ -163,7 +165,9 @@ function searchCashValue(ID, policyNo) {
     let proposal_no = $("#proposalAccpted" + ID).text();
     let grossContrib = $("#grossContrib" + ID).text().replaceAll(",", "");
     grossContrib = grossContrib.slice(4)
+    let policy_status = $("#policyStatus" + ID).text();
 
     sessionStorage.setItem("Proposal_NoF", proposal_no);
     sessionStorage.setItem("GROSS_AMT", grossContrib);
+    sessionStorage.setItem("PolicyStatusF", policy_status);
 }

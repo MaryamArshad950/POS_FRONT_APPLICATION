@@ -23,6 +23,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://use.fontawesome.com/32965eb355.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
     const app_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value);
     const api_port_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_PNO").Value);
@@ -224,7 +225,7 @@
                                 <hr />
                                 <div class="row mt-3">
                                     <div class="col-6">
-                                        <label class="text-primary font-weight-bold mr-5">Takaful Contribution</label>
+                                        <label class="text-primary font-weight-bold mr-5">Takaful Contribution/ Deposit</label>
                                     </div>
                                     <div class="col-6">
                                         <input id="p_BASIC_CONTRIBUTION" class="form-control2" readonly />
@@ -275,7 +276,7 @@
                                 <tr>
                                     <th>Membersip Year</th>
                                     <th>Age</th>
-                                    <th>Takaful Contribution</th>
+                                    <th>Takaful Contribution/ Deposit</th>
                                     <th>Cumm. Paid Contribution</th>
                                     <th class="text-center" colspan="2">9% Unit Growth Rate</th>
                                     <th class="text-center" colspan="2">11% Unit Growth Rate</th>

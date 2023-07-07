@@ -10,13 +10,18 @@
             let nf = new Intl.NumberFormat('en-US');
             let getsession = sessionStorage.getItem("tokenIndex");
             let proposal_no = sessionStorage.getItem("Proposal_NoF");
+
+            let policy_status = sessionStorage.getItem("PolicyStatusF");
+
             let policy_no = sessionStorage.getItem("PolicyNo");
             let grossContrib = sessionStorage.getItem("GROSS_AMT");
             $(".contrib_paid").html("<p class='text-center'>Total Takaful Contribution Paid</p><p class='text-center'>PKR " + nf.format(grossContrib) + "</p>")
             $(".policy_no").html(policy_no)
             $.ajax({
                 "crossDomain": true,
-                url: Global_API + "/API/NEW_BUSINESS/GET_CUSTOMER_PROP_FUND/" + proposal_no + "/Y/Y",
+
+                url: Global_API + "/API/NEW_BUSINESS/GET_CUSTOMER_PROP_FUND/" + proposal_no + "/Y/" + policy_status,
+
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
                 headers: {

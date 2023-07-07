@@ -351,7 +351,48 @@
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="VerifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="modal-icon">
+                        <img src="~/Assets/images/password.png" class="phoneVerifyImage" />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="description">Please enter the verification code to complete sign in</p>
+                            <div class="alert alert-success alert-dismissible alert-otp fade show p-3 mt-2" role="alert" hidden>
+                                <i class="fa fa-check p-2 me-3 text-white bg-success rounded-circle" aria-hidden="true"></i>
+                                <strong>
+                                    Your OTP has been verified sucessfully
+                                </strong>
+                            </div>
+                            <div class="alert alert-danger alert-dismissible wrong-otp fade show p-3 mt-2" role="alert" hidden>
+                                <i class="fa fa-times p-2 me-3 text-white bg-success rounded-circle" aria-hidden="true"></i>
+                                <strong>
+                                    Please enter correct OTP
+                                </strong>
+                            </div>
+                            <ul class="code-number">
+                                <li><input id="firstDigit" class="border-0 bg-transparent w-50" placeholder="1" maxlength="1" /></li>
+                                <li><input id="secondDigit" class="border-0 bg-transparent w-50" placeholder="0" maxlength="1" /></li>
+                                <li><input id="thirdDigit" class="border-0 bg-transparent w-50" placeholder="5" maxlength="1" /></li>
+                                <li><input id="fourthDigit" class="border-0 bg-transparent w-50" placeholder="3" maxlength="1" /></li>
+                                <li><input id="fifthDigit" class="border-0 bg-transparent w-50" placeholder="9" maxlength="1" /></li>
+                                <li><input id="sixthDigit" class="border-0 bg-transparent w-50" placeholder="2" maxlength="1" /></li>
+                            </ul>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button class="btn btn-submit-code" type="button" id="verifyOTP">Submit</button>
+                                </div>
+                            </div>
+                            <button class="btn bg-transparent mt-2 text-danger font-weight-bold text-center" id="resendCode" type="button">Didn't get the code? Send Again</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- container-scroller -->
     @RenderSection("Scripts", required: false)
     @RenderSection("TokenIndex", required: false)

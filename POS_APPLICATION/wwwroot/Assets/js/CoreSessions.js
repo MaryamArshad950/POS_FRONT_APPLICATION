@@ -163,27 +163,52 @@ function ProcessGlobalCore(coresession) {
                     success: function (result) {
                         if (result.length >= 1) {
                             $("#questionare_section").empty();
+                            console.log(result)
                             for (let i = 0; i < result.length; i++) {
-                                $("#questionare_section").append(
-                                    "<div class='col-md-12 mt-3'>" +
-                                    "<input name='FSPQS_QSTNR_FSCD_ID' id='FSPQS_QSTNR_FSCD_ID" + (i + 1) + "' value='" + result[i].FSPQS_QSTNR_FSCD_ID + "' required  hidden/>" +
-                                    "<input name='FCUQ_ANSR_YN' id='FCUQ_ANSR_YN" + (i + 1) + "' required  hidden/>" +
-                                    "<p class='text-white text-question line-height-2'> " + result[i].FSCD_SYS_CODE_DESCR + " " +
-                                    "</p>" +
-                                    "<div class='row ml-2'>" +
-                                    "<div class='form-check form-check-success mr-3'>" +
-                                    "<label for='FSPQS_PRODQESTNR_ID_Y" + (i + 1) + "' class='form-check-label text-white'> Yes" +
-                                    "<input class='form-check-input' type='radio' id='FSPQS_PRODQESTNR_ID_Y" + (i + 1) + "' name='FSPQS_PRODQESTNR_ID" + (i + 1) + "' value='Y' onclick='ReturnQuestVal(this.id, this.value), DiseaseAnalysis(this.id)' /><i class='input-helper'></i>" +
-                                    "</label>" +
-                                    "</div>" +
-                                    "<div class='form-check form-check-success'>" +
-                                    "<label for='FSPQS_PRODQESTNR_ID_N" + (i + 1) + "' class='form-check-label text-white'> No" +
-                                    "<input class='form-check-input' type='radio' id='FSPQS_PRODQESTNR_ID_N" + (i + 1) + "' name='FSPQS_PRODQESTNR_ID" + (i + 1) + "' value='N' onchange='ReturnQuestVal(this.id, this.value)' /><i class='input-helper'></i>" +
-                                    "</label>" +
-                                    "</div>" +
-                                    "</div>" +
-                                    "</div>"
-                                );
+                                if (result[i].FSPQS_QSTNR_FSCD_ID >= 3641 && result[i].FSPQS_QSTNR_FSCD_ID <= 3645) {
+                                    $("#questionare_section").append(
+                                        "<div class='col-md-12 mt-3 contribLimit' hidden>" +
+                                        "<input name='FSPQS_QSTNR_FSCD_ID' class='FSPQS_QSTNR_FSCD_ID' id='FSPQS_QSTNR_FSCD_ID" + (i + 1) + "' value='" + result[i].FSPQS_QSTNR_FSCD_ID + "'  hidden/>" +
+                                        "<input name='FCUQ_ANSR_YN' class='FCUQ_ANSR_YN' id='FCUQ_ANSR_YN" + (i + 1) + "' hidden/>" +
+                                        "<p class='text-white text-question line-height-2'> " + result[i].FSCD_SYS_CODE_DESCR + " " +
+                                        "</p>" +
+                                        "<div class='row ml-2'>" +
+                                        "<div class='form-check form-check-success mr-3'>" +
+                                        "<label for='FSPQS_PRODQESTNR_ID_Y" + (i + 1) + "' class='form-check-label text-white'> Yes" +
+                                        "<input class='form-check-input' type='radio' id='FSPQS_PRODQESTNR_ID_Y" + (i + 1) + "' name='FSPQS_PRODQESTNR_ID" + (i + 1) + "' value='Y' onclick='ReturnQuestVal(this.id, this.value), DiseaseAnalysis(this.id,this.value)' /><i class='input-helper'></i>" +
+                                        "</label>" +
+                                        "</div>" +
+                                        "<div class='form-check form-check-success'>" +
+                                        "<label for='FSPQS_PRODQESTNR_ID_N" + (i + 1) + "' class='form-check-label text-white'> No" +
+                                        "<input class='form-check-input' type='radio' id='FSPQS_PRODQESTNR_ID_N" + (i + 1) + "' name='FSPQS_PRODQESTNR_ID" + (i + 1) + "' value='N' onchange='ReturnQuestVal(this.id, this.value)' /><i class='input-helper'></i>" +
+                                        "</label>" +
+                                        "</div>" +
+                                        "</div>" +
+                                        "</div>"
+                                    );
+
+                                } else {
+                                    $("#questionare_section").append(
+                                        "<div class='col-md-12 mt-3'>" +
+                                        "<input name='FSPQS_QSTNR_FSCD_ID' id='FSPQS_QSTNR_FSCD_ID" + (i + 1) + "' value='" + result[i].FSPQS_QSTNR_FSCD_ID + "' required  hidden/>" +
+                                        "<input name='FCUQ_ANSR_YN' id='FCUQ_ANSR_YN" + (i + 1) + "' required  hidden/>" +
+                                        "<p class='text-white text-question line-height-2'> " + result[i].FSCD_SYS_CODE_DESCR + " " +
+                                        "</p>" +
+                                        "<div class='row ml-2'>" +
+                                        "<div class='form-check form-check-success mr-3'>" +
+                                        "<label for='FSPQS_PRODQESTNR_ID_Y" + (i + 1) + "' class='form-check-label text-white'> Yes" +
+                                        "<input class='form-check-input' type='radio' id='FSPQS_PRODQESTNR_ID_Y" + (i + 1) + "' name='FSPQS_PRODQESTNR_ID" + (i + 1) + "' value='Y' onclick='ReturnQuestVal(this.id, this.value), DiseaseAnalysis(this.id,this.value)' /><i class='input-helper'></i>" +
+                                        "</label>" +
+                                        "</div>" +
+                                        "<div class='form-check form-check-success'>" +
+                                        "<label for='FSPQS_PRODQESTNR_ID_N" + (i + 1) + "' class='form-check-label text-white'> No" +
+                                        "<input class='form-check-input' type='radio' id='FSPQS_PRODQESTNR_ID_N" + (i + 1) + "' name='FSPQS_PRODQESTNR_ID" + (i + 1) + "' value='N' onchange='ReturnQuestVal(this.id, this.value)' /><i class='input-helper'></i>" +
+                                        "</label>" +
+                                        "</div>" +
+                                        "</div>" +
+                                        "</div>"
+                                    );
+                                }
                             }
                         }
                     },
@@ -346,6 +371,7 @@ function ProcessGlobalCore(coresession) {
     });
 
     let riderName = '';
+    let colSize = '';
     $.ajax({
         //"async": false,
         "crossDomain": true,
@@ -364,8 +390,14 @@ function ProcessGlobalCore(coresession) {
             $(".ridersList").empty();
             for (let i = 0; i < result.length; i++) {
                 riderName = result[i].FSPM_PRODUCT_NAME;
+                if (result[i].FSPM_PRODUCT_ID == '20') {
+                    colSize = 'col-md-4'
+                }
+                else {
+                    colSize = 'col-md-3'
+                }
                 $(".ridersList").append(
-                    "<div class='col-md-3 mb-2'>" +
+                    "<div class='" + colSize + " mb-2'>" +
                     "<div class='input-group btn btn-outline-info p-1 border-1 box-shadow-1' id='rdrGroup" + result[i].FSPM_PRODUCT_ID + "' onclick='AddRdr(this, this.id)'>" +
                     "<div class='input-group-append'>" +
                     "<span class='m-0 pt-3 px-4'>" +
