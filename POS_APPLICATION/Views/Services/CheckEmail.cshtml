@@ -1,0 +1,90 @@
+﻿@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Configuration.Json
+@inject IConfiguration Configuration
+<script type="text/javascript">
+    const app_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value);
+    const api_port_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_PNO").Value);
+    const Result_API = (app_host_API + ":" + api_port_API);
+
+    const app_host_Front = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_FRONT_IP").Value);
+    const api_port_Front = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_FRONT_PNO").Value);
+    const Result_Front = (app_host_Front + ":" + api_port_Front);
+    var getsession = window.sessionStorage.getItem("tokenIndex");
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="~/Assets/js/servicePos/alterEmail.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('#updateUserEmail').click(function (e) {
+            var receipiantEmail = $('#SUM_USER_EMAIL_ADDR').val();
+            var proposalNo = $('#ProposalNo').val();
+            var DocNo = $('#DocNo').val();
+            var Subject = $('#Subject').val();
+            var Username = $('#Username').val();
+            var messageEmail = $('#messageEmail').val();
+
+            $.ajax({
+                "async": false,
+                "crossDomain": true,
+                url: "" + Result_API + "/api/EMAIL/POST_SendEmailNotification/" + receipiantEmail + "/" + proposalNo + "/" + DocNo + "/" + Subject + "/" + Username + "/" + messageEmail,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Access-Control-Allow-Origin': Result_API,
+                    'Access-Control-Allow-Methods': 'POST, GET',
+                    'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                    'Authorization': 'Bearer ' + getsession
+                },
+                datatype: 'jsonp',
+                timeout: 5000,
+                success: function (result, textStatus, jqXHR) {
+                    console.log(result);
+                    //$(result).each(function () {
+                    //    $("#SERFSPRF_PRMFND_ID").append($("<option></option>").val(this.FSPRF_PRMFND_ID).html(this.FSPRF_PRMFND_DESCRIP));
+                    //});
+                },
+                error: function (data) { }
+            });
+        });
+    });
+</script>
+<form action="/Services/UPDATE_EMAILADDR" method="post" class="form-horizontal">
+    <div class="card">
+        <div class="card-body card-funds">
+            <div class="row flex-div">
+                <div class="col-md-2">
+                    <img src="~/Assets/images/SalaamSavings.png" id="image_logo" />
+                </div>
+                <div class="col-md-8">
+                    <h2 class="text-lemonade text-primary text-center mt-3 mb-4">Add/Change Email Address</h2>
+                </div>
+            </div>
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-6">
+                    <div class="row mb-1">
+                        <div class="col-md-8 mb-2 m-auto">
+                            <div class="py-4">
+                                <label>Recipent Email</label>
+                                <input class="form-control mt-3" type="email" @*placeholder="user@mail.com"*@ name="SUM_USER_EMAIL_ADDR" id="SUM_USER_EMAIL_ADDR" required />
+                                <label>Proposal Number</label>
+                                <input class="form-control mt-3" type="text" @*placeholder="user@mail.com"*@ name="ProposalNo" id="ProposalNo" required />
+                                <label>Document Number</label>
+                                <input class="form-control mt-3" name="DocNo" id="DocNo" required />
+                                <label>Subject</label>
+                                <input class="form-control mt-3" name="Subject" id="Subject" required />
+                                <label>Username</label>
+                                <input class="form-control mt-3" name="Username" id="Username" required />
+                                <label>Message Email</label>
+                                <input class="form-control mt-3" name="messageEmail" id="messageEmail" required />
+
+                                <button class="btn btn-success w-100 mt-4" type="button" id="updateUserEmail">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
