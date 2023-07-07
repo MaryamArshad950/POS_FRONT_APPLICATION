@@ -305,6 +305,7 @@ namespace POS_APPLICATION.Controllers
             TAKAFUL_HIST takaful_hist = new TAKAFUL_HIST();
             FINANCIAL_DTLS fin_dtls = new FINANCIAL_DTLS();
             FINANCIAL_NEEDS fin_needs = new FINANCIAL_NEEDS();
+            int questionsLength;
 
             participant.FCDM_DOCUMENT_ID = FCDM_DOCUMENT_ID;
             participant.FCDM_DOCUMENT_CODE = FCDM_DOCUMENT_CODE;
@@ -363,7 +364,6 @@ namespace POS_APPLICATION.Controllers
                         /***************Partcipant Basic Info Insert*********************/
                         using (var response = await client.PostAsync(Add_DcmntInfo, SendRequest))
                         {
-
                             string apiResponse = await response.Content.ReadAsStringAsync();
                             var dict2 = JArray.Parse(apiResponse);
                             foreach (JObject DocCodeArr in dict2.Children<JObject>())
@@ -403,9 +403,16 @@ namespace POS_APPLICATION.Controllers
                                 }
                             }
                         }
-
+                        if(FCDM_PLAN_CONTRIB >= 500000)
+                        {
+                            questionsLength = FSPQS_QSTNR_FSCD_ID.Length;
+                        }
+                        else
+                        {
+                            questionsLength = FSPQS_QSTNR_FSCD_ID.Length - 5;
+                        }
                         //medical info insert
-                        for (int i = 0; i <= FSPQS_QSTNR_FSCD_ID.Length - 1; i++)
+                        for (int i = 0; i <= questionsLength - 1; i++)
                         {
                             //dcmnt_questnr.FCUQ_CHNLUW_QSN_ID = FCUQ_CHNLUW_QSN_ID[i];
                             dcmnt_questnr.FCDM_DOCUMENT_ID = Document_ID;

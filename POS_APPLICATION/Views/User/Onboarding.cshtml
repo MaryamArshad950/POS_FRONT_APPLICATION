@@ -420,17 +420,17 @@
                 <div class="col-md-3 mb-3">
                     <label for="" class="mr-5 text-success">Height <span class="text-danger font-weight-light">Feet & Inches</span></label>
                     <div class="input-group slidecontainer">
-                        <input type="number" class="form-control" max="8" min="3" id="heightFt" onkeyup="selectHeightFeet(this.value)" placeholder="Feet" value="5" onfocus="setHeightMaxLength(this.value)">
-                        <input type="number" class="form-control" max="11" min="0" id="heightIn" onkeyup="selectHeightInches(this.value)" placeholder="Inches" value="7" onfocus="setHeightMaxLength(this.value)">
+                        <input type="number" class="form-control" max="8" min="3" id="heightFt" onkeyup="selectHeightFeet(this.value)" placeholder="Feet" value="5" onclick="setHeightMaxLength(this.value)">
+                        <input type="number" class="form-control" max="11" min="0" id="heightIn" onkeyup="selectHeightInches(this.value)" placeholder="Inches" value="7" onclick="setHeightMaxLength(this.value)">
                         @*<input type="range" class="slider mt-3 mb-3" max="8" min="3" step="1" id="heightFt" hidden onchange="selectHeightFeet(this.value)">
                     <input type="range" class="slider mt-3 mb-3" max="11" min="0" step="1" id="heightIn" hidden onchange="selectHeightInches(this.value)">*@
                     </div>
-                    <input class="form-control" id="FCDM_OWCUST_HEITACT" name="FCDM_OWCUST_HEITACT" placeholder="Ex. 5ft 7inches" required onfocus="setHeightMaxLength(this.value)" value="5.7" hidden />
+                    <input class="form-control" id="FCDM_OWCUST_HEITACT" name="FCDM_OWCUST_HEITACT" placeholder="Ex. 5ft 7inches" required onclick="setHeightMaxLength(this.value)" value="5.7" hidden />
                     @*<output id="heightResult" class="mb-2"></output>*@
                 </div>
                 <div class="col-md-2">
                     <label for="" class="mr-5 text-success">Weight <span class="text-danger font-weight-light">KG</span></label>
-                    <input class="form-control" id="FCDM_OWCUST_WEITACT" type="number" name="FCDM_OWCUST_WEITACT" placeholder="Ex. 50 Kilograms" maxlength="3" required onkeyup="calculate_BMI()" onfocus="calculate_BMI()" />
+                    <input class="form-control" id="FCDM_OWCUST_WEITACT" type="number" name="FCDM_OWCUST_WEITACT" placeholder="Ex. 50 Kilograms" maxlength="3" required onkeyup="calculate_BMI()" onclick="calculate_BMI()"/>
                 </div>
                 <div class="col-md-4">
                     <div class="row mt-2">
@@ -439,7 +439,7 @@
                         </div>
                         <div class="col-md-4">
                             <label for="" class="mr-5 text-success">BMI:</label>
-                            <input class="form-control form-control-custom readonly" placeholder="BMI" id="FCDM_OWCUST_BMI" name="FCDM_OWCUST_BMI" onclick="calculate_BMI()" readonly required />
+                            <input class="form-control form-control-custom readonly" placeholder="BMI" id="FCDM_OWCUST_BMI" name="FCDM_OWCUST_BMI" readonly required />
                         </div>
                         <div class="col">
                             <img id="bmi_unhealthy" src="~/Assets/images/unhealthy_boy.png" class="icon_size animated animatedFadeInUpp fadeInUpp" hidden />
@@ -481,7 +481,7 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="" class="mr-5 text-success">Takaful Contribution/ Deposit</label>
-                    <input class="form-control" id="FCDM_PLAN_CONTRIB" type="number" name="FCDM_PLAN_CONTRIB" placeholder="Contribution" required onkeyup="calculateFaceValue()" min="100" max="10000000" />
+                    <input class="form-control" id="FCDM_PLAN_CONTRIB" type="number" name="FCDM_PLAN_CONTRIB" placeholder="Contribution" required onkeyup="calculateFaceValue()" onchange=" maxlimitVal(this.value)" min="100" max="10000000" />
                 </div>
                 <div class="col-md-3">
                     <label for="" class="mr-5 text-success">Sum Assured</label>

@@ -127,37 +127,55 @@ if (sessionStorage.getItem("cnic.") != null) {
 } else {
     objDmsHdr.FPDH_DMSCUS_CNIC = sessionStorage.getItem("DocCNIC").replaceAll("-", "");
 }
-objDmsHdr = JSON.stringify(objDmsHdr);
 
-function PaymentByCash() {
+function PaymentByCash(PolicyNum) {
+    //objDmsHdr = JSON.parse(objDmsHdr)
+    alert($(".ContribAmtoPay").html())
     let paymentAmount = '';
     if ($(".ContribAmtoPay").html() != undefined) {
         paymentAmount = $(".ContribAmtoPay").html();
-    } else {
-        paymentAmount = sessionStorage.getItem("CONTRIB_AMOUNT_DMS");
-    }
-    const select = document.createElement('select');
-    select.className = 'swal2-input'
-    const optionselect = document.createElement('option');
-    optionselect.textContent = 'Select';
-    optionselect.value = '';
-    select.appendChild(optionselect);
-    if (sessionStorage.getItem("proposalResult") != null) {
-        let ProposalNumbers = sessionStorage.getItem("proposalResult").split(",");
-        ProposalNumbers.forEach((proposalNo) => {
-            const option = document.createElement('option');
-            option.textContent = proposalNo;
-            option.value = proposalNo;
-            select.appendChild(option);
-        });
+        if ($("#FPDM_POLICY_NO").val() != "") {
+            PolicyNum = $("#FPDM_POLICY_NO").val();
+            objDmsHdr.FPDH_POLICY_NO = PolicyNum;
+        }
     }
     else {
-        let Prpsl_No = sessionStorage.getItem("Prpsl_No");
-        const option = document.createElement('option');
-        option.textContent = Prpsl_No;
-        option.value = Prpsl_No;
-        select.appendChild(option);
+        if ($("#TOTAL_AMOUNT").val() != "" || $("#TOTAL_AMOUNT").val() != undefined) {
+            if ($("#FPDM_POLICY_NO").val() != "") {
+                PolicyNum = $("#FPDM_POLICY_NO").val();
+                objDmsHdr.FPDH_POLICY_NO = PolicyNum;
+            }
+            paymentAmount = $("#TOTAL_AMOUNT").val();
+        } else {
+            paymentAmount = sessionStorage.getItem("CONTRIB_AMOUNT_DMS");
+        }
     }
+    objDmsHdr = JSON.stringify(objDmsHdr);
+    console.log(objDmsHdr)
+    //const select = document.createElement('select');
+    //select.className = 'swal2-input'
+    //const optionselect = document.createElement('option');
+    //optionselect.textContent = 'Select';
+    //optionselect.value = '';
+    //select.appendChild(optionselect);
+    //if (sessionStorage.getItem("proposalResult") != null) {
+    //    let ProposalNumbers = sessionStorage.getItem("proposalResult").split(",");
+    //    ProposalNumbers.forEach((proposalNo) => {
+    //        const option = document.createElement('option');
+    //        option.textContent = proposalNo;
+    //        option.value = proposalNo;
+    //        select.appendChild(option);
+    //    });
+    //}
+    //if (sessionStorage.getItem("policyResult") != null) {
+    //    let PolicyNumbers = sessionStorage.getItem("policyResult").split(",");
+    //    PolicyNumbers.forEach((policyNo) => {
+    //        const option = document.createElement('option');
+    //        option.textContent = policyNo;
+    //        option.value = policyNo;
+    //        select.appendChild(option);
+    //    });
+    //}
 
     Swal.fire({
         title: 'Cash/ Cheque',
@@ -243,10 +261,6 @@ function PaymentByCash() {
                                             icon: 'success'
                                         }).then((result) => {
                                             if (result.isConfirmed) {
-                                                PolicyNumberSelection();
-                                                $(".change-policy-num").click(function () {
-                                                    PolicyNumberSelection();
-                                                })
                                             }
                                         });
                                     }
