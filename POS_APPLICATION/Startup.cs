@@ -128,6 +128,9 @@ namespace POS_APPLICATION
                   name: "AlterEmail",
                   pattern: "AlterEmail/{controller=Services}/{action=AlterEmail}");
                 endpoints.MapControllerRoute(
+                  name: "CheckEmail",
+                  pattern: "CheckEmail/{controller=Services}/{action=CheckEmail}");
+                endpoints.MapControllerRoute(
                   name: "PartialWithdrawal",
                   pattern: "PartialWithdrawal/{controller=Services}/{action=PartialWithdrawal}");
                 endpoints.MapControllerRoute(

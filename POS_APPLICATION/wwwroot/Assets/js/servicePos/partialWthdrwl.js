@@ -36,7 +36,7 @@
             }
         }
     })
-}()
+}
 //function PolicyNumberSelection() {
 //    let thisCustCNIC = sessionStorage.getItem("cnic.");
 

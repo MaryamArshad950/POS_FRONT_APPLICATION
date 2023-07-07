@@ -21,6 +21,7 @@
                     let orderId = Math.floor(Math.random() * 9000000) + 1000000;
                     orderId = orderId.toString();
                     sessionStorage.setItem("Policy_NoF", $("#policy_number").val());
+
                     $("#HS_TransactionReferenceNumber").val(orderId);
                     $("#TransactionReferenceNumber").val(orderId);
                     $("#TransactionAmount").val($("#TOTAL_AMOUNT").val());
@@ -63,6 +64,7 @@ function checkValue(val) {
     if (custCNIC && custCNIC.length === 13) {
         custCNIC = custCNIC.slice(0, 5) + '-' + custCNIC.slice(5, 12) + '-' + custCNIC.slice(12);
     }
+
     if (sessionStorage.getItem("policyResult") != null) {
         PolicyNumbers = sessionStorage.getItem("policyResult").split(",");
     }
