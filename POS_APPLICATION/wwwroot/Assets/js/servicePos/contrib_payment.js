@@ -20,7 +20,7 @@
                 if ($("#policy_number").val() != "" && $("#TOTAL_AMOUNT").val() != "") {
                     let orderId = Math.floor(Math.random() * 9000000) + 1000000;
                     orderId = orderId.toString();
-
+                    sessionStorage.setItem("Policy_NoF", $("#policy_number").val());
                     $("#HS_TransactionReferenceNumber").val(orderId);
                     $("#TransactionReferenceNumber").val(orderId);
                     $("#TransactionAmount").val($("#TOTAL_AMOUNT").val());
@@ -104,6 +104,7 @@ function checkValue(val) {
         }
     }
     if (val == 2) {
+        sessionStorage.setItem("PayCheck", "TopupPay");
         $(".proposal_Contribution").attr("hidden", true)
         $(".paymode-select").attr("hidden", true);
         let proposal_no = sessionStorage.getItem("Proposal_NoF");
@@ -228,7 +229,7 @@ function PayContributionAmount(Val) {
         if (sessionStorage.getItem("PayCheck") == "ProposalPay") {
             sessionStorage.setItem("Proposal_NoF", $("#FPDM_PROPOSAL_NO").val());
         }
-        if (sessionStorage.getItem("PayCheck") == "RenewalPay") {
+        if (sessionStorage.getItem("PayCheck") == "RenewalPay" || sessionStorage.getItem("PayCheck") == "TopupPay") {
             sessionStorage.setItem("Policy_NoF", $("#FPDM_POLICY_NO").val());
         }
         $.ajax({
@@ -354,9 +355,12 @@ function paymentSelection() {
             if (sessionStorage.getItem("PayCheck") == "ProposalPay") {
                 $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
             }
-            if (sessionStorage.getItem("PayCheck") == "RenewalPay") {
+            if (sessionStorage.getItem("PayCheck") == "RenewalPay" || sessionStorage.getItem("PayCheck") == "TopupPay") {
                 $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Policy_NoF"));
             }
+            //if (sessionStorage.getItem("PayCheck") == "TopupPay") {
+            //    $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Policy_NoF"));
+            //}
             $("#FIPR_COLL_AMOUNT").val(gross_payment);
             $("#PaymentType").val("CC");
             $(".bank_charges").html("2.6%")
