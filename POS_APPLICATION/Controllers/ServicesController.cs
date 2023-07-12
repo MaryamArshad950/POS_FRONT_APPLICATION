@@ -38,7 +38,6 @@ namespace POS_APPLICATION.Controllers
         private readonly string Request_PartialWthdrw = "" + Result_API + "/API/NON_FINANCIAL/REQUEST_PARTIAL_WITHDRWL";
         private readonly string Intimate_claim = "" + Result_API + "/API/CLAIM_INTIMATION/POST_CLAIM_INTIMATION";
         private readonly string Request_Freelook = "" + Result_API + "/API/NON_FINANCIAL/REQUEST_FREELOOK";
-        private readonly string Request_Surrender = "" + Result_API + "/API/NON_FINANCIAL/REQUEST_POLICY_SURRENDER";
         public string GetIPHostAPI()
         {
             //POS IP
@@ -340,13 +339,13 @@ namespace POS_APPLICATION.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> REQUEST_FREE_LOOK_SURRNDR(int FSCU_CUSTOMER_CODE, string FSSH_POL_CODE, int FSSH_SRNDR_AMT, string SUM_FULL_NAME, string SUM_USER_EMAIL_ADDR, string SUM_CUST_CONTPHONE, string FSBK_BANK_NAME, string FSCB_BRANCH_NAME, string FSCB_ACCOUNT_TITLE, string FSCB_ACCOUNT_NO, string FPDM_PROPOSAL_NO)
+        public async Task<ActionResult> REQUEST_FREE_LOOK(int FSCU_CUSTOMER_CODE, string FSSH_POL_CODE, int FSSH_SURRNDR_AMT, string SUM_FULL_NAME, string SUM_USER_EMAIL_ADDR, string SUM_CUST_CONTPHONE, string FSBK_BANK_NAME, string FSCB_BRANCH_NAME, string FSCB_ACCOUNT_TITLE, string FSCB_ACCOUNT_NO, string FPDM_PROPOSAL_NO)
         {
             CUSTOMER_BANK_DETL cust_bnk = new CUSTOMER_BANK_DETL();
             cust_bnk.FSCU_CUSTOMER_CODE = FSCU_CUSTOMER_CODE;
             cust_bnk.FSSH_POL_CODE = FSSH_POL_CODE;
             cust_bnk.FPDM_PROPOSAL_NO = FPDM_PROPOSAL_NO;
-            cust_bnk.FSSH_SRNDR_AMT = FSSH_SRNDR_AMT;
+            cust_bnk.FSSH_SURRNDR_AMT = FSSH_SURRNDR_AMT;
             cust_bnk.FSBK_BANK_NAME = FSBK_BANK_NAME;
             cust_bnk.FSCB_BRANCH_NAME = FSCB_BRANCH_NAME;
             cust_bnk.FSCB_ACCOUNT_NO = FSCB_ACCOUNT_NO;
@@ -355,100 +354,50 @@ namespace POS_APPLICATION.Controllers
             cust_bnk.FSCB_CRUSER = 1;
             cust_bnk.FSCB_CRDATE = DateTime.Today;
             var strToken = HttpContext.Session.GetString("JwTokenPos");
-            if(FSSH_SRNDR_AMT != 0)
-            {
-                using (var handler = new HttpClientHandler())
-                {
-                    // allow the bad certificate
-                    handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
 
-                    using (var client = new HttpClient(handler))
+            using (var handler = new HttpClientHandler())
+            {
+                // allow the bad certificate
+                handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
+
+                using (var client = new HttpClient(handler))
+                {
+                    SendRequest = null;
+                    try
                     {
-                        SendRequest = null;
-                        try
+                        var Token = strToken.Replace("{", "}");
+                        client.BaseAddress = new Uri(Request_Freelook);
+                        var contentType = new MediaTypeWithQualityHeaderValue("application/json");
+                        client.DefaultRequestHeaders.Accept.Add(contentType);
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+                        SendRequest = new StringContent(JsonConvert.SerializeObject(cust_bnk), Encoding.UTF8, "application/json");
+                        using (var response = await client.PostAsync(Request_Freelook, SendRequest))
                         {
-                            var Token = strToken.Replace("{", "}");
-                            client.BaseAddress = new Uri(Request_Freelook);
-                            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
-                            client.DefaultRequestHeaders.Accept.Add(contentType);
-                            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-                            SendRequest = new StringContent(JsonConvert.SerializeObject(cust_bnk), Encoding.UTF8, "application/json");
-                            using (var response = await client.PostAsync(Request_Surrender, SendRequest))
+                            Random random = new Random();
+                            string randomDigits = "";
+                            for (int i = 0; i < 8; i++)
                             {
-                                Random random = new Random();
-                                string randomDigits = "";
-                                for (int i = 0; i < 8; i++)
-                                {
-                                    randomDigits += random.Next(0, 10).ToString();
-                                }
-                                int randomNumber = int.Parse(randomDigits);
-                                string apiResponse = await response.Content.ReadAsStringAsync();
-                                var dict2 = JArray.Parse(apiResponse);
-                                foreach (JObject ReqArr in dict2.Children<JObject>())
-                                {
-                                    string ReqNo = ReqArr["REQ_CODE"].ToString();
-                                    string msgText = "<p>Your Request for Free Look has been received under the request number " + ReqNo + "</p><p>We will get back to you soon.</p><p>Thank You for using our services</p><p>For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.</p>";
-                                    await this.SendEmail(SUM_FULL_NAME, msgText, SUM_USER_EMAIL_ADDR, "Partial Withdrawal Request");
-                                    var smsURL = "https://api.itelservices.net/send.php?transaction_id=" + randomNumber + "&user=salaamtakaf&pass=kdPre&number=" + (SUM_CUST_CONTPHONE).Substring(1) + "&text=Dear " + SUM_FULL_NAME + ", Your Request for Free Look has been received under the request number " + ReqNo + ". We will get back to you soon. Thank You for using our services. For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111." + "&from=44731&type=sms";
-                                    await client.PostAsync(smsURL, SendRequest);
-                                    TempData["successMessage"] = "Request Processed Successfully";
-                                }
+                                randomDigits += random.Next(0, 10).ToString();
+                            }
+                            int randomNumber = int.Parse(randomDigits);
+                            string apiResponse = await response.Content.ReadAsStringAsync();
+                            var dict2 = JArray.Parse(apiResponse);
+                            foreach (JObject ReqArr in dict2.Children<JObject>())
+                            {
+                                string ReqNo = ReqArr["REQ_CODE"].ToString();
+                                string msgText = "<p>Your Request for Free Look has been received under the request number " + ReqNo + "</p><p>We will get back to you soon.</p><p>Thank You for using our services</p><p>For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.</p>";
+                                await this.SendEmail(SUM_FULL_NAME, msgText, SUM_USER_EMAIL_ADDR, "Partial Withdrawal Request");
+                                var smsURL = "https://api.itelservices.net/send.php?transaction_id=" + randomNumber + "&user=salaamtakaf&pass=kdPre&number=" + (SUM_CUST_CONTPHONE).Substring(1) + "&text=Dear " + SUM_FULL_NAME + ", Your Request for Free Look has been received under the request number " + ReqNo + ". We will get back to you soon. Thank You for using our services. For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111." + "&from=44731&type=sms";
+                                await client.PostAsync(smsURL, SendRequest);
+                                TempData["successMessage"] = "Request Processed Successfully";
                             }
                         }
-                        catch (Exception ex)
-                        {
-                            TempData["successUSER"] = ex.ToString();
-                        }
-                        return RedirectToAction("PolicySurrender");
                     }
-                }
-            }
-            else
-            {
-                using (var handler = new HttpClientHandler())
-                {
-                    // allow the bad certificate
-                    handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
-
-                    using (var client = new HttpClient(handler))
+                    catch (Exception ex)
                     {
-                        SendRequest = null;
-                        try
-                        {
-                            var Token = strToken.Replace("{", "}");
-                            client.BaseAddress = new Uri(Request_Freelook);
-                            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
-                            client.DefaultRequestHeaders.Accept.Add(contentType);
-                            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-                            SendRequest = new StringContent(JsonConvert.SerializeObject(cust_bnk), Encoding.UTF8, "application/json");
-                            using (var response = await client.PostAsync(Request_Freelook, SendRequest))
-                            {
-                                Random random = new Random();
-                                string randomDigits = "";
-                                for (int i = 0; i < 8; i++)
-                                {
-                                    randomDigits += random.Next(0, 10).ToString();
-                                }
-                                int randomNumber = int.Parse(randomDigits);
-                                string apiResponse = await response.Content.ReadAsStringAsync();
-                                var dict2 = JArray.Parse(apiResponse);
-                                foreach (JObject ReqArr in dict2.Children<JObject>())
-                                {
-                                    string ReqNo = ReqArr["REQ_CODE"].ToString();
-                                    string msgText = "<p>Your Request for Free Look has been received under the request number " + ReqNo + "</p><p>We will get back to you soon.</p><p>Thank You for using our services</p><p>For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.</p>";
-                                    await this.SendEmail(SUM_FULL_NAME, msgText, SUM_USER_EMAIL_ADDR, "Partial Withdrawal Request");
-                                    var smsURL = "https://api.itelservices.net/send.php?transaction_id=" + randomNumber + "&user=salaamtakaf&pass=kdPre&number=" + (SUM_CUST_CONTPHONE).Substring(1) + "&text=Dear " + SUM_FULL_NAME + ", Your Request for Free Look has been received under the request number " + ReqNo + ". We will get back to you soon. Thank You for using our services. For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111." + "&from=44731&type=sms";
-                                    await client.PostAsync(smsURL, SendRequest);
-                                    TempData["successMessage"] = "Request Processed Successfully";
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            TempData["successUSER"] = ex.ToString();
-                        }
-                        return RedirectToAction("FreeLook");
+                        TempData["successUSER"] = ex.ToString();
                     }
+                    return RedirectToAction("FreeLook");
                 }
             }
         }

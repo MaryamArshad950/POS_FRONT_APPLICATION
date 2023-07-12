@@ -17,8 +17,8 @@
     <link rel="stylesheet" href="~/Assets/css/vertical-layout-light/style.css">
     <link rel="shortcut icon" href="~/Assets/images/SalaamSavings.png" />
     <script src="~/Assets/js/pos.js" defer></script>
-    <link rel="stylesheet" href="~/Assets/css/LandingSalaam.css" />
     <link rel="stylesheet" href="~/Assets/css/pos.css" />
+    <link rel="stylesheet" href="~/Assets/css/LandingSalaam.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -27,7 +27,7 @@
     <script src="https://use.fontawesome.com/32965eb355.js"></script>
 </head>
 <body>
-    <img src="~/Assets/images/SalaamSavings.png" class="image_logo pt-5 pl-5" />
+    <img src="~/Assets/images/SalaamSavings.png" class="image_logo pt-5 pl-5"/>
     <div class="px-4 px-md-5 text-center text-lg-start my-1 login-section">
         <div class="row gx-lg-5 align-items-center mb-5">
             <div class="col-lg-7 mb-5 mb-lg-0" style="z-index: 10">
@@ -73,18 +73,18 @@
                             </div>
                             <div class="col-md-12 m-auto">
                                 @if (TempData["WrongStatus"] != null)
-                                {
+                                 {
                                     <div class='alert alert-danger validation-alert border-0 bg-transparent font-weight-500 alert-dismissible fade show p-3 mt-2' role='alert'>@TempData["WrongStatus"] </div>
-                                }
+                                 }
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div id="spinner">
-        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+        <div id="spinner">
+            <img src="\Assets\images\loader-img.gif" class="spinner-icon" />
+        </div>
     </div>
 </body>
 </html>

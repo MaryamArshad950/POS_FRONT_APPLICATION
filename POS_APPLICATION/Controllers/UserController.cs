@@ -296,7 +296,7 @@ namespace POS_APPLICATION.Controllers
                                                                   int FCFA_FIN_ID, int FCFA_ANNUAL_INCOME, int FCFA_OTHER_INCOME, int FCFA_TOTAL_INCOME, 
                                                                   int FCFA_CUST_EXPENSES, int FCFA_EXPENSES_LASTYR, int FCFA_EXPENSES_CURRENTYR, int FCFA_NET_SAVINGS, string FCFA_ADDTNL_DTLS,
                                                                   int[] FSFP_FINQUEST_FSCD_ID, int[] FSFP_FINQUEST_TYPE, int[] FCFN_FINQUEST_PRIORITYNO,
-                                                                  int[] FSDI_DISEASE_ID, string[] FCDS_DISEASE_DURATION, string[] FCDS_DISEASE_DETAILS, int CHECK_RIDER, int[] FCDR_DOC_RDR_ID, int[] FSPM_PRODRDR_ID, int[] FCDR_PAYING_TERM, int[] FCDR_FACE_VALUE, IFormFile[] FPDD_PATH)
+                                                                  int[] FSDI_DISEASE_ID, string[] FCDS_DISEASE_DURATION, string[] FCDS_DISEASE_DETAILS, int CHECK_RIDER, int[] FCDR_DOC_RDR_ID, int[] FSPM_PRODRDR_ID, int[] FCDR_PAYING_TERM, int[] FCDR_FACE_VALUE)
         {
             PARTICIPANT participant = new PARTICIPANT();
             Rider rider = new Rider();
@@ -305,8 +305,6 @@ namespace POS_APPLICATION.Controllers
             TAKAFUL_HIST takaful_hist = new TAKAFUL_HIST();
             FINANCIAL_DTLS fin_dtls = new FINANCIAL_DTLS();
             FINANCIAL_NEEDS fin_needs = new FINANCIAL_NEEDS();
-            DMSHDR dms_hdr = new DMSHDR();
-            DMSDTLS dms_dtls = new DMSDTLS();
             int questionsLength;
 
             participant.FCDM_DOCUMENT_ID = FCDM_DOCUMENT_ID;
@@ -434,7 +432,7 @@ namespace POS_APPLICATION.Controllers
                                 TempData["successDocument"] = ex.ToString();
                             }
                         }
-                        if(FSPQS_QSTNR_FSCD_ID[0] == 3541 || FSPQS_QSTNR_FSCD_ID[1] == 3542 || FSPQS_QSTNR_FSCD_ID[3] == 3641 || FSPQS_QSTNR_FSCD_ID[4] == 3642 || FSPQS_QSTNR_FSCD_ID[7] == 3645 && FCUQ_ANSR_YN[0] == "Y" || FCUQ_ANSR_YN[1] == "Y" || FCUQ_ANSR_YN[3] == "Y" || FCUQ_ANSR_YN[4] == "Y" || FCUQ_ANSR_YN[7] == "Y")  //CORRECT THIS CONDITION
+                        if(FSPQS_QSTNR_FSCD_ID[0] == 3541 || FSPQS_QSTNR_FSCD_ID[1] == 3542 && FCUQ_ANSR_YN[0] == "Y" || FCUQ_ANSR_YN[1] == "Y")  //CORRECT THIS CONDITION
                         {
                             //Diseases info insert if any
                             for (int i = 0; i <= FSDI_DISEASE_ID.Length - 1; i++)
@@ -450,7 +448,7 @@ namespace POS_APPLICATION.Controllers
                                     diseases.FCDS_CRUSER = 1;
                                     diseases.FCDS_CRDATE = DateTime.Today;
                                 }
-                                if (FSDI_DISEASE_ID[i] >= 27 && FSDI_DISEASE_ID[i] <= 33)
+                                if (FSDI_DISEASE_ID[i] >= 27)
                                 {
                                     diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
                                     diseases.FCDM_DOCUMENT_ID = Document_ID;
@@ -460,36 +458,7 @@ namespace POS_APPLICATION.Controllers
                                     diseases.FCDS_CRUSER = 1;
                                     diseases.FCDS_CRDATE = DateTime.Today;
                                 }
-                                if (FSDI_DISEASE_ID[i] >= 34 && FSDI_DISEASE_ID[i] <= 36)
-                                {
-                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
-                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
-                                    diseases.FSPQS_QSTNR_FSCD_ID = 3641;
-                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
-                                    diseases.FCDS_STATUS = "Y";
-                                    diseases.FCDS_CRUSER = 1;
-                                    diseases.FCDS_CRDATE = DateTime.Today;
-                                }
-                                if (FSDI_DISEASE_ID[i] >= 37 && FSDI_DISEASE_ID[i] <= 40)
-                                {
-                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
-                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
-                                    diseases.FSPQS_QSTNR_FSCD_ID = 3642;
-                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
-                                    diseases.FCDS_STATUS = "Y";
-                                    diseases.FCDS_CRUSER = 1;
-                                    diseases.FCDS_CRDATE = DateTime.Today;
-                                }
-                                if (FSDI_DISEASE_ID[i] >= 41)
-                                {
-                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
-                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
-                                    diseases.FSPQS_QSTNR_FSCD_ID = 3645;
-                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
-                                    diseases.FCDS_STATUS = "Y";
-                                    diseases.FCDS_CRUSER = 1;
-                                    diseases.FCDS_CRDATE = DateTime.Today;
-                                }
+
                                 try
                                 {
                                     SendRequest = new StringContent(JsonConvert.SerializeObject(diseases), Encoding.UTF8, "application/json");
@@ -504,43 +473,7 @@ namespace POS_APPLICATION.Controllers
                                 }
                             }
                         }
-                        dms_hdr.FPDH_DMSCUS_CNIC = FCDM_OWCUST_CNIC.Replace("-", "");
-                        dms_hdr.FPDH_DESCRIPTION = "Medical documents";
-                        dms_hdr.FPDH_SHORT_DESCR = "Medical documents";
-                        dms_hdr.FPDH_STATUS = "Y";
-                        dms_hdr.FPDH_APPROVED_YN = "Y";
-                        dms_hdr.FPDH_CRUSER = 1;
-                        dms_hdr.FPDH_CRDATE = DateTime.Now;
-                        try
-                        {
-                            SendRequest = new StringContent(JsonConvert.SerializeObject(dms_hdr), Encoding.UTF8, "application/json");
-                            using (var response = await client.PostAsync(Add_DMS, SendRequest))
-                            {
-                                string apiResponse = await response.Content.ReadAsStringAsync();
-                                var dict = JArray.Parse(apiResponse);
-                                foreach (JObject dms in dict.Children<JObject>())
-                                {
-                                    dms_hdr.FPDH_DMSHDR_ID = int.Parse(dms["NEW_DMSHDR_ID"].ToString());
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            TempData["successDocument"] = ex.ToString();
-                        }
-                        for (int i = 0; i < FPDD_PATH.Length; i++)
-                        {
-                            var img = await uploadFile(FPDD_PATH[i]);
-                            dms_dtls.FPDH_DMSHDR_ID = dms_hdr.FPDH_DMSHDR_ID;
-                            dms_dtls.FPDD_PATH = img;
-                            dms_dtls.FPDD_DESC = "Diseases";
-                            SendRequest = new StringContent(JsonConvert.SerializeObject(dms_dtls), Encoding.UTF8, "application/json");
 
-                            using (var response = await client.PostAsync(Add_DMS_DETAILS, SendRequest))
-                            {
-                                string apiResponse = await response.Content.ReadAsStringAsync();
-                            }
-                        }
                         //***************need analysis form data*******************//
                         customerCNIC = FCDM_OWCUST_CNIC.Replace("-", "");
                         //Takaful History
@@ -936,7 +869,7 @@ namespace POS_APPLICATION.Controllers
                             //DMS Details
                             for (int i = 0; i < FPDD_PATH.Length; i++)
                             {
-                                var img = await uploadFile(FPDD_PATH[i]);
+                                var img = await uploadimage(FPDD_PATH[i]);
                                 //var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(FPDD_PATH[i]));
                                 //var file = new FormFile(memoryStream, 0, memoryStream.Length, null);
                                 //var img = await uploadimage(FPDD_PATH[i]);
@@ -971,7 +904,7 @@ namespace POS_APPLICATION.Controllers
             }
         }
 
-        public async Task<string> uploadFile(IFormFile file)
+        public async Task<string> uploadimage(IFormFile file)
         {
             string webRootPath = _webHostEnvironment.WebRootPath;
             string contentRootPath = _webHostEnvironment.ContentRootPath;
@@ -982,7 +915,7 @@ namespace POS_APPLICATION.Controllers
             if (file != null && file.Length > 0)
             {
                 string extension = Path.GetExtension(file.FileName);
-                if (extension.ToLower().Equals(".jpg") || extension.ToLower().Equals(".jpeg") || extension.ToLower().Equals(".png") || extension.ToLower().Equals(".pdf"))
+                if (extension.ToLower().Equals(".jpg") || extension.ToLower().Equals(".jpeg") || extension.ToLower().Equals(".png"))
                 {
                     try
                     {
