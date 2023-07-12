@@ -1487,6 +1487,7 @@ function formatNumber(input) {
   let formattedValue = Number(value).toLocaleString(); // Format the number with commas
   input.value = formattedValue;
 }
+
 function DeleteTblRecord(elem,ID) {
     $(elem).closest('tr').remove();
     if (rdersIDArr.length != 0) {
