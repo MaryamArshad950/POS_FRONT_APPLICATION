@@ -130,7 +130,7 @@ if (sessionStorage.getItem("cnic.") != null) {
 
 function PaymentByCash(PolicyNum) {
     //objDmsHdr = JSON.parse(objDmsHdr)
-//    alert($(".ContribAmtoPay").html())
+    alert($(".ContribAmtoPay").html())
     let paymentAmount = '';
     if ($(".ContribAmtoPay").html() != undefined) {
         paymentAmount = $(".ContribAmtoPay").html();
@@ -227,7 +227,7 @@ function PaymentByCash(PolicyNum) {
                     console.log(result);
                     let dmsHdrId = result[0].NEW_DMSHDR_ID;
                     $.ajax({
-                        url: '/User/uploadFile',
+                        url: '/User/uploadimage',
                         type: 'POST',
                         data: formData,
                         processData: false,
@@ -427,7 +427,7 @@ function ProposalCashValues(selectdProposalNo, status) {
             $(result).each(function () {
                 $(".refund_amount").html(nf.format(this.CONTRIB_AMOUNT));
                 $(".contrib_paid").html("<p class='text-center'>Total Takaful Contribution Paid</p><p class='text-center'>PKR " + nf.format(this.CONTRIB_AMOUNT) + "</p>");
-                $("#FSSH_SRNDR_AMT").val(this.CONTRIB_AMOUNT);
+                $("#FSSH_SURRNDR_AMT").val(this.CONTRIB_AMOUNT);
             })
         },
         error: function (jqXHR, textStatus, errorThrown) {
