@@ -17,7 +17,7 @@
     var getsession = sessionStorage.getItem("token");
 </script>
 <script src="~/Assets/js/JSPOS/Onboard.js" defer></script>
-<form method="post" action="/User/ADD_PARTICIPANT_BASICINFO" class="form-horizontal">
+<form method="post" action="/User/ADD_PARTICIPANT_BASICINFO" class="form-horizontal" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
     <div class="card pb-4 p-3 card-onboard">
         <div class="card-body">
@@ -104,7 +104,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label for="" class="font-size-2 text-success">Contribution/Deposit</label>
-                                        <input class="form-control" name="FCIH_CONTRIB_AMT" id="FCIH_CONTRIB_AMT" type="number" placeholder="100,000"/>
+                                        <input class="form-control" name="FCIH_CONTRIB_AMT" id="FCIH_CONTRIB_AMT" type="number" placeholder="100,000" />
                                     </div>
                                     <div class="col-md-3">
                                         <label for="" class="font-size-2 text-success">Start Date</label>
@@ -130,33 +130,33 @@
                                     </div>
                                 </div>
                                 @*<table class="table table-borderless" id="tblMyExistingLifePlans">
-            <thead>
-                <tr>
-                    <th hidden>ID</th>
-                    <th>Policy Number</th>
-                    <th>Sum Assured</th>
-                    <th>Contribution/Deposit</th>
-                    <th>Start Date</th>
-                    <th>Maturity Date</th>
-                    <th>Purpose</th>
-                    <th>Company</th>
-                    <th>Condition of Acceptance</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td hidden><input class="form-control" name="FCIH_INSUREREXIST_ID" id="FCIH_INSUREREXIST_ID" value="0"></td>
-                    <td><input class="form-control" name="FCIH_POLICY_NO" id="FCIH_POLICY_NO"></td>
-                    <td><input class="form-control" name="FCIH_SA_AMOUNT" id="FCIH_SA_AMOUNT" type="number" min="1"></td>
-                    <td><input class="form-control" name="FCIH_CONTRIB_AMT" id="FCIH_CONTRIB_AMT" type="number" min="1"></td>
-                    <td><input class="form-control" name="FCIH_START_DATE" id="FCIH_START_DATE" type="date"></td>
-                    <td><input class="form-control" name="FCIH_MATURITY_DATE" id="FCIH_MATURITY_DATE" type="date"></td>
-                    <td><input class="form-control" name="FCIH_INSURER_PURPOSE" id="FCIH_INSURER_PURPOSE"></td>
-                    <td><input class="form-control" name="FCIH_INSURER_NM" id="FCIH_INSURER_NM"></td>
-                    <td><input class="form-control" name="FCIH_COND_ACCPTNCE" id="FCIH_COND_ACCPTNCE"></td>
-                </tr>
-            </tbody>
-        </table>*@
+                                        <thead>
+                                            <tr>
+                                                <th hidden>ID</th>
+                                                <th>Policy Number</th>
+                                                <th>Sum Assured</th>
+                                                <th>Contribution/Deposit</th>
+                                                <th>Start Date</th>
+                                                <th>Maturity Date</th>
+                                                <th>Purpose</th>
+                                                <th>Company</th>
+                                                <th>Condition of Acceptance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td hidden><input class="form-control" name="FCIH_INSUREREXIST_ID" id="FCIH_INSUREREXIST_ID" value="0"></td>
+                                                <td><input class="form-control" name="FCIH_POLICY_NO" id="FCIH_POLICY_NO"></td>
+                                                <td><input class="form-control" name="FCIH_SA_AMOUNT" id="FCIH_SA_AMOUNT" type="number" min="1"></td>
+                                                <td><input class="form-control" name="FCIH_CONTRIB_AMT" id="FCIH_CONTRIB_AMT" type="number" min="1"></td>
+                                                <td><input class="form-control" name="FCIH_START_DATE" id="FCIH_START_DATE" type="date"></td>
+                                                <td><input class="form-control" name="FCIH_MATURITY_DATE" id="FCIH_MATURITY_DATE" type="date"></td>
+                                                <td><input class="form-control" name="FCIH_INSURER_PURPOSE" id="FCIH_INSURER_PURPOSE"></td>
+                                                <td><input class="form-control" name="FCIH_INSURER_NM" id="FCIH_INSURER_NM"></td>
+                                                <td><input class="form-control" name="FCIH_COND_ACCPTNCE" id="FCIH_COND_ACCPTNCE"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>*@
                             </div>
 
                             <h3 class="card-title mt-5">Financial Details</h3>
@@ -356,9 +356,9 @@
                 <select class="form-control" name="FCDM_OW_FSNT_IDENTYPE_ID" id="FCDM_OW_FSNT_IDENTYPE_ID" required></select>
             </div>
             @*<div class="col-md-4" hidden>
-            <label for="" class="mr-5 text-success">Contrib Frequency</label>
-            <select class="form-control" name="FCDM_PFREQ_FSCD_ID" id="FCDM_PFREQ_FSCD_ID" required></select>
-        </div>*@
+                    <label for="" class="mr-5 text-success">Contrib Frequency</label>
+                    <select class="form-control" name="FCDM_PFREQ_FSCD_ID" id="FCDM_PFREQ_FSCD_ID" required></select>
+                </div>*@
             <div class="col-md-4" hidden>
                 <label for="" class="mr-5 text-success">Cover MultipleType</label>
                 <select class="form-control" name="FCDM_PLAN_CASE_STATUS" id="FCDM_PLAN_CASE_STATUS" required></select>
@@ -425,7 +425,7 @@
                         <input type="number" class="form-control" max="11" min="0" id="heightIn" onkeyup="selectHeightInches(this.value)" placeholder="Inches" value="7" onclick="setHeightMaxLength(this.value)">
 
                         @*<input type="range" class="slider mt-3 mb-3" max="8" min="3" step="1" id="heightFt" hidden onchange="selectHeightFeet(this.value)">
-                    <input type="range" class="slider mt-3 mb-3" max="11" min="0" step="1" id="heightIn" hidden onchange="selectHeightInches(this.value)">*@
+                            <input type="range" class="slider mt-3 mb-3" max="11" min="0" step="1" id="heightIn" hidden onchange="selectHeightInches(this.value)">*@
                     </div>
                     <input class="form-control" id="FCDM_OWCUST_HEITACT" name="FCDM_OWCUST_HEITACT" placeholder="Ex. 5ft 7inches" required onclick="setHeightMaxLength(this.value)" value="5.7" hidden />
 
@@ -433,7 +433,7 @@
                 </div>
                 <div class="col-md-2">
                     <label for="" class="mr-5 text-success">Weight <span class="text-danger font-weight-light">KG</span></label>
-                    <input class="form-control" id="FCDM_OWCUST_WEITACT" type="number" name="FCDM_OWCUST_WEITACT" placeholder="Ex. 50 Kilograms" maxlength="3" required onkeyup="calculate_BMI()" onclick="calculate_BMI()"/>
+                    <input class="form-control" id="FCDM_OWCUST_WEITACT" type="number" name="FCDM_OWCUST_WEITACT" placeholder="Ex. 50 Kilograms" maxlength="3" required onkeyup="calculate_BMI()" onclick="calculate_BMI()" />
                 </div>
                 <div class="col-md-4">
                     <div class="row mt-2">
@@ -454,25 +454,25 @@
                 </div>
             </div>
             @*<div class="row ml-1 mt-4">
-            <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
-            <h5 class="text-danger font-weight-500 pt-1"> Please Choose Between Takaful Contribution or Maturity Value</h5>
-        </div>
-        <div class="row mt-2 ml-1">
-            <div class="form-check form-check-success mr-4">
-                <label for="Annual_savings" class="form-check-label">
-                    Takaful Contribution
-                    <input class="form-check-input mr-5" type="radio" id="Annual_savings" name="mode" value="A" oninput="checkValue(this.value)" />
-                    <i class="input-helper"></i>
-                </label>
-            </div>
-            <div class="form-check form-check-success">
-                <label for="maturity_value" class="form-check-label">
-                    Maturity Value
-                    <input class="form-check-input" type="radio" id="maturity_value" name="mode" value="M" oninput="checkValue(this.value)" disabled />
-                    <i class="input-helper"></i>
-                </label>
-            </div>
-        </div>*@
+                    <img src="~/Assets/images/info_icon.png" class="icon_gif mr-2" /><br />
+                    <h5 class="text-danger font-weight-500 pt-1"> Please Choose Between Takaful Contribution or Maturity Value</h5>
+                </div>
+                <div class="row mt-2 ml-1">
+                    <div class="form-check form-check-success mr-4">
+                        <label for="Annual_savings" class="form-check-label">
+                            Takaful Contribution
+                            <input class="form-check-input mr-5" type="radio" id="Annual_savings" name="mode" value="A" oninput="checkValue(this.value)" />
+                            <i class="input-helper"></i>
+                        </label>
+                    </div>
+                    <div class="form-check form-check-success">
+                        <label for="maturity_value" class="form-check-label">
+                            Maturity Value
+                            <input class="form-check-input" type="radio" id="maturity_value" name="mode" value="M" oninput="checkValue(this.value)" disabled />
+                            <i class="input-helper"></i>
+                        </label>
+                    </div>
+                </div>*@
             <div class="row mt-3 mb-3">
                 <div class="col-md-3 mb-3">
                     <label for="" class="mr-5 text-success">Takaful Contribution Mode</label>
@@ -555,15 +555,11 @@
             </div>
         </div>
         @*<div class="chatbot-helper">
-            <img src="~/Assets/images/helping_chatbot.png" class="chatbotImg animated animatedFadeInUpp fadeInUpp" />
-        </div>*@
+                <img src="~/Assets/images/helping_chatbot.png" class="chatbotImg animated animatedFadeInUpp fadeInUpp" />
+            </div>*@
     </div>
     <div class="spinner-box" hidden>
-        <img src="~/Assets/images/maleUserLogedin.gif" class="loaderImage" />
-        <div class="row">
-            <div class="m-auto loader_div">
-            </div>
-        </div>
+        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
     </div>
     <div class="modal fade AccountSection" id="AccountSection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog" role="document">
@@ -986,6 +982,273 @@
             </div>
         </div>
     </div>
+    <div class="modal fade medicalUnderWT" id="medicalUnderWT3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <button type="button" class="close closeDiseaseForm3" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h3 class="text-lemonade text-center pt-5">Please select your condition(s)</h3>
+                        </div>
+                        <div class="col-md-3">
+                            <img src="~/Assets/images/medical-test.gif" class="medical-checkup" alt="medical-checkup" />
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-md-12">
+                            <div class="card bg-transparent border-0">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID34" name="FSDI_DISEASE_ID" value="34" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID34" class="diseaseLabel text-primary">
+                                                On average, how many units of alcohol do you consume per day
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID35" name="FSDI_DISEASE_ID" value="35" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID35" class="diseaseLabel text-primary">
+                                                If you smoke, how many cigarettes do you typically smoke per day
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID36" name="FSDI_DISEASE_ID" value="36" class="selectDisease" onchange="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID36" class="diseaseLabel text-primary">
+                                                What/How frequently do you use drugs or substances?
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-md-4">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID26" name="FSDI_DISEASE_ID" value="26" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID26" class="diseaseLabel text-primary">
+                                                Others
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <table class="table table-striped table-responsive" id="tblconditionCatgry">
+                            <thead>
+                                <tr class="salaam-color text-white">
+                                    <th hidden>DiseaseID</th>
+                                    <th>Conditions</th>
+                                    <th>Details (If Any)</th>
+                                    <th>Upload Document</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row mt-3 justify-content-center">
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary closeDiseaseForm3" type="button">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade medicalUnderWT" id="medicalUnderWT4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <button type="button" class="close closeDiseaseForm4" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h3 class="text-lemonade text-center pt-5">Please select your disease(s)</h3>
+                        </div>
+                        <div class="col-md-3">
+                            <img src="~/Assets/images/medical-test.gif" class="medical-checkup" alt="medical-checkup" />
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-md-12">
+                            <div class="card bg-transparent border-0">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID" name="FSDI_DISEASE_ID" value="37" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID37" class="diseaseLabel text-primary">
+                                                Illness
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID38" name="FSDI_DISEASE_ID" value="38" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID38" class="diseaseLabel text-primary">
+                                                Injury
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID39" name="FSDI_DISEASE_ID" value="39" class="selectDisease" onchange="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID39" class="diseaseLabel text-primary">
+                                                Disability Benefit
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID40" name="FSDI_DISEASE_ID" value="40" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID40" class="diseaseLabel text-primary">
+                                                Operation
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <table class="table table-striped table-responsive" id="tbldiseaseSelect">
+                            <thead>
+                                <tr class="salaam-color text-white">
+                                    <th hidden>DiseaseID</th>
+                                    <th>Conditions</th>
+                                    <th>Details (If Any)</th>
+                                    <th>Upload Document</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row mt-3 justify-content-center">
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary closeDiseaseForm4" type="button">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade medicalUnderWT" id="medicalUnderWT5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <button type="button" class="close closeDiseaseForm5" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h3 class="text-lemonade text-center pt-5">Please select your disease(s)</h3>
+                        </div>
+                        <div class="col-md-3">
+                            <img src="~/Assets/images/medical-test.gif" class="medical-checkup" alt="medical-checkup" />
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-md-12">
+                            <div class="card bg-transparent border-0">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID41" name="FSDI_DISEASE_ID" value="41" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID41" class="diseaseLabel text-primary">
+                                                Complications occur during /after your pregnancy
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID42" name="FSDI_DISEASE_ID" value="42" class="selectDisease" onclick="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID42" class="diseaseLabel text-primary">
+                                                Any gynecological conditions or diseases
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="checkbox" id="FSDI_DISEASE_ID43" name="FSDI_DISEASE_ID" value="43" class="selectDisease" onchange="showDisease(this,this.value)">
+                                            <label for="FSDI_DISEASE_ID43" class="diseaseLabel text-primary">
+                                                Any specific treatments or interventions for breast diseases or conditions
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <table class="table table-striped table-responsive" id="tblfemaleCatgry">
+                            <thead>
+                                <tr class="salaam-color text-white">
+                                    <th hidden>DiseaseID</th>
+                                    <th>Conditions</th>
+                                    <th>Details (If Any)</th>
+                                    <th>Upload Document</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row mt-3 justify-content-center">
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary closeDiseaseForm5" type="button">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade medicalUnderWT" id="familyHistory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <button type="button" class="close closeFamilyHistory" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h3 class="text-lemonade text-center pt-5">Please add your family history</h3>
+                        </div>
+                        <div class="col-md-3">
+                            <img src="~/Assets/images/medical-test.gif" class="medical-checkup" alt="medical-checkup" />
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="btnAddFamilyHstry" type="button">Add more relations</button>
+                    <div class="card">
+                        <input class="form-control" hidden />
+                        <table class="table table-striped table-responsive" id="tblfamilyHistory">
+                            <thead>
+                                <tr class="salaam-color text-white">
+                                    <th>Relationship</th>
+                                    <th>Age</th>
+                                    <th>Status of health</th>
+                                    <th>Year of death <span class="text-danger"><i>(If died)</i></span></th>
+                                    <th>Age at death</th>
+                                    <th>Cause of death</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><select class="form-control" name="FSCU_RELTN_FSCD_DID" id="FSCU_RELTN_FSCD_DID1"><option value="">Select</option><option value="28">Father</option><option value="29">Mother</option><option value="30">Brother</option><option value="3405">Sister</option><option value="3406">Spouse</option><option value="3407">Son</option><option value="3408">Daughter</option></select></td>
+                                    <td><input style='width:85px' class="form-control" name="FSCF_AGE" id="FSCF_AGE1" type="number" min="1" max="150" /></td>
+                                    <td><select class="form-control" name="FSCF_STATOFHLTH" id="FSCF_STATOFHLTH1"><option value="">Select</option><option value="1">Good</option><option value="2">Fair</option><option value="3">Poor</option></select></td>
+                                    <td><input class="form-control" name="FSCF_YEAROFDTH" id="FSCF_YEAROFDTH1" type="number" min="1" max="3000" /></td>
+                                    <td><input class="form-control" name="FSCF_AGEOFDTH" id="FSCF_AGEOFDTH1" type="number" min="1" max="150" /></td>
+                                    <td><select class="form-control" name="FSCF_CAUSOFDTH" id="FSCF_CAUSOFDTH1"><option value="">Select</option><option value="1">Natural</option><option value="2">Accidental</option><option value="3">Disease</option></select></td>
+                                    <td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row mt-3 justify-content-center">
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary closeFamilyHistory" type="button">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>
 <div class="modal fade" id="mySavedIllustModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog" role="document">
@@ -1026,47 +1289,47 @@
     </div>
 </div>
 @*<div class="modal fade" id="VerifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="modal-icon">
-                    <img src="~/Assets/images/password.png" class="phoneVerifyImage" />
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <p class="description">Please enter the verification code to complete sign in</p>
-                        <div class="alert alert-success alert-dismissible alert-otp fade show p-3 mt-2" role="alert" hidden>
-                            <i class="fa fa-check p-2 me-3 text-white bg-success rounded-circle" aria-hidden="true"></i>
-                            <strong>
-                                Your OTP has been verified sucessfully
-                            </strong>
-                        </div>
-                        <div class="alert alert-danger alert-dismissible wrong-otp fade show p-3 mt-2" role="alert" hidden>
-                            <i class="fa fa-times p-2 me-3 text-white bg-success rounded-circle" aria-hidden="true"></i>
-                            <strong>
-                                Please enter correct OTP
-                            </strong>
-                        </div>
-                        <ul class="code-number">
-                            <li><input id="firstDigit" class="border-0 bg-transparent w-50" placeholder="1" maxlength="1" /></li>
-                            <li><input id="secondDigit" class="border-0 bg-transparent w-50" placeholder="0" maxlength="1" /></li>
-                            <li><input id="thirdDigit" class="border-0 bg-transparent w-50" placeholder="5" maxlength="1" /></li>
-                            <li><input id="fourthDigit" class="border-0 bg-transparent w-50" placeholder="3" maxlength="1" /></li>
-                            <li><input id="fifthDigit" class="border-0 bg-transparent w-50" placeholder="9" maxlength="1" /></li>
-                            <li><input id="sixthDigit" class="border-0 bg-transparent w-50" placeholder="2" maxlength="1" /></li>
-                        </ul>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button class="btn btn-submit-code" type="button" id="verifyOTP">Submit</button>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="modal-icon">
+                        <img src="~/Assets/images/password.png" class="phoneVerifyImage" />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="description">Please enter the verification code to complete sign in</p>
+                            <div class="alert alert-success alert-dismissible alert-otp fade show p-3 mt-2" role="alert" hidden>
+                                <i class="fa fa-check p-2 me-3 text-white bg-success rounded-circle" aria-hidden="true"></i>
+                                <strong>
+                                    Your OTP has been verified sucessfully
+                                </strong>
                             </div>
+                            <div class="alert alert-danger alert-dismissible wrong-otp fade show p-3 mt-2" role="alert" hidden>
+                                <i class="fa fa-times p-2 me-3 text-white bg-success rounded-circle" aria-hidden="true"></i>
+                                <strong>
+                                    Please enter correct OTP
+                                </strong>
+                            </div>
+                            <ul class="code-number">
+                                <li><input id="firstDigit" class="border-0 bg-transparent w-50" placeholder="1" maxlength="1" /></li>
+                                <li><input id="secondDigit" class="border-0 bg-transparent w-50" placeholder="0" maxlength="1" /></li>
+                                <li><input id="thirdDigit" class="border-0 bg-transparent w-50" placeholder="5" maxlength="1" /></li>
+                                <li><input id="fourthDigit" class="border-0 bg-transparent w-50" placeholder="3" maxlength="1" /></li>
+                                <li><input id="fifthDigit" class="border-0 bg-transparent w-50" placeholder="9" maxlength="1" /></li>
+                                <li><input id="sixthDigit" class="border-0 bg-transparent w-50" placeholder="2" maxlength="1" /></li>
+                            </ul>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button class="btn btn-submit-code" type="button" id="verifyOTP">Submit</button>
+                                </div>
+                            </div>
+                            <button class="btn bg-transparent mt-2 text-danger font-weight-bold text-center" id="resendCode" type="button">Didn't get the code? Send Again</button>
                         </div>
-                        <button class="btn bg-transparent mt-2 text-danger font-weight-bold text-center" id="resendCode" type="button">Didn't get the code? Send Again</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>*@
+    </div>*@
 <div class="modal fade animated animatedFadeInUpp fadeInUpp videographyModal" id="videographyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content salaam-color">

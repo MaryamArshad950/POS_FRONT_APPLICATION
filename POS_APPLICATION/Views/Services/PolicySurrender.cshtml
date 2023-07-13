@@ -13,7 +13,7 @@
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script src="~/Assets/js/servicePos/freeLook.js"></script>
-<form class="form-horizontal" action="/Services/REQUEST_FREE_LOOK" method="post">
+<form class="form-horizontal" action="/Services/REQUEST_FREE_LOOK_SURRNDR" method="post">
     <div class="card">
         <div class="card-body card-funds">
             <div class="row flex-div">
@@ -26,25 +26,9 @@
             </div>
             <h4 class="text-center service-policy mt-3" hidden>Freelook cancellation against my Policy No. <span class="policy_no"></span></h4>
             <input name="FSSH_POL_CODE" id="FSSH_POL_CODE" hidden />
-            <input name="FSSH_PW_AMT" id="FSSH_PW_AMT" hidden />
+            <input name="FSSH_SRNDR_AMT" id="FSSH_SRNDR_AMT" hidden />
+            <input name="FPDM_PROPOSAL_NO" id="FPDM_PROPOSAL_NO" hidden />
             <h4 class="text-center"><a class="change-policy-num">Select Policy Number</a></h4>
-            @*@if (TempData["successMessage"] != null)
-                {<div class="modal fade" id="successRequest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <button type="button" class="close closeRequestSuccess" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                <div class="modal-body">
-                                    <div class="modal-icon">
-                                        <img src="~/Assets/images/check.png" class="notebook_image center-img w-25" />
-                                    </div>
-                                    <h3 class="font-cursive text-center mt-3">Your Request has been received!</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                 }*@
             <div class="serviceProcess" hidden>
                 <div class="row mt-4 justify-content-center">
                     <div class="col-md-6">
@@ -145,33 +129,4 @@
             </div>
         </div>
     </div>
-    @*<div class="modal fade" id="VerifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="modal-icon">
-                            <img src="~/Assets/images/password.png" class="phoneVerifyImage" />
-                        </div>
-                        <h3 class="title">Verification code</h3>
-                        <p class="description">We have sent an OTP to your phone number ... Please verify</p>
-                        <div class="alert alert-success alert-dismissible alert-otp fade show p-3 mt-2" role="alert" hidden>
-                            <i class="fa fa-check p-2 me-3 text-white bg-success rounded-circle" aria-hidden="true"></i>
-                            <strong>
-                                OTP verified sucessfully
-                            </strong>
-                        </div>
-                        <ul class="code-number">
-                            <li><input id="firstDigit" class="border-0 bg-transparent" placeholder="1" maxlength="1" /></li>
-                            <li><input id="secondDigit" class="border-0 bg-transparent" placeholder="0" maxlength="1" /></li>
-                            <li><input id="thirdDigit" class="border-0 bg-transparent" placeholder="5" maxlength="1" /></li>
-                            <li><input id="fourthDigit" class="border-0 bg-transparent" placeholder="3" maxlength="1" /></li>
-                            <li><input id="fifthDigit" class="border-0 bg-transparent" placeholder="9" maxlength="1" /></li>
-                            <li><input id="sixthDigit" class="border-0 bg-transparent" placeholder="2" maxlength="1" /></li>
-                        </ul>
-                        <button class="btn btn-outline-success" type="button" id="verifyOTP">Submit</button>
-                        <button class="btn bg-transparent mt-2 text-danger font-weight-bold" id="resendCode" type="button">Didn't get the code? Send Again</button>
-                    </div>
-                </div>
-            </div>
-        </div>*@
 </form>

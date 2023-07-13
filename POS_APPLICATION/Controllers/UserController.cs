@@ -44,10 +44,10 @@ namespace POS_APPLICATION.Controllers
 
         static string Result_API = "", Global_API = "", IP_Address = "", Port_No = "", DE_ACTIVEJWTTOKEN, checkUserValidate, checkCoreUserValidate, DefaultPosUser;
         StringContent SendRequest;
-      //  StringContent SendRequest2;
+        //  StringContent SendRequest2;
 
         private readonly string Add_DcmntInfo = "" + Result_API + "/api/Participant/PostParticipantDetails";
-        private readonly string Add_UserInfo  = "" + Result_API + "/api/PosUser/SavePOSUserDetails";
+        private readonly string Add_UserInfo = "" + Result_API + "/api/PosUser/SavePOSUserDetails";
         private readonly string Add_MedicalInfo = "" + Result_API + "/api/DcmntQuestnr/SaveOrUpdateDcmntQuestnrDetails";
         private readonly string Add_DiseasesInfo = "" + Result_API + "/api/DcmntQuestnr/SaveDcmntQuestnrDetails";
         private readonly string Add_NomineeInfo = "" + Result_API + "/api/DcmntNominee/SaveOrUpdateDcmntNominee";
@@ -58,6 +58,7 @@ namespace POS_APPLICATION.Controllers
         private readonly string Add_DMS = "" + Result_API + "/API/DMS/POST_DMS_HDR";
         private readonly string Add_DMS_DETAILS = "" + Result_API + "/API/DMS/POST_DMS_DETAILS";
         private readonly string Add_Rider_Dtls = "" + Result_API + "/api/Participant/PostRiderDetails";
+        private readonly string Add_familyhistory = "" + Result_API + "/API/CUSTOMER_FAMILY_HISTRY/";
         public string GetIPHostAPI()
         {
             IP_Address = Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value;
@@ -188,7 +189,7 @@ namespace POS_APPLICATION.Controllers
             string url = $"{reportServerUrl}?/{reportPath}&rs:Command=Render{queryString}&rs:Format=PDF";
 
             return url;
-            
+
         }
         public IActionResult GetUrl(string Src_CODE)
         {
@@ -260,7 +261,7 @@ namespace POS_APPLICATION.Controllers
             await rS.SendSMSMesg(username, Txtmessage, phoneNumber, transactionID);
             return Ok("Sms Has Been Sent Successfully");
         }
-        
+
         public IActionResult Onboarding()
         {
             return View();
@@ -283,8 +284,8 @@ namespace POS_APPLICATION.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> ADD_PARTICIPANT_BASICINFO(int FCDM_DOCUMENT_ID, string FCDM_DOCUMENT_CODE, int FSPM_PRODUCT_ID, string FCDM_OWCUST_FIRSTNAME,                                                             string FCDM_OWCUST_MDDLNAME, string FCDM_OWCUST_LASTNAME,
-                                                                  string FCDM_OWCUST_CNIC, int FCDM_OW_GENDR_FSCD_ID, DateTime FCDM_OWCUST_DOB, 
+        public async Task<ActionResult> ADD_PARTICIPANT_BASICINFO(int FCDM_DOCUMENT_ID, string FCDM_DOCUMENT_CODE, int FSPM_PRODUCT_ID, string FCDM_OWCUST_FIRSTNAME, string FCDM_OWCUST_MDDLNAME, string FCDM_OWCUST_LASTNAME,
+                                                                  string FCDM_OWCUST_CNIC, int FCDM_OW_GENDR_FSCD_ID, DateTime FCDM_OWCUST_DOB,
                                                                   string FCDM_OWCUST_MOBILENO,
                                                                   string FCDM_OWCUST_EMAILADDR, float FCDM_OWCUST_HEITACT, int FCDM_OWCUST_HEITUNT,
                                                                   int FCDM_OWCUST_WEITACT, int FCDM_OWCUST_WEITUNT, float FCDM_OWCUST_BMI, int FCDM_OW_CUOCP_FSCD_ID,
@@ -292,11 +293,12 @@ namespace POS_APPLICATION.Controllers
                                                                   int FCDM_PLAN_CASE_STATUS, int FCDM_COVER_MULTIPLE, int FCDM_CONTRIB_IDX_RATE,
                                                                   int FSAG_AGENT_CODE, int FCDM_FACEVAL_IDX_RATE, int FCDM_OW_FSNT_IDENTYPE_ID, int FCDM_BENEFIT_TERM,
                                                                   int[] FCUQ_CHNLUW_QSN_ID, int[] FSPQS_QSTNR_FSCD_ID, string[] FCUQ_ANSR_YN, int[] FCUQ_PARENT_ID,
-                                                                  int[] FCIH_INSUREREXIST_ID, string FCIH_INSUREREXIST_YN, string[] FCIH_POLICY_NO, int[] FCIH_SA_AMOUNT,                        int[] FCIH_CONTRIB_AMT, DateTime[] FCIH_START_DATE, DateTime[] FCIH_MATURITY_DATE,                                             string[] FCIH_INSURER_PURPOSE, string [] FCIH_INSURER_NM, string[] FCIH_COND_ACCPTNCE,
-                                                                  int FCFA_FIN_ID, int FCFA_ANNUAL_INCOME, int FCFA_OTHER_INCOME, int FCFA_TOTAL_INCOME, 
+                                                                  int[] FCIH_INSUREREXIST_ID, string FCIH_INSUREREXIST_YN, string[] FCIH_POLICY_NO, int[] FCIH_SA_AMOUNT, int[] FCIH_CONTRIB_AMT, DateTime[] FCIH_START_DATE, DateTime[] FCIH_MATURITY_DATE, string[] FCIH_INSURER_PURPOSE, string[] FCIH_INSURER_NM, string[] FCIH_COND_ACCPTNCE,
+                                                                  int FCFA_FIN_ID, int FCFA_ANNUAL_INCOME, int FCFA_OTHER_INCOME, int FCFA_TOTAL_INCOME,
                                                                   int FCFA_CUST_EXPENSES, int FCFA_EXPENSES_LASTYR, int FCFA_EXPENSES_CURRENTYR, int FCFA_NET_SAVINGS, string FCFA_ADDTNL_DTLS,
                                                                   int[] FSFP_FINQUEST_FSCD_ID, int[] FSFP_FINQUEST_TYPE, int[] FCFN_FINQUEST_PRIORITYNO,
-                                                                  int[] FSDI_DISEASE_ID, string[] FCDS_DISEASE_DURATION, string[] FCDS_DISEASE_DETAILS, int CHECK_RIDER, int[] FCDR_DOC_RDR_ID, int[] FSPM_PRODRDR_ID, int[] FCDR_PAYING_TERM, int[] FCDR_FACE_VALUE)
+                                                                  int[] FSDI_DISEASE_ID, string[] FCDS_DISEASE_DURATION, string[] FCDS_DISEASE_DETAILS, int CHECK_RIDER, int[] FCDR_DOC_RDR_ID, int[] FSPM_PRODRDR_ID, int[] FCDR_PAYING_TERM, int[] FCDR_FACE_VALUE, IFormFile[] FPDD_PATH,
+                               int[] FSCU_RELTN_FSCD_DID, int[] FSCF_AGE, string[] FSCF_STATOFHLTH, string[] FSCF_YEAROFDTH, int[] FSCF_AGEOFDTH, string[] FSCF_CAUSOFDTH)
         {
             PARTICIPANT participant = new PARTICIPANT();
             Rider rider = new Rider();
@@ -305,6 +307,9 @@ namespace POS_APPLICATION.Controllers
             TAKAFUL_HIST takaful_hist = new TAKAFUL_HIST();
             FINANCIAL_DTLS fin_dtls = new FINANCIAL_DTLS();
             FINANCIAL_NEEDS fin_needs = new FINANCIAL_NEEDS();
+            DMSHDR dms_hdr = new DMSHDR();
+            DMSDTLS dms_dtls = new DMSDTLS();
+            CUSTOMER_FAMILY_HISTRY family = new CUSTOMER_FAMILY_HISTRY();
             int questionsLength;
 
             participant.FCDM_DOCUMENT_ID = FCDM_DOCUMENT_ID;
@@ -403,7 +408,7 @@ namespace POS_APPLICATION.Controllers
                                 }
                             }
                         }
-                        if(FCDM_PLAN_CONTRIB >= 500000)
+                        if (FCDM_PLAN_CONTRIB >= 500000)
                         {
                             questionsLength = FSPQS_QSTNR_FSCD_ID.Length;
                         }
@@ -432,12 +437,12 @@ namespace POS_APPLICATION.Controllers
                                 TempData["successDocument"] = ex.ToString();
                             }
                         }
-                        if(FSPQS_QSTNR_FSCD_ID[0] == 3541 || FSPQS_QSTNR_FSCD_ID[1] == 3542 && FCUQ_ANSR_YN[0] == "Y" || FCUQ_ANSR_YN[1] == "Y")  //CORRECT THIS CONDITION
+                        if (FSPQS_QSTNR_FSCD_ID[0] == 3541 || FSPQS_QSTNR_FSCD_ID[1] == 3542 || FSPQS_QSTNR_FSCD_ID[3] == 3641 || FSPQS_QSTNR_FSCD_ID[4] == 3642 || FSPQS_QSTNR_FSCD_ID[7] == 3645 && FCUQ_ANSR_YN[0] == "Y" || FCUQ_ANSR_YN[1] == "Y" || FCUQ_ANSR_YN[3] == "Y" || FCUQ_ANSR_YN[4] == "Y" || FCUQ_ANSR_YN[7] == "Y")  //CORRECT THIS CONDITION
                         {
                             //Diseases info insert if any
                             for (int i = 0; i <= FSDI_DISEASE_ID.Length - 1; i++)
                             {
-                                if(FSDI_DISEASE_ID[i] <= 26)
+                                if (FSDI_DISEASE_ID[i] <= 26)
                                 {
                                     diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
                                     diseases.FCDM_DOCUMENT_ID = Document_ID;
@@ -448,7 +453,7 @@ namespace POS_APPLICATION.Controllers
                                     diseases.FCDS_CRUSER = 1;
                                     diseases.FCDS_CRDATE = DateTime.Today;
                                 }
-                                if (FSDI_DISEASE_ID[i] >= 27)
+                                if (FSDI_DISEASE_ID[i] >= 27 && FSDI_DISEASE_ID[i] <= 33)
                                 {
                                     diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
                                     diseases.FCDM_DOCUMENT_ID = Document_ID;
@@ -458,7 +463,36 @@ namespace POS_APPLICATION.Controllers
                                     diseases.FCDS_CRUSER = 1;
                                     diseases.FCDS_CRDATE = DateTime.Today;
                                 }
-
+                                if (FSDI_DISEASE_ID[i] >= 34 && FSDI_DISEASE_ID[i] <= 36)
+                                {
+                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
+                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
+                                    diseases.FSPQS_QSTNR_FSCD_ID = 3641;
+                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
+                                    diseases.FCDS_STATUS = "Y";
+                                    diseases.FCDS_CRUSER = 1;
+                                    diseases.FCDS_CRDATE = DateTime.Today;
+                                }
+                                if (FSDI_DISEASE_ID[i] >= 37 && FSDI_DISEASE_ID[i] <= 40)
+                                {
+                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
+                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
+                                    diseases.FSPQS_QSTNR_FSCD_ID = 3642;
+                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
+                                    diseases.FCDS_STATUS = "Y";
+                                    diseases.FCDS_CRUSER = 1;
+                                    diseases.FCDS_CRDATE = DateTime.Today;
+                                }
+                                if (FSDI_DISEASE_ID[i] >= 41)
+                                {
+                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
+                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
+                                    diseases.FSPQS_QSTNR_FSCD_ID = 3645;
+                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
+                                    diseases.FCDS_STATUS = "Y";
+                                    diseases.FCDS_CRUSER = 1;
+                                    diseases.FCDS_CRDATE = DateTime.Today;
+                                }
                                 try
                                 {
                                     SendRequest = new StringContent(JsonConvert.SerializeObject(diseases), Encoding.UTF8, "application/json");
@@ -473,7 +507,70 @@ namespace POS_APPLICATION.Controllers
                                 }
                             }
                         }
+                        if(FSPQS_QSTNR_FSCD_ID[5] == 3643 && FCUQ_ANSR_YN[5] == "Y")
+                        {
+                            for(int i = 0; i <= FSCU_RELTN_FSCD_DID.Length - 1; i++)
+                            {
+                                family.FSCU_CUSTOMER_CODE = int.Parse(CustomerCodeValue);
+                                family.FSCU_RELTN_FSCD_DID = FSCU_RELTN_FSCD_DID[i];
+                                family.FSCF_AGE = FSCF_AGE[i];
+                                family.FSCF_STATOFHLTH = FSCF_STATOFHLTH[i];
+                                family.FSCF_AGEOFDTH = FSCF_AGEOFDTH[i];
+                                family.FSCF_YEAROFDTH = FSCF_YEAROFDTH[i];
+                                family.FSCF_CAUSOFDTH = FSCF_CAUSOFDTH[i];
+                                family.FSCF_CRUSER = 1;
+                                family.FSCF_CRDATE = DateTime.Now;
+                                try
+                                {
+                                    SendRequest = new StringContent(JsonConvert.SerializeObject(family), Encoding.UTF8, "application/json");
+                                    using (var response = await client.PostAsync(Add_familyhistory, SendRequest))
+                                    {
+                                        string apiResponse = await response.Content.ReadAsStringAsync();
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    TempData["successDocument"] = ex.ToString();
+                                }
+                            }
+                        }
+                        dms_hdr.FPDH_DMSCUS_CNIC = FCDM_OWCUST_CNIC.Replace("-", "");
+                        dms_hdr.FPDH_DESCRIPTION = "Medical documents";
+                        dms_hdr.FPDH_SHORT_DESCR = "Medical documents";
+                        dms_hdr.FPDH_STATUS = "Y";
+                        dms_hdr.FPDH_APPROVED_YN = "Y";
+                        dms_hdr.FPDH_CRUSER = 1;
+                        dms_hdr.FPDH_CRDATE = DateTime.Now;
+                        try
+                        {
+                            SendRequest = new StringContent(JsonConvert.SerializeObject(dms_hdr), Encoding.UTF8, "application/json");
+                            using (var response = await client.PostAsync(Add_DMS, SendRequest))
+                            {
+                                string apiResponse = await response.Content.ReadAsStringAsync();
+                                var dict = JArray.Parse(apiResponse);
+                                foreach (JObject dms in dict.Children<JObject>())
+                                {
+                                    dms_hdr.FPDH_DMSHDR_ID = int.Parse(dms["NEW_DMSHDR_ID"].ToString());
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            TempData["successDocument"] = ex.ToString();
+                        }
+                        for (int i = 0; i < FPDD_PATH.Length; i++)
+                        {
+                            var img = await uploadFile(FPDD_PATH[i]);
+                            dms_dtls.FPDH_DMSHDR_ID = dms_hdr.FPDH_DMSHDR_ID;
+                            dms_dtls.FPDD_PATH = img;
+                            dms_dtls.FPDD_DESC = "Diseases";
+                            SendRequest = new StringContent(JsonConvert.SerializeObject(dms_dtls), Encoding.UTF8, "application/json");
 
+                            using (var response = await client.PostAsync(Add_DMS_DETAILS, SendRequest))
+                            {
+                                string apiResponse = await response.Content.ReadAsStringAsync();
+                            }
+                        }
                         //***************need analysis form data*******************//
                         customerCNIC = FCDM_OWCUST_CNIC.Replace("-", "");
                         //Takaful History
@@ -555,7 +652,6 @@ namespace POS_APPLICATION.Controllers
                         //financial needs
                         for (int i = 0; i <= FSFP_FINQUEST_FSCD_ID.Length - 1; i++)
                         {
-                            //fin_needs.FCFN_FINOBJ_ID = FCFN_FINOBJ_ID[i];
                             fin_needs.SUM_SYS_USER_CODE = customerCNIC;
                             fin_needs.FSFP_FINQUEST_FSCD_ID = FSFP_FINQUEST_FSCD_ID[i];
                             fin_needs.FSFP_FINQUEST_TYPE = FSFP_FINQUEST_TYPE[i];
@@ -584,7 +680,6 @@ namespace POS_APPLICATION.Controllers
             }
         }
 
-
         [HttpPost]
         public async Task<ActionResult> POS_USER_CREATION(int SUM_SYS_USER_ID, string SUM_SYS_USER_CODE, string SUM_FULL_NAME, string USER_NAME,
                                                           int FSDS_DESIGN_ID, string SUM_USER_EMAIL_ADDR, DateTime SUM_CUST_DOB, string SUM_CUST_CONTPHONE,
@@ -596,13 +691,11 @@ namespace POS_APPLICATION.Controllers
             ViewBag.TOKEN = null;
             LASTLOGIN = SUM_SYS_USER_CODE;
 
-            //user.SUM_SYS_USER_ID = SUM_SYS_USER_ID;
             Random rand = new Random();
             user.SUM_SYS_USER_ID = int.Parse(HttpContext.Session.GetString("POS_SYS_USER_ID"));
 
             user.SUM_SYS_USER_CODE = SUM_SYS_USER_CODE;
             user.SUM_FULL_NAME = SUM_FULL_NAME;
-            //user.SUM_USER_PASSWORD = USER_NAME;
             user.FSDS_DESIGN_ID = 1;
             user.SUM_USER_EMAIL_ADDR = SUM_USER_EMAIL_ADDR;
             user.SUM_CUST_DOB = SUM_CUST_DOB;
@@ -615,7 +708,7 @@ namespace POS_APPLICATION.Controllers
             var key = Configuration.GetSection("Credentials").GetSection("SymKey").Value;
             int num = rand.Next(1000, 10000);
             USER_NAME = USER_NAME + num;
-            user.SUM_USER_PASSWORD = EncryptString(key,USER_NAME).ToString();
+            user.SUM_USER_PASSWORD = EncryptString(key, USER_NAME).ToString();
             string UserIDValue = "";
             using (var handler = new HttpClientHandler())
             {
@@ -625,7 +718,8 @@ namespace POS_APPLICATION.Controllers
                 using (var client = new HttpClient(handler))
                 {
                     SendRequest = null;
-                    try {
+                    try
+                    {
                         SendRequest = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
                         using (var response = await client.PostAsync(Add_UserInfo, SendRequest))
                         {
@@ -675,8 +769,6 @@ namespace POS_APPLICATION.Controllers
                                     {
                                         JWTToken = (string)matches[1].ToString().Trim('"');
                                         HttpContext.Session.SetString("JwToken", JWTToken);
-                                        //HttpContext.Session.SetString("UserName", UserName);
-
                                         ViewBag.TOKEN = JWTToken.ToString();
                                         TempData["Token"] = JWTToken.ToString();
                                     }
@@ -686,7 +778,8 @@ namespace POS_APPLICATION.Controllers
                             }
                         }
                     }
-                    catch (Exception ex){
+                    catch (Exception ex)
+                    {
                         TempData["successUSER"] = ex.ToString();
                     }
                     return RedirectToAction("Onboarding");
@@ -720,7 +813,6 @@ namespace POS_APPLICATION.Controllers
                 using (var client = new HttpClient(handler))
                 {
                     SendRequest = null;
-                 //   SendRequest2 = null;
                     try
                     {
                         //core authenticate
@@ -772,8 +864,6 @@ namespace POS_APPLICATION.Controllers
                             }
                             else
                             {
-                                //HttpContext.Session.SetString("SUM_USER_EMAIL_ADDR", SUM_USER_EMAIL_ADDR);
-                                //HttpContext.Session.SetString("SUM_CUST_CONTPHONE", SUM_CUST_CONTPHONE);
                                 var reg = new Regex("\".*?\"");
                                 var matches = reg.Matches((string)apiResponse);
                                 for (int i = 1; i < 3; i++)
@@ -784,13 +874,10 @@ namespace POS_APPLICATION.Controllers
                                         HttpContext.Session.SetString("JwToken", JWTToken);
                                         HttpContext.Session.SetString("JwTokenPos", JWTToken);
 
-                                        //HttpContext.Session.SetString("UserName", UserName);
                                         ViewBag.TOKEN = JWTToken.ToString();
                                         TempData["TokenIndex"] = JWTToken.ToString();
                                     }
                                 }
-
-
                                 return RedirectToAction("Proposal_summary");
                             }
                         }
@@ -804,27 +891,20 @@ namespace POS_APPLICATION.Controllers
             }
         }
 
-
         [HttpPost]
         public async Task<ActionResult> SaveDMS(int FPDH_DMSHDR_ID, string FPDH_POLICY_NO, string FPDH_DMSCUS_CNIC, int FPDM_POLDOM_ID, int FPDM_POLICY_IDX, string FPDH_DESCRIPTION, string FPDH_SHORT_DESCR, string FPDH_APPROVED_YN, string FPDH_STATUS, DateTime FPDH_FLXFLD_DATE, string FPDH_FLXFLD_VCHAR, int FPDH_FLXFLD_NUMBER, int FPDH_CRUSER, DateTime FPDH_CRDATE, int FPDH_CHKUSER, DateTime FPDH_CHKDATE, int FPDH_AUTHUSER, DateTime FPDH_AUTHDATE, int FPDH_CNCLUSER, DateTime FPDH_CNCLDATE, string FPDH_AUDIT_COMMENTS, string FPDH_USER_IPADDR,
-                                                //dMS detail
+                                               //dMS detail
                                                int[] FPDD_DMSDTL_ID, string FPDD_PATH_front, string FPDD_PATH_back, IFormFile[] FPDD_PATH, int[] FPDD_SERIAL_NO, string[] FPDD_NAME, string[] FPDD_TYPE, DateTime[] FPDD_DATE, /*string FPDD_PATH,*/ string[] FPDD_DESC, string[] FPDD_STATUS, DateTime[] FPDD_FLXFLD_DATE, string[] FPDD_FLXFLD_VCHAR, int[] FPDD_FLXFLD_NUMBER, int[] FPDD_CRUSER, DateTime[] FPDD_CRDATE, int[] FPDD_CHKUSER, DateTime[] FPDD_CHKDATE, int[] FPDD_AUTHUSER, DateTime[] FPDD_AUTHDATE, int[] FPDD_CNCLUSER, DateTime[] FPDD_CNCLDATE, string[] FPDD_AUDIT_COMMENTS, string[] FPDD_USER_IPADDR)
         {
             DMSHDR dmshdr = new DMSHDR();
             DMSDTLS dmsdtl = new DMSDTLS();
 
             dmshdr.FPDH_POLICY_NO = FPDH_POLICY_NO;
-            //dmshdr.FPDH_DMSHDR_ID = FPDH_DMSHDR_ID;
-            //dmshdr.FPDM_POLDOM_ID = FPDM_POLDOM_ID;
-            //dmshdr.FPDM_POLICY_IDX = FPDM_POLICY_IDX;
             dmshdr.FPDH_DESCRIPTION = "CNIC";
             dmshdr.FPDH_SHORT_DESCR = "CNIC";
             dmshdr.FPDH_DMSCUS_CNIC = FPDH_DMSCUS_CNIC;
             dmshdr.FPDH_APPROVED_YN = "Y";
             dmshdr.FPDH_STATUS = "N";
-            //dmshdr.FPDH_FLXFLD_DATE = FPDH_FLXFLD_DATE;
-            //dmshdr.FPDH_FLXFLD_VCHAR = FPDH_FLXFLD_VCHAR;
-            //dmshdr.FPDH_FLXFLD_NUMBER = FPDH_FLXFLD_NUMBER;
             dmshdr.FPDH_CRUSER = 1;
             dmshdr.FPDH_CRDATE = FPDH_CRDATE;
             var strToken = HttpContext.Session.GetString("JwToken");
@@ -870,28 +950,16 @@ namespace POS_APPLICATION.Controllers
                             //DMS Details
                             for (int i = 0; i < FPDD_PATH.Length; i++)
                             {
-                                var img = await uploadimage(FPDD_PATH[i]);
-                                //var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(FPDD_PATH[i]));
-                                //var file = new FormFile(memoryStream, 0, memoryStream.Length, null);
-                                //var img = await uploadimage(FPDD_PATH[i]);
-                                //dmsdtl.FPDD_DMSDTL_ID = FPDD_DMSDTL_ID[i];
+                                var img = await uploadFile(FPDD_PATH[i]);
                                 dmsdtl.FPDH_DMSHDR_ID = dmshdr.FPDH_DMSHDR_ID;
-                                //dmsdtl.FPDD_SERIAL_NO = FPDD_SERIAL_NO[i];
-                                //dmsdtl.FPDD_NAME = FPDD_NAME[i];
-                                //dmsdtl.FPDD_TYPE = FPDD_TYPE[i];
-                                //dmsdtl.FPDD_DATE = FPDD_DATE[i];
                                 dmsdtl.FPDD_PATH = img;
                                 //dmsdtl.FPDD_DESC = FPDD_DESC[i];
-                                //dmsdtl.FPDD_STATUS = FPDD_STATUS[i];
-                                //dmsdtl.FPDD_CRUSER = 1;
-                                //dmsdtl.FPDD_CRDATE = FPDD_CRDATE[i];
 
                                 SendRequest = new StringContent(JsonConvert.SerializeObject(dmsdtl), Encoding.UTF8, "application/json");
 
                                 using (var response = await client1.PostAsync(Add_DMS_DETAILS, SendRequest))
                                 {
                                     apiResponse = await response.Content.ReadAsStringAsync();
-                                    //TempData["successPolicMangt"] = " " + apiResponse.Replace('"', ' ').Trim();
                                 }
                             }
                         }
@@ -905,18 +973,18 @@ namespace POS_APPLICATION.Controllers
             }
         }
 
-        public async Task<string> uploadimage(IFormFile file)
+        public async Task<string> uploadFile(IFormFile file)
         {
             string webRootPath = _webHostEnvironment.WebRootPath;
             string contentRootPath = _webHostEnvironment.ContentRootPath;
             Random r = new Random();
             string path = "-1";
-            string filePath ="-1";
+            string filePath = "-1";
             int random = r.Next();
             if (file != null && file.Length > 0)
             {
                 string extension = Path.GetExtension(file.FileName);
-                if (extension.ToLower().Equals(".jpg") || extension.ToLower().Equals(".jpeg") || extension.ToLower().Equals(".png"))
+                if (extension.ToLower().Equals(".jpg") || extension.ToLower().Equals(".jpeg") || extension.ToLower().Equals(".png") || extension.ToLower().Equals(".pdf"))
                 {
                     try
                     {
@@ -926,7 +994,7 @@ namespace POS_APPLICATION.Controllers
                             Directory.CreateDirectory(rootPath);
                         }
                         path = random + Path.GetFileName(file.FileName);
-                        filePath = rootPath+"\\"+ path;
+                        filePath = rootPath + "\\" + path;
                         using (FileStream stream = new FileStream(Path.Combine(rootPath, path), FileMode.Create))
                         {
                             file.CopyTo(stream);

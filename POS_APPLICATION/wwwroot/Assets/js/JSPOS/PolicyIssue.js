@@ -49,20 +49,27 @@
         })
     })
 }()
-function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GWAY_STATUS, GWAY_REFNO, PROFILE_ID, TRANS_REF_ID, PENDING_STATUS, INTGN_ID, TRANS_STATUS, TRANS_DATE) {
-    if ((sessionStorage.getItem("PayCheck") == "RenewalPay" || sessionStorage.getItem("PayCheck") == "TopupPay") && sessionStorage.getItem("Policy_NoF") != null) {
+function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GWAY_STATUS, GWAY_REFNO, PROFILE_ID, TRANS_REF_ID, PENDING_STATUS, INTGN_ID, TRANS_STATUS, TRANS_DATE, RCPT_TYPE) {
+    if (sessionStorage.getItem("PayCheck") == "RenewalPay" && sessionStorage.getItem("Policy_NoF") != null) {
         FPDM_PROPOSAL_NO = sessionStorage.getItem("Policy_NoF");
         FPDM_APPROVED = 'Y';
+        RCPT_TYPE = 2;
+    }
+    if (sessionStorage.getItem("PayCheck") == "TopupPay" && sessionStorage.getItem("Policy_NoF") != null) {
+        FPDM_PROPOSAL_NO = sessionStorage.getItem("Policy_NoF");
+        FPDM_APPROVED = 'Y';
+        RCPT_TYPE = 3;
     }
     if (sessionStorage.getItem("PayCheck") == "ProposalPay" && sessionStorage.getItem("Proposal_NoF") != null) {
         FPDM_PROPOSAL_NO = sessionStorage.getItem("Proposal_NoF");
+        RCPT_TYPE = 1;
     }
 
     $.ajax({
         "crossDomain": true,
         url: "" + Result_API + "/API/RECEIPT/SAVEorUPDATE_RECEIPT_INFO?FPDM_PROPOSAL_NO=" + FPDM_PROPOSAL_NO + "&FPDM_APPROVED=" + FPDM_APPROVED + "&CURR_CODE=" + CURR_CODE +
             "&CLLCT_AMOUNT=" + CLLCT_AMOUNT + "&GWAY_STATUS=" + GWAY_STATUS + "&GWAY_REFNO=" + GWAY_REFNO + "&PROFILE_ID=" + PROFILE_ID + "&TRANS_REF_ID=" + TRANS_REF_ID + "" +
-            "&PENDING_STATUS=" + PENDING_STATUS + "&INTGN_ID=" + INTGN_ID + "&TRANS_STATUS=" + TRANS_STATUS + "&TRANS_DATE=" + TRANS_DATE,
+            "&PENDING_STATUS=" + PENDING_STATUS + "&INTGN_ID=" + INTGN_ID + "&TRANS_STATUS=" + TRANS_STATUS + "&TRANS_DATE=" + TRANS_DATE + "&RCPT_TYPE=" + RCPT_TYPE,
         type: "POST",
         contentType: "application/json; charset=utf-8",
         headers: {
@@ -74,7 +81,7 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
         },
         datatype: 'jsonp',
         success: function (result) {
-            if ((sessionStorage.getItem("PayCheck") == "RenewalPay" || sessionStorage.getItem("PayCheck") == "TopupPay") && sessionStorage.getItem("Policy_NoF") != null){
+            if ((sessionStorage.getItem("PayCheck") == "RenewalPay" || sessionStorage.getItem("PayCheck") == "TopupPay") && sessionStorage.getItem("Policy_NoF") != null) {
                 console.log(result)
             }
             else {
