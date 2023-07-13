@@ -1217,60 +1217,22 @@
                                     <th>Relationship</th>
                                     <th>Age</th>
                                     <th>Status of health</th>
-                                    <th>Year of death</th>
+                                    <th>Year of death <span class="text-danger"><i>(If died)</i></span></th>
                                     <th>Age at death</th>
                                     <th>Cause of death</th>
+                                    <th>Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td><select class="form-control" name="FSCU_RELTN_FSCD_DID" id="FSCU_RELTN_FSCD_DID1"><option value="">Select</option><option value="28">Father</option><option value="29">Mother</option><option value="30">Brother</option><option value="3405">Sister</option><option value="3406">Spouse</option><option value="3407">Son</option><option value="3408">Daughter</option></select></td>
-                                    <td><input class="form-control" name="FSCF_AGE" id="FSCF_AGE1" type="number" min="1" max="150" /></td>
+                                    <td><input style='width:85px' class="form-control" name="FSCF_AGE" id="FSCF_AGE1" type="number" min="1" max="150" /></td>
                                     <td><select class="form-control" name="FSCF_STATOFHLTH" id="FSCF_STATOFHLTH1"><option value="">Select</option><option value="1">Good</option><option value="2">Fair</option><option value="3">Poor</option></select></td>
                                     <td><input class="form-control" name="FSCF_YEAROFDTH" id="FSCF_YEAROFDTH1" type="number" min="1" max="3000" /></td>
                                     <td><input class="form-control" name="FSCF_AGEOFDTH" id="FSCF_AGEOFDTH1" type="number" min="1" max="150" /></td>
                                     <td><select class="form-control" name="FSCF_CAUSOFDTH" id="FSCF_CAUSOFDTH1"><option value="">Select</option><option value="1">Natural</option><option value="2">Accidental</option><option value="3">Disease</option></select></td>
+                                    <td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td>
                                 </tr>
-                                @*<tr>
-                                        <td><select class="form-control" name="FSCU_RELTN_FSCD_DID" id="FSCU_RELTN_FSCD_DID2"><option value="">Select</option><option value="28">Father</option><option value="29">Mother</option><option value="30">Brother</option><option value="3405">Sister</option><option value="3406">Spouse</option><option value="3407">Son</option><option value="3408">Daughter</option></select></td>
-                                        <td><input class="form-control" name="FSCF_AGE" id="FSCF_AGE2" type="number" min="1" max="150" /></td>
-                                        <td><select class="form-control" name="FSCF_STATOFHLTH" id="FSCF_STATOFHLTH2"><option value="">Select</option><option value="1">Good</option><option value="2">Fair</option><option value="3">Poor</option></select></td>
-                                        <td><input class="form-control" name="FSCF_YEAROFDTH" id="FSCF_YEAROFDTH2" type="number" min="1" max="3000" /></td>
-                                        <td><input class="form-control" name="FSCF_AGEOFDTH" id="FSCF_AGEOFDTH2" type="number" min="1" max="150" /></td>
-                                        <td><select class="form-control" name="FSCF_CAUSOFDTH" id="FSCF_CAUSOFDTH2"><option value="">Select</option><option value="1">Natural</option><option value="2">Accidental</option><option value="3">Disease</option></select></td>
-                                    </tr>*@
-                                @*<tr>
-                                        <td><select class="form-control" name="FSCU_RELTN_FSCD_DID" id="FSCU_RELTN_FSCD_DID3"><option value="">Select</option><option value="28">Father</option><option value="29">Mother</option><option value="30">Brother</option><option value="3405">Sister</option><option value="3406">Spouse</option><option value="3407">Son</option><option value="3408">Daughter</option></select></td>
-                                        <td><input class="form-control" name="FSCF_AGE" id="FSCF_AGE3" type="number" min="1" max="150" /></td>
-                                        <td><select class="form-control" name="FSCF_STATOFHLTH" id="FSCF_STATOFHLTH3"><option value="">Select</option><option value="1">Good</option><option value="2">Fair</option><option value="3">Poor</option></select></td>
-                                        <td><input class="form-control" name="FSCF_YEAROFDTH" id="FSCF_YEAROFDTH3" type="number" min="1" max="3000" /></td>
-                                        <td><input class="form-control" name="FSCF_AGEOFDTH" id="FSCF_AGEOFDTH3" type="number" min="1" max="150" /></td>
-                                        <td><select class="form-control" name="FSCF_CAUSOFDTH" id="FSCF_CAUSOFDTH3"><option value="">Select</option><option value="1">Natural</option><option value="2">Accidental</option><option value="3">Disease</option></select></td>
-                                    </tr>
-                                    <tr>
-                                        <td><select class="form-control" name="FSCU_RELTN_FSCD_DID" id="FSCU_RELTN_FSCD_DID4"><option value="">Select</option><option value="28">Father</option><option value="29">Mother</option><option value="30">Brother</option><option value="3405">Sister</option><option value="3406">Spouse</option><option value="3407">Son</option><option value="3408">Daughter</option></select></td>
-                                        <td><input class="form-control" name="FSCF_AGE" id="FSCF_AGE4" type="number" min="1" max="150" /></td>
-                                        <td><select class="form-control" name="FSCF_STATOFHLTH" id="FSCF_STATOFHLTH4"><option value="">Select</option><option value="1">Good</option><option value="2">Fair</option><option value="3">Poor</option></select></td>
-                                        <td><input class="form-control" name="FSCF_YEAROFDTH" id="FSCF_YEAROFDTH4" type="number" min="1" max="3000" /></td>
-                                        <td><input class="form-control" name="FSCF_AGEOFDTH" id="FSCF_AGEOFDTH4" type="number" min="1" max="150" /></td>
-                                        <td><select class="form-control" name="FSCF_CAUSOFDTH" id="FSCF_CAUSOFDTH4"><option value="">Select</option><option value="1">Natural</option><option value="2">Accidental</option><option value="3">Disease</option></select></td>
-                                    </tr>
-                                    <tr>
-                                        <td><select class="form-control" name="FSCU_RELTN_FSCD_DID" id="FSCU_RELTN_FSCD_DID5"><option value="">Select</option><option value="28">Father</option><option value="29">Mother</option><option value="30">Brother</option><option value="3405">Sister</option><option value="3406">Spouse</option><option value="3407">Son</option><option value="3408">Daughter</option></select></td>
-                                        <td><input class="form-control" name="FSCF_AGE" id="FSCF_AGE5" type="number" min="1" max="150" /></td>
-                                        <td><select class="form-control" name="FSCF_STATOFHLTH" id="FSCF_STATOFHLTH5"><option value="">Select</option><option value="1">Good</option><option value="2">Fair</option><option value="3">Poor</option></select></td>
-                                        <td><input class="form-control" name="FSCF_YEAROFDTH" id="FSCF_YEAROFDTH5" type="number" min="1" max="3000" /></td>
-                                        <td><input class="form-control" name="FSCF_AGEOFDTH" id="FSCF_AGEOFDTH5" type="number" min="1" max="150" /></td>
-                                        <td><select class="form-control" name="FSCF_CAUSOFDTH" id="FSCF_CAUSOFDTH5"><option value="">Select</option><option value="1">Natural</option><option value="2">Accidental</option><option value="3">Disease</option></select></td>
-                                    </tr>
-                                    <tr>
-                                        <td><select class="form-control" name="FSCU_RELTN_FSCD_DID" id="FSCU_RELTN_FSCD_DID6"><option value="">Select</option><option value="28">Father</option><option value="29">Mother</option><option value="30">Brother</option><option value="3405">Sister</option><option value="3406">Spouse</option><option value="3407">Son</option><option value="3408">Daughter</option></select></td>
-                                        <td><input class="form-control" name="FSCF_AGE" id="FSCF_AGE6" type="number" min="1" max="150" /></td>
-                                        <td><select class="form-control" name="FSCF_STATOFHLTH" id="FSCF_STATOFHLTH6"><option value="">Select</option><option value="1">Good</option><option value="2">Fair</option><option value="3">Poor</option></select></td>
-                                        <td><input class="form-control" name="FSCF_YEAROFDTH" id="FSCF_YEAROFDTH6" type="number" min="1" max="3000" /></td>
-                                        <td><input class="form-control" name="FSCF_AGEOFDTH" id="FSCF_AGEOFDTH6" type="number" min="1" max="150" /></td>
-                                        <td><select class="form-control" name="FSCF_CAUSOFDTH" id="FSCF_CAUSOFDTH6"><option value="">Select</option><option value="1">Natural</option><option value="2">Accidental</option><option value="3">Disease</option></select></td>
-                                    </tr>*@
                             </tbody>
                         </table>
                     </div>

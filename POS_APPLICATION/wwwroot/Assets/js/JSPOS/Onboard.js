@@ -876,26 +876,62 @@
         $(".closeRidersForm").click(function () {
             $("#RiderSection").modal("hide");
         })
-        $("#btnAddFamilyHstry").click(function () {
-            let table = document.getElementById("tblfamilyHistory").children[1]
-            console.dir(table)
-            let tableLength = document.getElementById("tblfamilyHistory").children[1].children.length
-            console.dir(tableLength)
-            let count = tableLength;
+    //    $("#btnAddFamilyHstry").click(function () {
+    //        let table = document.getElementById("tblfamilyHistory").children[1]
+    //        console.dir(table)
+    //        let tableLength = document.getElementById("tblfamilyHistory").children[1].children.length
+    //        console.dir(tableLength)
+    //        let count = tableLength;
 
-            let content = "<tr>" +
-                "<td><select class='form-control' name='FSCU_RELTN_FSCD_DID' id='FSCU_RELTN_FSCD_DID" + count + "'><option value=''>Select</option><option value='28'>Father</option><option value='29'>Mother</option><option value='30'>Brother</option><option value='3405'>Sister</option><option value='3406'>Spouse</option><option value='3407'>Son</option><option value='3408'>Daughter</option></select></td>" +
-                "<td><input class='form-control' name='FSCF_AGE' id='FSCF_AGE" + count + "' type='number' min='1' max='150' /></td>" +
-                "<td><select class='form-control' name='FSCF_STATOFHLTH' id='FSCF_STATOFHLTH" + count + "'><option value=''>Select</option><option value='1'>Good</option><option value='2'>Fair</option><option value='3'>Poor</option></select></td>" +
-                "<td><input class='form-control' name='FSCF_YEAROFDTH' id='FSCF_YEAROFDTH" + count + "' type='number' min='1' max='3000' /></td>" +
-                "<td><input class='form-control' name='FSCF_AGEOFDTH' id='FSCF_AGEOFDTH" + count + "' type='number' min='1' max='150' /></td>" +
-                "<td><select class='form-control' name='FSCF_CAUSOFDTH' id='FSCF_CAUSOFDTH" + count + "'><option value=''>Select</option><option value='1'>Natural</option><option value='2' Accidental</option><option value='3'>Disease</option></select></td>" +
-                "</tr>";
-            if (tableLength < 6) {
-                table.append(content)
-                console.log(table)
+    //        let content = "<tr>" +
+    //            "<td><select class='form-control' name='FSCU_RELTN_FSCD_DID' id='FSCU_RELTN_FSCD_DID" + count + "'><option value=''>Select</option><option value='28'>Father</option><option value='29'>Mother</option><option value='30'>Brother</option><option value='3405'>Sister</option><option value='3406'>Spouse</option><option value='3407'>Son</option><option value='3408'>Daughter</option></select></td>" +
+    //            "<td><input class='form-control' name='FSCF_AGE' id='FSCF_AGE" + count + "' type='number' min='1' max='150' /></td>" +
+    //            "<td><select class='form-control' name='FSCF_STATOFHLTH' id='FSCF_STATOFHLTH" + count + "'><option value=''>Select</option><option value='1'>Good</option><option value='2'>Fair</option><option value='3'>Poor</option></select></td>" +
+    //            "<td><input class='form-control' name='FSCF_YEAROFDTH' id='FSCF_YEAROFDTH" + count + "' type='number' min='1' max='3000' /></td>" +
+    //            "<td><input class='form-control' name='FSCF_AGEOFDTH' id='FSCF_AGEOFDTH" + count + "' type='number' min='1' max='150' /></td>" +
+    //            "<td><select class='form-control' name='FSCF_CAUSOFDTH' id='FSCF_CAUSOFDTH" + count + "'><option value=''>Select</option><option value='1'>Natural</option><option value='2' Accidental</option><option value='3'>Disease</option></select></td>" +
+    //            "</tr>";
+    //        if (tableLength < 6) {
+    //            table.append(content)
+    //            console.log(table)
+    //        }
+    //    })
+        // Attach a click event handler to the button
+        document.getElementById("btnAddFamilyHstry").addEventListener("click", function () {
+            var table = document.getElementById("tblfamilyHistory");
+            var rowCount = table.rows.length;
+
+            // Check if the maximum limit has been reached
+            if (rowCount >= 8) {
+                    Swal.fire({
+                        text: 'You have reached the maximum limit of 7 rows.',
+                        icon: 'info',
+                    })
+                return;
             }
-        })
+
+            // Clone the last row
+            var lastRow = rowCount - 1;
+            var newRow = table.rows[lastRow].cloneNode(true);
+
+            // Update the IDs of the cloned row
+            var rowInputs = newRow.getElementsByTagName("input");
+            var rowSelects = newRow.getElementsByTagName("select");
+
+            for (var i = 0; i < rowInputs.length; i++) {
+                rowInputs[i].id = rowInputs[i].id.replace(/\d+$/, lastRow + 1);
+                rowInputs[i].value = ""; // Clear the input values in the new row
+            }
+
+            for (var j = 0; j < rowSelects.length; j++) {
+                rowSelects[j].id = rowSelects[j].id.replace(/\d+$/, lastRow + 1);
+                rowSelects[j].value = ""; // Clear the select values in the new row
+            }
+
+            // Append the new row to the table
+            table.getElementsByTagName("tbody")[0].appendChild(newRow);
+        });
+
     })
 }()
 
@@ -1510,14 +1546,16 @@ function formatNumber(input) {
 }
 function DeleteTblRecord(elem, ID) {
     $(elem).closest('tr').remove();
-    if (rdersIDArr.length != 0) {
-        const index = rdersIDArr.indexOf(ID);
-        if (index > -1) {
-            rdersIDArr.splice(index, 1);
-            rdrsArray.splice(index, 1);
+    if (ID != "" || ID != undefined) {
+        if (rdersIDArr.length != 0) {
+            const index = rdersIDArr.indexOf(ID);
+            if (index > -1) {
+                rdersIDArr.splice(index, 1);
+                rdrsArray.splice(index, 1);
+            }
+            console.log(rdersIDArr)
+            console.log(rdrsArray)
         }
-        console.log(rdersIDArr)
-        console.log(rdrsArray)
     }
 }
 function ReturnQuestVal(ID, Val) {
