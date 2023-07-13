@@ -29,7 +29,7 @@
         //            ProcessGlobalCore(sessionPos);
         //        }
         //    }
-            
+
         //    let sessionCNIC = '';
         //    //let sessionPos = sessionStorage.getItem("GlobalPos");
         //    if (sessionStorage.getItem("cnic.") != null) {
@@ -80,7 +80,7 @@
                     //let sessionPos = getsession;
                     ProcessGlobalCore(sessionStorage.getItem("token"));
                 }
-            }            
+            }
         }
         let nf = new Intl.NumberFormat('en-US');
         if (sessionStorage.getItem("GlobalPos") != null) {
@@ -876,6 +876,26 @@
         $(".closeRidersForm").click(function () {
             $("#RiderSection").modal("hide");
         })
+        $("#btnAddFamilyHstry").click(function () {
+            let table = document.getElementById("tblfamilyHistory").children[1]
+            console.dir(table)
+            let tableLength = document.getElementById("tblfamilyHistory").children[1].children.length
+            console.dir(tableLength)
+            let count = tableLength;
+
+            let content = "<tr>" +
+                "<td><select class='form-control' name='FSCU_RELTN_FSCD_DID' id='FSCU_RELTN_FSCD_DID" + count + "'><option value=''>Select</option><option value='28'>Father</option><option value='29'>Mother</option><option value='30'>Brother</option><option value='3405'>Sister</option><option value='3406'>Spouse</option><option value='3407'>Son</option><option value='3408'>Daughter</option></select></td>" +
+                "<td><input class='form-control' name='FSCF_AGE' id='FSCF_AGE" + count + "' type='number' min='1' max='150' /></td>" +
+                "<td><select class='form-control' name='FSCF_STATOFHLTH' id='FSCF_STATOFHLTH" + count + "'><option value=''>Select</option><option value='1'>Good</option><option value='2'>Fair</option><option value='3'>Poor</option></select></td>" +
+                "<td><input class='form-control' name='FSCF_YEAROFDTH' id='FSCF_YEAROFDTH" + count + "' type='number' min='1' max='3000' /></td>" +
+                "<td><input class='form-control' name='FSCF_AGEOFDTH' id='FSCF_AGEOFDTH" + count + "' type='number' min='1' max='150' /></td>" +
+                "<td><select class='form-control' name='FSCF_CAUSOFDTH' id='FSCF_CAUSOFDTH" + count + "'><option value=''>Select</option><option value='1'>Natural</option><option value='2' Accidental</option><option value='3'>Disease</option></select></td>" +
+                "</tr>";
+            if (tableLength < 6) {
+                table.append(content)
+                console.log(table)
+            }
+        })
     })
 }()
 
@@ -1181,6 +1201,7 @@ async function calculateFaceValue() {
 
             $(result).each(function () {
                 $("#FCDM_FACE_VALUE").val(this.V_FACE_VALUE);
+                maxlimitVal(this.V_FACE_VALUE);
             });
         } catch (jqXHR) {
             if (jqXHR.status === 401) {
@@ -1339,10 +1360,10 @@ function setHeightMaxLength(Val) {
 }
 function setHeightDescp(Val) {
     if (Val[1] == ".") {
-    //    $("#heightResult").val(Val + " Inches");
+        //    $("#heightResult").val(Val + " Inches");
     }
     else {
-    //    $("#heightResult").val(Val + " Feet");
+        //    $("#heightResult").val(Val + " Feet");
     }
 }
 //---------------------------BMI CALCULATION-------------------------------//
@@ -1418,8 +1439,8 @@ function editThisDocument(ID) {
         cache: false,
         success: function (result) {
             $(result).each(function () {
-                sessionStorage.setItem("thisDocumentDode", this.DOCUMENT_CODE);
-                sessionStorage.getItem("thisDocumentDode");
+                sessionStorage.setItem("thisDocumentCode", this.DOCUMENT_CODE);
+                sessionStorage.getItem("thisDocumentCode");
                 let custDOB = (this.DOB).slice(0, 10);
                 $("#FCDM_DOCUMENT_ID").val(this.DOCUMENT_ID);
                 $("#FCDM_DOCUMENT_CODE").val(this.DOCUMENT_CODE);
@@ -1440,8 +1461,8 @@ function editThisDocument(ID) {
                 $("#FCDM_OWCUST_BMI").val(this.FCDM_OWCUST_BMI);
                 $("#FCDM_PAYING_TERM").val(this.MEMBERSHIP_TERM);
                 $("#FCDM_PLAN_CONTRIB").val(this.BASIC_CONTRIBUTION);
-                maxlimitVal(this.BASIC_CONTRIBUTION);
                 $("#FCDM_FACE_VALUE").val(this.POL_COVGE_SUMASSURD);
+                maxlimitVal(this.POL_COVGE_SUMASSURD);
                 $("#FSAG_AGENT_CODE").val(this.FSAG_AGENT_CODE);
             })
         },
@@ -1483,19 +1504,21 @@ function editThisDocument(ID) {
     });
 }
 function formatNumber(input) {
-  let value = input.value.replace(/,/g, ''); // Remove existing commas
-  let formattedValue = Number(value).toLocaleString(); // Format the number with commas
-  input.value = formattedValue;
+    let value = input.value.replace(/,/g, ''); // Remove existing commas
+    let formattedValue = Number(value).toLocaleString(); // Format the number with commas
+    input.value = formattedValue;
 }
-function DeleteTblRecord(elem,ID) {
+function DeleteTblRecord(elem, ID) {
     $(elem).closest('tr').remove();
     if (rdersIDArr.length != 0) {
-        rdersIDArr.pop(ID);
-        rdrsArray.pop('FCDR_DOC_RDR_ID' + ID)
+        const index = rdersIDArr.indexOf(ID);
+        if (index > -1) {
+            rdersIDArr.splice(index, 1);
+            rdrsArray.splice(index, 1);
+        }
         console.log(rdersIDArr)
         console.log(rdrsArray)
     }
-
 }
 function ReturnQuestVal(ID, Val) {
     ID = ID.slice(21)
@@ -1531,7 +1554,7 @@ function calcTotalIncome(VAL) {
     $("#FCFA_TOTAL_INCOME").val(Number(annualIncome) + Number(otherIncome));
     $("#FCFA_NET_SAVINGS").val((Number(annualIncome) + Number(otherIncome)) - (Number(expensesLastYr) + Number(expensesCurrYr)));
 }
-function DiseaseAnalysis(QuesID,Val) {
+function DiseaseAnalysis(QuesID, Val) {
     QuesID = QuesID.slice(21);
     $("#FCUQ_ANSR_YN" + QuesID).val(Val);
     let sessionPos = getSessionpos()
@@ -1548,7 +1571,7 @@ function DiseaseAnalysis(QuesID,Val) {
         $(".closeDiseaseForm").click(function () {
             $("#medicalUnderWT").modal("hide");
         })
-        let doc_code = sessionStorage.getItem("thisDocumentDode").slice(3);
+        let doc_code = sessionStorage.getItem("thisDocumentCode").slice(3);
         if (doc_code != null) {
             $.ajax({
                 "crossDomain": true,
@@ -1586,7 +1609,7 @@ function DiseaseAnalysis(QuesID,Val) {
         $(".closeDiseaseForm2").click(function () {
             $("#medicalUnderWT2").modal("hide");
         })
-        let doc_code = sessionStorage.getItem("thisDocumentDode").slice(3);
+        let doc_code = sessionStorage.getItem("thisDocumentCode").slice(3);
         if (doc_code != null) {
             $.ajax({
                 "crossDomain": true,
@@ -1619,6 +1642,33 @@ function DiseaseAnalysis(QuesID,Val) {
     if ($("#FSPQS_QSTNR_FSCD_ID" + QuesID).val() == "3543") {
         $("#INSUREREXIST_YN").attr("checked", true);
         $(".ExistingLifePlans").removeAttr("hidden", true);
+    }
+    if ($("#FSPQS_QSTNR_FSCD_ID" + QuesID).val() == "3641") {
+        $("#medicalUnderWT3").modal("show");
+        $(".closeDiseaseForm3").click(function () {
+            $("#medicalUnderWT3").modal("hide");
+        })
+    }
+    if ($("#FSPQS_QSTNR_FSCD_ID" + QuesID).val() == "3642") {
+        $("#medicalUnderWT4").modal("show");
+        $(".closeDiseaseForm4").click(function () {
+            $("#medicalUnderWT4").modal("hide");
+        })
+    }
+    if ($("#FSPQS_QSTNR_FSCD_ID" + QuesID).val() == "3643") {
+        $("#familyHistory").modal("show");
+        $(".closeFamilyHistory").click(function () {
+            $("#familyHistory").modal("hide");
+        })
+    }
+    if ($("#FSPQS_QSTNR_FSCD_ID" + QuesID).val() == "3644") {
+
+    }
+    if ($("#FSPQS_QSTNR_FSCD_ID" + QuesID).val() == "3645") {
+        $("#medicalUnderWT5").modal("show");
+        $(".closeDiseaseForm5").click(function () {
+            $("#medicalUnderWT5").modal("hide");
+        })
     }
 }
 function setAgentName(AgentCode) {
@@ -1669,9 +1719,9 @@ function showDisease(elem, DisID) {
             }
         }
     }
-    if (DisID >= 27) {
+    if (DisID >= 27 && DisID <= 33) {
         if ($('#tblMedCatgry tbody tr').length == 0) {
-            MedCatgryUniqueAdd(DisID, diseaseName)
+            MedCatgryUniqueAdd(DisID, diseaseName, "tblMedCatgry")
         }
         else {
             $('#tblMedCatgry tbody tr').each(function (index, row) {
@@ -1679,10 +1729,53 @@ function showDisease(elem, DisID) {
             });
             if (diseaseArray.includes('DiseaseID' + DisID)) {
             } else {
-                MedCatgryUniqueAdd(DisID, diseaseName)
+                MedCatgryUniqueAdd(DisID, diseaseName, "tblMedCatgry")
             }
         }
     }
+    if (DisID >= 34 && DisID <= 36) {
+        if ($('#tblconditionCatgry tbody tr').length == 0) {
+            MedCatgryUniqueAdd(DisID, diseaseName, "tblconditionCatgry")
+        }
+        else {
+            $('#tblconditionCatgry tbody tr').each(function (index, row) {
+                diseaseArray.push(row.children[0].children[0].id);
+            });
+            if (diseaseArray.includes('DiseaseID' + DisID)) {
+            } else {
+                MedCatgryUniqueAdd(DisID, diseaseName, "tblconditionCatgry")
+            }
+        }
+    }
+    if (DisID >= 37 && DisID <= 40) {
+        if ($('#tbldiseaseSelect tbody tr').length == 0) {
+            MedCatgryUniqueAdd(DisID, diseaseName, "tbldiseaseSelect")
+        }
+        else {
+            $('#tbldiseaseSelect tbody tr').each(function (index, row) {
+                diseaseArray.push(row.children[0].children[0].id);
+            });
+            if (diseaseArray.includes('DiseaseID' + DisID)) {
+            } else {
+                MedCatgryUniqueAdd(DisID, diseaseName, "tbldiseaseSelect")
+            }
+        }
+    }
+    if (DisID >= 41) {
+        if ($('#tblfemaleCatgry tbody tr').length == 0) {
+            MedCatgryUniqueAdd(DisID, diseaseName, "tblfemaleCatgry")
+        }
+        else {
+            $('#tblfemaleCatgry tbody tr').each(function (index, row) {
+                diseaseArray.push(row.children[0].children[0].id);
+            });
+            if (diseaseArray.includes('DiseaseID' + DisID)) {
+            } else {
+                MedCatgryUniqueAdd(DisID, diseaseName, "tblfemaleCatgry")
+            }
+        }
+    }
+    console.log(diseaseArray);
 }
 function checkRider(RdrYN) {
     if (RdrYN == "1") {
@@ -1705,35 +1798,41 @@ function AddRdr(elem, ID) {
         $("#rdrInput" + ID).attr("checked", true);
         $(elem).addClass("bg-info");
         if ($('#tableRiders tbody tr').length == 0) {
+            rdrsArray.push('FCDR_DOC_RDR_ID' + ID)
             rdersIDArr.push(ID)
             RidersUniqueAdd(ID, rdrName)
+            console.log(rdersIDArr)
+            console.log(rdrsArray)
         }
         else {
-            rdersIDArr.push(ID)
-            $('#tableRiders tbody tr').each(function (index, row) {
-                rdrsArray.push(row.children[0].children[0].id);
-            });
-            console.log("riders array")
-            console.log(rdrsArray)
-            //alert(ID)
             if (rdrsArray.includes('FCDR_DOC_RDR_ID' + ID)) {
             }
             else {
-                console.log(rdersIDArr)
-                if (rdersIDArr.includes('19') && rdersIDArr.includes('20')) {
-                    $(elem).removeClass("bg-info");
-                    $("#rdrInput" + ID).removeAttr("checked", true);
-                    Swal.fire({
-                        icon: 'info',
-                        //title: 'Alert',
-                        text: 'You cannot select ADB & ADD together!',
-                    }).then(() => {
-                        rdersIDArr.pop(ID)
+                if (ID == 19 || ID == 20) {
+                    if (rdersIDArr.includes('19') || rdersIDArr.includes('20')) {
+                        $(elem).removeClass("bg-info");
+                        $("#rdrInput" + ID).removeAttr("checked", true);
+                        Swal.fire({
+                            icon: 'info',
+                            text: 'You cannot select ADB & ADD together!',
+                        }).then(() => {
+                            console.log(rdersIDArr)
+                        })
+                    }
+                    else {
+                        rdrsArray.push('FCDR_DOC_RDR_ID' + ID)
+                        rdersIDArr.push(ID)
+                        RidersUniqueAdd(ID, rdrName)
                         console.log(rdersIDArr)
-                    })
+                        console.log(rdrsArray)
+                    }
                 }
                 else {
+                    rdrsArray.push('FCDR_DOC_RDR_ID' + ID)
+                    rdersIDArr.push(ID)
                     RidersUniqueAdd(ID, rdrName)
+                    console.log(rdersIDArr)
+                    console.log(rdrsArray)
                 }
             }
         }
@@ -1745,7 +1844,7 @@ function RidersUniqueAdd(ID, name) {
         "<td><input style='width:315px' class='form-control readonly' name='RDR_NAME' id='RDR_NAME" + ID + "' value='" + name + "' readonly /></td>" +
         "<td><input style='width:119px' class='form-control' name='FCDR_PAYING_TERM' id='FCDR_PAYING_TERM" + ID + "' placeholder='5 years' type='number' /></td>" +
         "<td><input style='width:150px' class='form-control' name='FCDR_FACE_VALUE' id='FCDR_FACE_VALUE" + ID + "' placeholder='100,000' type='number' /></td>" +
-        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' id='" + ID + "' onclick='DeleteTblRecord(this)' /></td></tr>"
+        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' id='" + ID + "' onclick='DeleteTblRecord(this,this.id)' /></td></tr>"
     )
 }
 function MedDiseasesUniqueAdd(ID, name) {
@@ -1753,15 +1852,15 @@ function MedDiseasesUniqueAdd(ID, name) {
         "<td><input style='width:200px' class='form-control readonly' name='DISEAESE_NAME' id='DISEAESE_NAME" + ID + "' value='" + name + "' readonly /></td>" +
         "<td><select style='width:119px' class='form-control' name='FCDS_DISEASE_DURATION' id='FCDS_DISEASE_DURATION" + ID + "'><option value=''>Select</option><option value='1'>Less than an year</option><option value='3'>1-5 years</option><option value='5'>Above 5 yearsr</option></select></td>" +
         "<td><input style='width:150px' class='form-control' name='FCDS_DISEASE_DETAILS' id='FCDS_DISEASE_DETAILS" + ID + "' placeholder='More Details' /></td>" +
-        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH" + ID + "' /></td>" +
+        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH' /></td>" +
         "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td></tr>"
     )
 }
-function MedCatgryUniqueAdd(ID, name) {
-    $("#tblMedCatgry tbody").append("<tr><td hidden><input class='form-control' name='DiseaseID' id='DiseaseID" + ID + "' value='" + ID + "' /></td>" +
+function MedCatgryUniqueAdd(ID, name, table) {
+    $("#" + table + " tbody").append("<tr><td hidden><input class='form-control' name='DiseaseID' id='DiseaseID" + ID + "' value='" + ID + "' /></td>" +
         "<td><input style='width:280px' class='form-control readonly' name='DISEAESE_NAME' id='DISEAESE_NAME" + ID + "' value='" + name + "' readonly /></td>" +
-        "<td><input style='width:150px' class='form-control' name='FCDS_DISEASE_DETAILS' id='FCDS_DISEASE_DETAILS" + ID + "' placeholder='More Details' /></td>" +
-        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH" + ID + "' /></td>" +
+        "<td><input style='width:150px' class='form-control' name='FCDS_DISEASE_DETAILS' id='FCDS_DISEASE_DETAILS" + ID + "' placeholder='Details' /></td>" +
+        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH' /></td>" +
         "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td></tr>"
     )
 }
@@ -1778,6 +1877,5 @@ const maxlimitVal = (Contribution) => {
         $('.FCUQ_ANSR_YN').removeAttr("required", true);
         $('.FSPQS_QSTNR_FSCD_ID').removeAttr("required", true);
         $('.FCUQ_ANSR_YN').val("");
-        $(".fs").val("");
     }
 }

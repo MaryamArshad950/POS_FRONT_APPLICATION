@@ -7,6 +7,7 @@
             localStorage.clear();
             sessionStorage.clear();
         } else {
+
             if (sessionStorage.getItem("successFreelook") != '') {
                 Swal.fire({
                     text: 'Your Request has been received.',

@@ -58,17 +58,17 @@ function togglePasswordVisibility() {
 //    });
 //}
 function readURLFront(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
 
-            reader.onload = function (e) {
-                $('#imageResultFront')
-                    .attr('src', e.target.result);
-                $('#imageResultFront')
-                    .addClass('w-50');
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
+        reader.onload = function (e) {
+            $('#imageResultFront')
+                .attr('src', e.target.result);
+            $('#imageResultFront')
+                .addClass('w-50');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
 }
 function readURLBack(input) {
     if (input.files && input.files[0]) {
@@ -96,7 +96,7 @@ function readURLPrsnl(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
-function openGuardianInfo(Val) {    
+function openGuardianInfo(Val) {
     if (Val < 18) {
         $("#guardian_infoRow").removeAttr("hidden", true);
         //$("#guardian_name").attr("required",true);
@@ -130,7 +130,7 @@ if (sessionStorage.getItem("cnic.") != null) {
 
 function PaymentByCash(PolicyNum) {
     //objDmsHdr = JSON.parse(objDmsHdr)
-    alert($(".ContribAmtoPay").html())
+    //    alert($(".ContribAmtoPay").html())
     let paymentAmount = '';
     if ($(".ContribAmtoPay").html() != undefined) {
         paymentAmount = $(".ContribAmtoPay").html();
@@ -193,10 +193,10 @@ function PaymentByCash(PolicyNum) {
             //if (selectedOption === '') {
             //    Swal.showValidationMessage('Please select your proposal number');
             //}
-        //    if (bankName === '') {
-        //        Swal.showValidationMessage('Please enter the bank name');
-        //}
-        if(!fileUpload) {
+            //    if (bankName === '') {
+            //        Swal.showValidationMessage('Please enter the bank name');
+            //}
+            if (!fileUpload) {
                 Swal.showValidationMessage('Please upload a file');
             } else {
                 return {
@@ -227,7 +227,7 @@ function PaymentByCash(PolicyNum) {
                     console.log(result);
                     let dmsHdrId = result[0].NEW_DMSHDR_ID;
                     $.ajax({
-                        url: '/User/uploadimage',
+                        url: '/User/uploadFile',
                         type: 'POST',
                         data: formData,
                         processData: false,
@@ -427,7 +427,7 @@ function ProposalCashValues(selectdProposalNo, status) {
             $(result).each(function () {
                 $(".refund_amount").html(nf.format(this.CONTRIB_AMOUNT));
                 $(".contrib_paid").html("<p class='text-center'>Total Takaful Contribution Paid</p><p class='text-center'>PKR " + nf.format(this.CONTRIB_AMOUNT) + "</p>");
-                $("#FSSH_SURRNDR_AMT").val(this.CONTRIB_AMOUNT);
+                $("#FSSH_SRNDR_AMT").val(this.CONTRIB_AMOUNT);
             })
         },
         error: function (jqXHR, textStatus, errorThrown) {
