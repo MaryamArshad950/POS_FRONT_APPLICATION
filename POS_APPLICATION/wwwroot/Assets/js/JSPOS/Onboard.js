@@ -1583,6 +1583,7 @@ function ExistInsValNo(ID, VAL) {
     $("#FCIH_INSURER_PURPOSE").removeAttr("required", true);
     $("#FCIH_INSURER_NM").removeAttr("required", true);
     $("#FCIH_COND_ACCPTNCE").removeAttr("required", true);
+    $(".fact_find").val("");
 }
 function calcTotalIncome(VAL) {
     let annualIncome = $("#FCFA_ANNUAL_INCOME").val();

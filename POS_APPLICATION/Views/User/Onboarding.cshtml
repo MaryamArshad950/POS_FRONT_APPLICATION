@@ -10,8 +10,8 @@
     const api_port_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("POS_API_PNO").Value);
     const Result_API = (app_host_API + ":" + api_port_API);
     const corePos = @Json.Serialize(@Configuration.GetSection("Credentials").GetSection("Global").Value);
-    const global_host_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("GLOBAL_API_IP").Value);
-    const Global_API = (global_host_API);
+    const Global_API = @Json.Serialize(@Configuration.GetSection("Endpoint").GetSection("GLOBAL_API_IP").Value);
+    //const Global_API = (global_host_API);
 
     var setsession = sessionStorage.setItem("token", '@TempData["Token"]');
     var getsession = sessionStorage.getItem("token");
@@ -96,67 +96,39 @@
                                     <div class="col-md-3">
                                         <input class="form-control" name="FCIH_INSUREREXIST_ID" id="FCIH_INSUREREXIST_ID" value="0" hidden>
                                         <label for="" class="font-size-2 text-success">Policy Number</label>
-                                        <input class="form-control" name="FCIH_POLICY_NO" id="FCIH_POLICY_NO" placeholder="Policy Number" />
+                                        <input class="form-control fact_find" name="FCIH_POLICY_NO" id="FCIH_POLICY_NO" placeholder="Policy Number" />
                                     </div>
                                     <div class="col-md-3">
                                         <label for="" class="font-size-2 text-success">Sum Assured</label>
-                                        <input class="form-control" name="FCIH_SA_AMOUNT" id="FCIH_SA_AMOUNT" type="number" placeholder="500,000" />
+                                        <input class="form-control fact_find" name="FCIH_SA_AMOUNT" id="FCIH_SA_AMOUNT" type="number" placeholder="500,000" />
                                     </div>
                                     <div class="col-md-3">
                                         <label for="" class="font-size-2 text-success">Contribution/Deposit</label>
-                                        <input class="form-control" name="FCIH_CONTRIB_AMT" id="FCIH_CONTRIB_AMT" type="number" placeholder="100,000" />
+                                        <input class="form-control fact_find" name="FCIH_CONTRIB_AMT" id="FCIH_CONTRIB_AMT" type="number" placeholder="100,000" />
                                     </div>
                                     <div class="col-md-3">
                                         <label for="" class="font-size-2 text-success">Start Date</label>
-                                        <input class="form-control" name="FCIH_START_DATE" id="FCIH_START_DATE" type="date" />
+                                        <input class="form-control fact_find" name="FCIH_START_DATE" id="FCIH_START_DATE" type="date" />
                                     </div>
                                 </div>
                                 <div class="row w-100">
                                     <div class="col-md-3">
                                         <label for="" class="font-size-2 text-success">Maturity Date</label>
-                                        <input class="form-control" name="FCIH_MATURITY_DATE" id="FCIH_MATURITY_DATE" type="date" />
+                                        <input class="form-control fact_find" name="FCIH_MATURITY_DATE" id="FCIH_MATURITY_DATE" type="date" />
                                     </div>
                                     <div class="col-md-3">
                                         <label for="" class="font-size-2 text-success">Purpose</label>
-                                        <input class="form-control" name="FCIH_INSURER_PURPOSE" id="FCIH_INSURER_PURPOSE" placeholder="Purpose" />
+                                        <input class="form-control fact_find" name="FCIH_INSURER_PURPOSE" id="FCIH_INSURER_PURPOSE" placeholder="Purpose" />
                                     </div>
                                     <div class="col-md-3">
                                         <label for="" class="font-size-2 text-success">Company</label>
-                                        <input class="form-control" name="FCIH_INSURER_NM" id="FCIH_INSURER_NM" placeholder="Company" />
+                                        <input class="form-control fact_find" name="FCIH_INSURER_NM" id="FCIH_INSURER_NM" placeholder="Company" />
                                     </div>
                                     <div class="col-md-3">
                                         <label for="" class="font-size-2 text-success">Condition of Acceptance</label>
-                                        <input class="form-control" name="FCIH_COND_ACCPTNCE" id="FCIH_COND_ACCPTNCE" placeholder="Condition of Acceptance" />
+                                        <input class="form-control fact_find" name="FCIH_COND_ACCPTNCE" id="FCIH_COND_ACCPTNCE" placeholder="Condition of Acceptance" />
                                     </div>
                                 </div>
-                                @*<table class="table table-borderless" id="tblMyExistingLifePlans">
-                                        <thead>
-                                            <tr>
-                                                <th hidden>ID</th>
-                                                <th>Policy Number</th>
-                                                <th>Sum Assured</th>
-                                                <th>Contribution/Deposit</th>
-                                                <th>Start Date</th>
-                                                <th>Maturity Date</th>
-                                                <th>Purpose</th>
-                                                <th>Company</th>
-                                                <th>Condition of Acceptance</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td hidden><input class="form-control" name="FCIH_INSUREREXIST_ID" id="FCIH_INSUREREXIST_ID" value="0"></td>
-                                                <td><input class="form-control" name="FCIH_POLICY_NO" id="FCIH_POLICY_NO"></td>
-                                                <td><input class="form-control" name="FCIH_SA_AMOUNT" id="FCIH_SA_AMOUNT" type="number" min="1"></td>
-                                                <td><input class="form-control" name="FCIH_CONTRIB_AMT" id="FCIH_CONTRIB_AMT" type="number" min="1"></td>
-                                                <td><input class="form-control" name="FCIH_START_DATE" id="FCIH_START_DATE" type="date"></td>
-                                                <td><input class="form-control" name="FCIH_MATURITY_DATE" id="FCIH_MATURITY_DATE" type="date"></td>
-                                                <td><input class="form-control" name="FCIH_INSURER_PURPOSE" id="FCIH_INSURER_PURPOSE"></td>
-                                                <td><input class="form-control" name="FCIH_INSURER_NM" id="FCIH_INSURER_NM"></td>
-                                                <td><input class="form-control" name="FCIH_COND_ACCPTNCE" id="FCIH_COND_ACCPTNCE"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>*@
                             </div>
 
                             <h3 class="card-title mt-5">Financial Details</h3>

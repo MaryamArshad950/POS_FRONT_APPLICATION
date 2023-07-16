@@ -711,6 +711,7 @@
 
         $("#btnPaymentProcess").click(function () {
             let Prpsl_No = sessionStorage.getItem("Prpsl_No");
+            sessionStorage.setItem("PayCheck", "ProposalPay");
             $.ajax({
                 //"async": false,
                 "crossDomain": true,
@@ -1326,6 +1327,7 @@
             $("#PaymentType").attr("required", true);
             $(".bank_charges").html("2.6%")
             $("#chargesDisclaimer").modal("show");
+            sessionStorage.setItem("BNK_CHRGS", "2669");
         })
         $("#btnNIFTPay").click(function () {
             $("#PaymentType").val("NI");
