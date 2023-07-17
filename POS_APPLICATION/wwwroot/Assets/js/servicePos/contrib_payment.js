@@ -33,6 +33,7 @@
                     $("#PaymentType").val("CC");
                     $(".bank_charges").html("2.6%")
                     $("#chargesDisclaimer").modal("show");
+                    sessionStorage.setItem("BNK_CHRGS", "2669");
                 })
                 $("#btnNIFTPay").click(function () {
                     $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
@@ -184,6 +185,7 @@ function checkValue(val) {
 function NB_Payments(Val, ID) {
     let proposalIn = document.getElementById("FPDM_PROPOSAL_NO");
     let policyIn = document.getElementById("FPDM_POLICY_NO");
+    $(".paymode-select").attr("hidden", true);
     if (Val == 1) {
         $("#FPDM_POLICY_NO").attr("hidden", true);
         $(".indexation-contribution").attr("hidden", true);

@@ -1,5 +1,7 @@
 ﻿!function () {
     $(document).ready(function () {
+        let RCPT_TYPE = 1;
+        let BNK_CHRGS = Number(sessionStorage.getItem("BNK_CHRGS"));
         const urlParams = new URLSearchParams(location.search);
         for (const [key, value] of urlParams) {
             sessionStorage.setItem(`${key}`, `${value}`);
@@ -18,7 +20,7 @@
             let INTGN_ID = sessionStorage.getItem("integration_id");
             let TRANS_STATUS = sessionStorage.getItem("data.message");
             let TRANS_DATE = sessionStorage.getItem("created_at").slice(0, 10);
-            Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GWAY_STATUS, GWAY_REFNO, PROFILE_ID, TRANS_REF_ID, PENDING_STATUS, INTGN_ID, TRANS_STATUS, TRANS_DATE);
+            Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GWAY_STATUS, GWAY_REFNO, PROFILE_ID, TRANS_REF_ID, PENDING_STATUS, INTGN_ID, TRANS_STATUS, TRANS_DATE, RCPT_TYPE, BNK_CHRGS);
         }
         if (sessionStorage.getItem("success") != 'true' && sessionStorage.getItem("RC") == null) {
             $("#failure").removeAttr("hidden", true);
@@ -37,8 +39,8 @@
             let PENDING_STATUS = sessionStorage.getItem("pending");
             let INTGN_ID = sessionStorage.getItem("integration_id");
             let TRANS_STATUS = sessionStorage.getItem("data.message");
-            let TRANS_DATE = sessionStorage.getItem("created_at")
-            Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GWAY_STATUS, GWAY_REFNO, PROFILE_ID, TRANS_REF_ID, PENDING_STATUS, INTGN_ID, TRANS_STATUS, TRANS_DATE);
+            let TRANS_DATE = sessionStorage.getItem("created_at");
+            Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GWAY_STATUS, GWAY_REFNO, PROFILE_ID, TRANS_REF_ID, PENDING_STATUS, INTGN_ID, TRANS_STATUS, TRANS_DATE, RCPT_TYPE, BNK_CHRGS);
         }
         if (sessionStorage.getItem("RC") != null && sessionStorage.getItem("RC") != '00' || sessionStorage.getItem("TS") != 'P' && sessionStorage.getItem("success") == null) {
             window.location.href = "/Basic_information";
@@ -49,7 +51,7 @@
         })
     })
 }()
-function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GWAY_STATUS, GWAY_REFNO, PROFILE_ID, TRANS_REF_ID, PENDING_STATUS, INTGN_ID, TRANS_STATUS, TRANS_DATE, RCPT_TYPE) {
+function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GWAY_STATUS, GWAY_REFNO, PROFILE_ID, TRANS_REF_ID, PENDING_STATUS, INTGN_ID, TRANS_STATUS, TRANS_DATE, RCPT_TYPE, BNK_CHRGS) {
     if (sessionStorage.getItem("PayCheck") == "RenewalPay" && sessionStorage.getItem("Policy_NoF") != null) {
         FPDM_PROPOSAL_NO = sessionStorage.getItem("Policy_NoF");
         FPDM_APPROVED = 'Y';
@@ -69,7 +71,7 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
         "crossDomain": true,
         url: "" + Result_API + "/API/RECEIPT/SAVEorUPDATE_RECEIPT_INFO?FPDM_PROPOSAL_NO=" + FPDM_PROPOSAL_NO + "&FPDM_APPROVED=" + FPDM_APPROVED + "&CURR_CODE=" + CURR_CODE +
             "&CLLCT_AMOUNT=" + CLLCT_AMOUNT + "&GWAY_STATUS=" + GWAY_STATUS + "&GWAY_REFNO=" + GWAY_REFNO + "&PROFILE_ID=" + PROFILE_ID + "&TRANS_REF_ID=" + TRANS_REF_ID + "" +
-            "&PENDING_STATUS=" + PENDING_STATUS + "&INTGN_ID=" + INTGN_ID + "&TRANS_STATUS=" + TRANS_STATUS + "&TRANS_DATE=" + TRANS_DATE + "&RCPT_TYPE=" + RCPT_TYPE,
+            "&PENDING_STATUS=" + PENDING_STATUS + "&INTGN_ID=" + INTGN_ID + "&TRANS_STATUS=" + TRANS_STATUS + "&TRANS_DATE=" + TRANS_DATE + "&RCPT_TYPE=" + RCPT_TYPE + "&BNK_CHRGS=" + BNK_CHRGS,
         type: "POST",
         contentType: "application/json; charset=utf-8",
         headers: {
@@ -84,7 +86,7 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
             if ((sessionStorage.getItem("PayCheck") == "RenewalPay" || sessionStorage.getItem("PayCheck") == "TopupPay") && sessionStorage.getItem("Policy_NoF") != null) {
                 console.log(result)
             }
-            else {
+            if (sessionStorage.getItem("PayCheck") == "ProposalPay" && sessionStorage.getItem("Prpsl_No") != null){
                 $(result).each(function () {
                     sessionStorage.setItem("NEW_POL_NO", this.NEW_POL_NO);
                     let NEW_POL_NO = sessionStorage.getItem("NEW_POL_NO");
