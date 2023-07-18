@@ -24,11 +24,12 @@
     $('.form-horizontal').submit(function () {
         $("#spinner").show();
     });
+
 }();
 
-$('.form-horizontal').submit(function () {
-    $("#spinner").show();
-});
+//$('.form-horizontal').submit(function () {
+//    $("#spinner").show();
+//});
 function togglePasswordVisibility() {
     var passwordInput = document.getElementById("SUM_USER_PASSWORD");
     var icon = document.querySelector(".password-toggle i");

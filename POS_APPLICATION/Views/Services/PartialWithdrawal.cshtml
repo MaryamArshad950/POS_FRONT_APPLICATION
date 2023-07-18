@@ -12,8 +12,7 @@
     sessionStorage.setItem("successWithdrawal", '@TempData["successMessage"]');
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-<script src="~/Assets/js/pos.js" async></script>
-<script src="~/Assets/js/servicePos/partialWthdrwl.js"></script>
+<script src="~/Assets/js/servicePos/partialWthdrwl.js" ></script>
 <form class="form-horizontal" action="/Services/REQUEST_PARTIAL_WITHDRW" method="post">
     <div class="card">
         <div class="card-body card-funds">
@@ -30,22 +29,22 @@
             <input name="FPDM_PROPOSAL_NO" id="FPDM_PROPOSAL_NO" hidden />
             <h4 class="text-center"><a class="change-policy-num">Select Policy Number</a></h4>
             @*@if (TempData["successMessage"] != null)
-        {<div class="modal fade" id="successRequest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <button type="button" class="close closeRequestSuccess" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                        <div class="modal-body">
-                            <div class="modal-icon">
-                                <img src="~/Assets/images/check.png" class="notebook_image center-img w-25" />
+                {<div class="modal fade" id="successRequest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <button type="button" class="close closeRequestSuccess" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <div class="modal-body">
+                                    <div class="modal-icon">
+                                        <img src="~/Assets/images/check.png" class="notebook_image center-img w-25" />
+                                    </div>
+                                    <h3 class="font-cursive text-center mt-3">Your Request has been received!</h3>
+                                </div>
                             </div>
-                            <h3 class="font-cursive text-center mt-3">Your Request has been received!</h3>
                         </div>
                     </div>
-                </div>
-            </div>
-        }*@
+                }*@
             <div class="serviceProcess" hidden>
                 <div class="row mt-4 justify-content-center">
                     <div class="col-md-6">
@@ -83,7 +82,6 @@
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     </div>
     <div class="modal fade" id="custBankDtls" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
