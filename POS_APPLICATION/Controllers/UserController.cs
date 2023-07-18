@@ -329,7 +329,8 @@ namespace POS_APPLICATION.Controllers
             participant.FCDM_OWCUST_WEITUNT = FCDM_OWCUST_WEITUNT;
             participant.FCDM_OWCUST_BMI = FCDM_OWCUST_BMI;
             participant.FCDM_OW_CUOCP_FSCD_ID = FCDM_OW_CUOCP_FSCD_ID;
-            participant.FCDM_OWCUST_ANNUINCOME = FCFA_NET_SAVINGS;
+            participant.FCDM_OWCUST_ANNUINCOME = FCFA_ANNUAL_INCOME;
+            //participant.FCDM_OWCUST_ANNUINCOME = FCFA_NET_SAVINGS;
             participant.FCDM_PFREQ_FSCD_ID = FCDM_PFREQ_FSCD_ID;
             participant.FCDM_PLAN_CONTRIB = FCDM_PLAN_CONTRIB;
             participant.FCDM_PAYING_TERM = FCDM_PAYING_TERM;
