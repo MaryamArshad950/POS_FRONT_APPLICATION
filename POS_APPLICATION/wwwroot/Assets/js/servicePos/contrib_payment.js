@@ -21,7 +21,7 @@
                     let orderId = Math.floor(Math.random() * 9000000) + 1000000;
                     orderId = orderId.toString();
                     sessionStorage.setItem("Policy_NoF", $("#policy_number").val());
-
+                    sessionStorage.setItem("TOPUP_CONTRIB", $("#TOTAL_AMOUNT").val());
                     $("#HS_TransactionReferenceNumber").val(orderId);
                     $("#TransactionReferenceNumber").val(orderId);
                     $("#TransactionAmount").val($("#TOTAL_AMOUNT").val());
@@ -321,9 +321,13 @@ function showFund(ProposalNum, PolicyNumb) {
             },
             datatype: 'jsonp',
             success: function (result) {
+                console.log(result)
                 $(".topup-data").removeAttr("hidden", true);
                 $(result).each(function () {
                     $(".fund_name").html(this.FUND_NAME);
+                    sessionStorage.setItem("PRMFND_ID", this.FSPRF_PRMFND_ID);
+                    sessionStorage.setItem("DISTRIBURATE", this.FPDF_DISTRIBURATE);
+                    sessionStorage.setItem("DOCUMENT_ID", this.DOCUMENT_ID);
                 })
             },
             error: function (jqXHR, textStatus, errorThrown) {

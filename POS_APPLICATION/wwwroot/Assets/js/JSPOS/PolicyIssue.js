@@ -85,6 +85,111 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
         success: function (result) {
             if ((sessionStorage.getItem("PayCheck") == "RenewalPay" || sessionStorage.getItem("PayCheck") == "TopupPay") && sessionStorage.getItem("Policy_NoF") != null) {
                 console.log(result)
+                $(result).each(function () {
+                    //sessionStorage.setItem("NEW_POL_NO", this.NEW_POL_NO);
+                    let NEW_POL_NO = this.NEW_POL_NO
+                    let message = this.APP_ALTMSG;
+                    if (this.APP_STS == "Y") {
+                        $("#policyText").removeAttr("hidden", true);
+                        let policyNumber = document.getElementById("policy-number");
+                        policyNumber.innerHTML = NEW_POL_NO;
+                        //let userID = sessionStorage.getItem("User");
+                        let DOCUMENT_ID = Number(sessionStorage.getItem("DOCUMENT_ID"));
+                        let TOPUP_CONTRIB = Number(sessionStorage.getItem("TOPUP_CONTRIB"));
+                        let PRMFND_ID = Number(sessionStorage.getItem("PRMFND_ID"));
+                        let DISTRIBURATE = Number(sessionStorage.getItem("DISTRIBURATE"));
+                        let CURRENCY_CODE = 1;
+                        let GLVOUCHR_NO = NEW_POL_NO;
+                        let STATUS = "Y";
+                        $.ajax({
+                            "crossDomain": true,
+                            url: "" + Result_API + "/API/TOPUP/SAVEorUPDATE_TOPUP_DETAILS?DOCUMENT_ID=" + DOCUMENT_ID + "&TOPUP_CONTRIB=" + TOPUP_CONTRIB + "&PRMFND_ID=" + PRMFND_ID + "&DISTRIBURATE=" + DISTRIBURATE + "&CURRENCY_CODE=" + CURRENCY_CODE + "&GLVOUCHR_NO=" + GLVOUCHR_NO + "&STATUS=" + STATUS,
+                            type: "GET",
+                            contentType: "application/json; charset=utf-8",
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'Access-Control-Allow-Origin': Result_API,
+                                'Access-Control-Allow-Methods': 'POST, GET',
+                                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                                'Authorization': 'Bearer ' + getsession
+                            },
+                            datatype: 'jsonp',
+                            success: function (result) {
+                                $(result).each(function () {
+                                    console.log(result)
+                                })
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                if (jqXHR.status === 401) {
+                                }
+                            }
+                        });
+                    //    if (userID != null) {
+                    //        $.ajax({
+                    //            "crossDomain": true,
+                    //            url: "" + Result_API + "/api/PosUser/GetPOSUserDetails/" + userID,
+                    //            type: "GET",
+                    //            contentType: "application/json; charset=utf-8",
+                    //            headers: {
+                    //                'Content-Type': 'application/x-www-form-urlencoded',
+                    //                'Access-Control-Allow-Origin': Result_API,
+                    //                'Access-Control-Allow-Methods': 'POST, GET',
+                    //                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                    //                'Authorization': 'Bearer ' + getsession
+                    //            },
+                    //            datatype: 'jsonp',
+                    //            success: function (result) {
+                    //                $(result).each(function () {
+                    //                    let cust_name = this.SUM_FULL_NAME;
+                    //                    let cust_number = (this.SUM_CUST_CONTPHONE).slice(1);
+                    //                    CLLCT_AMOUNT = CLLCT_AMOUNT.slice(0, CLLCT_AMOUNT.length - 2);
+                    //                    let nf = new Intl.NumberFormat('en-US');
+                    //                    CLLCT_AMOUNT = nf.format(CLLCT_AMOUNT);
+                    //                })
+                    //            },
+                    //            error: function (jqXHR, textStatus, errorThrown) {
+                    //                if (jqXHR.status === 401) {
+                    //                }
+                    //            }
+                    //        });
+                    //    }
+                    //    if (userID == null) {
+                    //        $.ajax({
+                    //            "crossDomain": true,
+                    //            url: "" + Result_API + "/api/PosUser/GetUserByUserCd/" + sessionStorage.getItem("cnic."),
+                    //            type: "GET",
+                    //            contentType: "application/json; charset=utf-8",
+                    //            headers: {
+                    //                'Content-Type': 'application/x-www-form-urlencoded',
+                    //                'Access-Control-Allow-Origin': Result_API,
+                    //                'Access-Control-Allow-Methods': 'POST, GET',
+                    //                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                    //                'Authorization': 'Bearer ' + getsession
+                    //            },
+                    //            datatype: 'jsonp',
+                    //            success: function (result) {
+                    //                $(result).each(function () {
+                    //                    let cust_name = this.SUM_FULL_NAME;
+                    //                    let cust_number = (this.SUM_CUST_CONTPHONE).slice(1);
+                    //                    CLLCT_AMOUNT = CLLCT_AMOUNT.slice(0, CLLCT_AMOUNT.length - 2);
+                    //                    let nf = new Intl.NumberFormat('en-US');
+                    //                    CLLCT_AMOUNT = nf.format(CLLCT_AMOUNT);
+                    //                })
+                    //            },
+                    //            error: function (jqXHR, textStatus, errorThrown) {
+                    //                if (jqXHR.status === 401) {
+                    //                }
+                    //            }
+                    //        });
+                    //    }
+                    }
+                    else {
+                        $("#policyfailed").removeAttr("hidden", true);
+                        $("#policyText").attr("hidden", true);
+                        let policyFailure = document.getElementById("policyfailed");
+                        policyFailure.innerHTML = 'Please check your email for policy attachments or respond to sms sent to your provided contact Number';
+                    }
+                });
             }
             if (sessionStorage.getItem("PayCheck") == "ProposalPay" && sessionStorage.getItem("Prpsl_No") != null){
                 $(result).each(function () {
