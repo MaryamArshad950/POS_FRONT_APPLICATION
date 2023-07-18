@@ -24,6 +24,7 @@
     $('.form-horizontal').submit(function () {
         $("#spinner").show();
     });
+
 }();
 
 //$('.form-horizontal').submit(function () {
