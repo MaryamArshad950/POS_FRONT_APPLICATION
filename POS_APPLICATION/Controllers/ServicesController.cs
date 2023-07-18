@@ -275,6 +275,7 @@ namespace POS_APPLICATION.Controllers
         }
 
         [HttpPost]
+
         public async Task<ActionResult> REQUEST_PARTIAL_WITHDRW(int FSCU_CUSTOMER_CODE, string SUM_FULL_NAME, string SUM_USER_EMAIL_ADDR, string SUM_CUST_CONTPHONE, string FSBK_BANK_NAME, string FSCB_BRANCH_NAME, string FSCB_ACCOUNT_TITLE, string FSCB_ACCOUNT_NO, string FSSH_POL_CODE, int FSSH_PW_AMT, string FPDM_PROPOSAL_NO)
         {
             CUSTOMER_BANK_DETL cust_bnk = new CUSTOMER_BANK_DETL();
