@@ -17,6 +17,9 @@
             let grossContrib = sessionStorage.getItem("GROSS_AMT");
             $(".contrib_paid").html("<p class='text-center'>Total Takaful Contribution Paid</p><p class='text-center'>PKR " + nf.format(grossContrib) + "</p>")
             $(".policy_no").html(policy_no)
+            if (policy_status == 'Approved') {
+                policy_status = "Y";
+            }
             $.ajax({
                 "crossDomain": true,
 
@@ -33,6 +36,7 @@
                 },
                 datatype: 'jsonp',
                 success: function (result) {
+                    console.log(result)
                     $(result).each(function () {
                         let units = this.FPDF_UNITS_END;
                         if (units == null) {
