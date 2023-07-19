@@ -322,9 +322,9 @@ namespace POS_APPLICATION.Controllers
                             foreach (JObject ReqArr in dict2.Children<JObject>())
                             {
                                 string ReqNo = ReqArr["REQ_CODE"].ToString();
-                                string msgText = "<p>Your Request for Partial cash withdraw has been received under the request number " + ReqNo + "</p><p>We will get back to you soon.</p><p>Thank You for using our services</p><p>For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.</p>";
+                                string msgText = "<p>Your request for partial cash withdrawal has been received under the request number " + ReqNo + "</p><p>We will get back to you soon.</p><p>Thank You for using our services</p><p>For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.</p>";
                                 await this.SendEmail(SUM_FULL_NAME, msgText, SUM_USER_EMAIL_ADDR, "Partial Withdrawal Request");
-                                var smsURL = "https://api.itelservices.net/send.php?transaction_id=" + randomNumber + "&user=salaamtakaf&pass=kdPre&number=" + (SUM_CUST_CONTPHONE).Substring(1) + "&text=Dear " + SUM_FULL_NAME + ", Your Request for Partial cash withdraw has been received under the request number " + ReqNo + ". We will get back to you soon. Thank You for using our services. For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111." + "&from=44731&type=sms";
+                                var smsURL = "https://api.itelservices.net/send.php?transaction_id=" + randomNumber + "&user=salaamtakaf&pass=kdPre&number=" + (SUM_CUST_CONTPHONE).Substring(1) + "&text=Dear " + SUM_FULL_NAME + ", Your Request for Partial cash withdrawal has been received under the request number " + ReqNo + ". We will get back to you soon. Thank You for using our services. For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111." + "&from=44731&type=sms";
                                 await client.PostAsync(smsURL, SendRequest);
                                 TempData["successMessage"] = "Request Processed Successfully";
                             }
@@ -388,7 +388,7 @@ namespace POS_APPLICATION.Controllers
                                 foreach (JObject ReqArr in dict2.Children<JObject>())
                                 {
                                     string ReqNo = ReqArr["REQ_CODE"].ToString();
-                                    string msgText = "<p>Your Request for Free Look has been received under the request number " + ReqNo + "</p><p>We will get back to you soon.</p><p>Thank You for using our services</p><p>For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.</p>";
+                                    string msgText = "<p>Your request for policy surrender has been received under the request number " + ReqNo + "</p><p>We will get back to you soon.</p><p>Thank You for using our services</p><p>For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.</p>";
                                     await this.SendEmail(SUM_FULL_NAME, msgText, SUM_USER_EMAIL_ADDR, "Partial Withdrawal Request");
                                     var smsURL = "https://api.itelservices.net/send.php?transaction_id=" + randomNumber + "&user=salaamtakaf&pass=kdPre&number=" + (SUM_CUST_CONTPHONE).Substring(1) + "&text=Dear " + SUM_FULL_NAME + ", Your Request for Free Look has been received under the request number " + ReqNo + ". We will get back to you soon. Thank You for using our services. For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111." + "&from=44731&type=sms";
                                     await client.PostAsync(smsURL, SendRequest);

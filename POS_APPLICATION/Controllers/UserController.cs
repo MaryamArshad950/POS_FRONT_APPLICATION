@@ -287,15 +287,15 @@ namespace POS_APPLICATION.Controllers
         public async Task<ActionResult> ADD_PARTICIPANT_BASICINFO(int FCDM_DOCUMENT_ID, string FCDM_DOCUMENT_CODE, int FSPM_PRODUCT_ID, string FCDM_OWCUST_FIRSTNAME, string FCDM_OWCUST_MDDLNAME, string FCDM_OWCUST_LASTNAME,
                                                                   string FCDM_OWCUST_CNIC, int FCDM_OW_GENDR_FSCD_ID, DateTime FCDM_OWCUST_DOB,
                                                                   string FCDM_OWCUST_MOBILENO,
-                                                                  string FCDM_OWCUST_EMAILADDR, float FCDM_OWCUST_HEITACT, int FCDM_OWCUST_HEITUNT,
+                                                                  string FCDM_OWCUST_EMAILADDR, decimal FCDM_OWCUST_HEITACT, int FCDM_OWCUST_HEITUNT,
                                                                   int FCDM_OWCUST_WEITACT, int FCDM_OWCUST_WEITUNT, float FCDM_OWCUST_BMI, int FCDM_OW_CUOCP_FSCD_ID,
-                                                                  int FCDM_PFREQ_FSCD_ID, int FCDM_PLAN_CONTRIB, int FCDM_PAYING_TERM, int FCDM_FACE_VALUE,
+                                                                  int FCDM_PFREQ_FSCD_ID, string FCDM_PLAN_CONTRIB, int FCDM_PAYING_TERM, string FCDM_FACE_VALUE,
                                                                   int FCDM_PLAN_CASE_STATUS, int FCDM_COVER_MULTIPLE, int FCDM_CONTRIB_IDX_RATE,
                                                                   int FSAG_AGENT_CODE, int FCDM_FACEVAL_IDX_RATE, int FCDM_OW_FSNT_IDENTYPE_ID, int FCDM_BENEFIT_TERM,
                                                                   int[] FCUQ_CHNLUW_QSN_ID, int[] FSPQS_QSTNR_FSCD_ID, string[] FCUQ_ANSR_YN, int[] FCUQ_PARENT_ID,
-                                                                  int[] FCIH_INSUREREXIST_ID, string FCIH_INSUREREXIST_YN, string[] FCIH_POLICY_NO, int[] FCIH_SA_AMOUNT, int[] FCIH_CONTRIB_AMT, DateTime[] FCIH_START_DATE, DateTime[] FCIH_MATURITY_DATE, string[] FCIH_INSURER_PURPOSE, string[] FCIH_INSURER_NM, string[] FCIH_COND_ACCPTNCE,
-                                                                  int FCFA_FIN_ID, int FCFA_ANNUAL_INCOME, int FCFA_OTHER_INCOME, int FCFA_TOTAL_INCOME,
-                                                                  int FCFA_CUST_EXPENSES, int FCFA_EXPENSES_LASTYR, int FCFA_EXPENSES_CURRENTYR, int FCFA_NET_SAVINGS, string FCFA_ADDTNL_DTLS,
+                                                                  int[] FCIH_INSUREREXIST_ID, string FCIH_INSUREREXIST_YN, string[] FCIH_POLICY_NO, string[] FCIH_SA_AMOUNT, string[] FCIH_CONTRIB_AMT, DateTime[] FCIH_START_DATE, DateTime[] FCIH_MATURITY_DATE, string[] FCIH_INSURER_PURPOSE, string[] FCIH_INSURER_NM, string[] FCIH_COND_ACCPTNCE,
+                                                                  int FCFA_FIN_ID, string FCFA_ANNUAL_INCOME, string FCFA_OTHER_INCOME, string FCFA_TOTAL_INCOME,
+                                                                  string FCFA_CUST_EXPENSES, string FCFA_EXPENSES_LASTYR, string FCFA_EXPENSES_CURRENTYR, string FCFA_NET_SAVINGS, string FCFA_ADDTNL_DTLS,
                                                                   int[] FSFP_FINQUEST_FSCD_ID, int[] FSFP_FINQUEST_TYPE, int[] FCFN_FINQUEST_PRIORITYNO,
                                                                   int[] FSDI_DISEASE_ID, string[] FCDS_DISEASE_DURATION, string[] FCDS_DISEASE_DETAILS, int CHECK_RIDER, int[] FCDR_DOC_RDR_ID, int[] FSPM_PRODRDR_ID, int[] FCDR_PAYING_TERM, int[] FCDR_FACE_VALUE, IFormFile[] FPDD_PATH,
                                int[] FSCU_RELTN_FSCD_DID, int[] FSCF_AGE, string[] FSCF_STATOFHLTH, string[] FSCF_YEAROFDTH, int[] FSCF_AGEOFDTH, string[] FSCF_CAUSOFDTH)
@@ -329,17 +329,17 @@ namespace POS_APPLICATION.Controllers
             participant.FCDM_OWCUST_WEITUNT = FCDM_OWCUST_WEITUNT;
             participant.FCDM_OWCUST_BMI = FCDM_OWCUST_BMI;
             participant.FCDM_OW_CUOCP_FSCD_ID = FCDM_OW_CUOCP_FSCD_ID;
-            participant.FCDM_OWCUST_ANNUINCOME = FCFA_ANNUAL_INCOME;
+            participant.FCDM_OWCUST_ANNUINCOME = int.Parse(FCFA_ANNUAL_INCOME.Replace(",",""));
             //participant.FCDM_OWCUST_ANNUINCOME = FCFA_NET_SAVINGS;
             participant.FCDM_PFREQ_FSCD_ID = FCDM_PFREQ_FSCD_ID;
-            participant.FCDM_PLAN_CONTRIB = FCDM_PLAN_CONTRIB;
+            participant.FCDM_PLAN_CONTRIB = int.Parse(FCDM_PLAN_CONTRIB.Replace(",", ""));
             participant.FCDM_PAYING_TERM = FCDM_PAYING_TERM;
             participant.FCDM_PLAN_CASE_STATUS = FCDM_PLAN_CASE_STATUS;
             participant.FCDM_COVER_MULTIPLE = FCDM_COVER_MULTIPLE;
             participant.FCDM_CONTRIB_IDX_RATE = FCDM_CONTRIB_IDX_RATE;
             participant.FCDM_FACEVAL_IDX_RATE = FCDM_FACEVAL_IDX_RATE;
             participant.FCDM_OW_FSNT_IDENTYPE_ID = FCDM_OW_FSNT_IDENTYPE_ID;
-            participant.FCDM_FACE_VALUE = FCDM_FACE_VALUE;
+            participant.FCDM_FACE_VALUE = int.Parse(FCDM_FACE_VALUE.Replace(",", ""));
             participant.FSAG_AGENT_CODE = FSAG_AGENT_CODE;
             var strToken = HttpContext.Session.GetString("JwToken");
             if (strToken == null)
@@ -409,7 +409,7 @@ namespace POS_APPLICATION.Controllers
                                 }
                             }
                         }
-                        if (FCDM_PLAN_CONTRIB >= 500000)
+                        if (int.Parse(FCDM_PLAN_CONTRIB.Replace(",", "")) >= 500000)
                         {
                             questionsLength = FSPQS_QSTNR_FSCD_ID.Length;
                         }
@@ -601,8 +601,8 @@ namespace POS_APPLICATION.Controllers
                                 takaful_hist.SUM_SYS_USER_CODE = customerCNIC;
                                 takaful_hist.FCIH_INSUREREXIST_YN = FCIH_INSUREREXIST_YN;
                                 takaful_hist.FCIH_POLICY_NO = FCIH_POLICY_NO[i];
-                                takaful_hist.FCIH_SA_AMOUNT = FCIH_SA_AMOUNT[i];
-                                takaful_hist.FCIH_CONTRIB_AMT = FCIH_CONTRIB_AMT[i];
+                                takaful_hist.FCIH_SA_AMOUNT = int.Parse(FCIH_SA_AMOUNT[i].Replace(",", ""));
+                                takaful_hist.FCIH_CONTRIB_AMT = int.Parse(FCIH_CONTRIB_AMT[i].Replace(",", ""));
                                 takaful_hist.FCIH_START_DATE = FCIH_START_DATE[i];
                                 takaful_hist.FCIH_MATURITY_DATE = FCIH_MATURITY_DATE[i];
                                 takaful_hist.FCIH_INSURER_PURPOSE = FCIH_INSURER_PURPOSE[i];
@@ -628,13 +628,16 @@ namespace POS_APPLICATION.Controllers
                         //Financial details
                         fin_dtls.FCFA_FIN_ID = FCFA_FIN_ID;
                         fin_dtls.SUM_SYS_USER_CODE = customerCNIC;
-                        fin_dtls.FCFA_ANNUAL_INCOME = FCFA_ANNUAL_INCOME;
-                        fin_dtls.FCFA_OTHER_INCOME = FCFA_OTHER_INCOME;
-                        fin_dtls.FCFA_TOTAL_INCOME = FCFA_TOTAL_INCOME;
-                        fin_dtls.FCFA_CUST_EXPENSES = FCFA_CUST_EXPENSES;
-                        fin_dtls.FCFA_EXPENSES_LASTYR = FCFA_EXPENSES_LASTYR;
-                        fin_dtls.FCFA_EXPENSES_CURRENTYR = FCFA_EXPENSES_CURRENTYR;
-                        fin_dtls.FCFA_NET_SAVINGS = FCFA_NET_SAVINGS;
+                        fin_dtls.FCFA_ANNUAL_INCOME = int.Parse(FCFA_ANNUAL_INCOME.Replace(",", ""));
+                        if (FCFA_OTHER_INCOME != null || FCFA_OTHER_INCOME != "")
+                        {
+                            fin_dtls.FCFA_OTHER_INCOME = int.Parse(FCFA_OTHER_INCOME.Replace(",", ""));
+                        }
+                        fin_dtls.FCFA_TOTAL_INCOME = int.Parse(FCFA_TOTAL_INCOME.Replace(",", ""));
+                        //fin_dtls.FCFA_CUST_EXPENSES = int.Parse(FCFA_CUST_EXPENSES.Replace(",", ""));
+                        fin_dtls.FCFA_EXPENSES_LASTYR = int.Parse(FCFA_EXPENSES_LASTYR.Replace(",", ""));
+                        fin_dtls.FCFA_EXPENSES_CURRENTYR = int.Parse(FCFA_EXPENSES_CURRENTYR.Replace(",", ""));
+                        fin_dtls.FCFA_NET_SAVINGS = int.Parse(FCFA_NET_SAVINGS.Replace(",", ""));
                         fin_dtls.FCFA_ADDTNL_DTLS = FCFA_ADDTNL_DTLS;
                         fin_dtls.FCFA_CRDATE = DateTime.Today;
                         try

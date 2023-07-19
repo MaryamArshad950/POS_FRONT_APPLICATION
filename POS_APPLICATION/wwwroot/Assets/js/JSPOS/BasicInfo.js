@@ -205,7 +205,7 @@
                         let customer_code = this.FSCU_CUSTOMER_CODE;
                         sessionStorage.setItem("thisCustomerCode", customer_code);
                         sessionStorage.getItem("thisCustomerCode");
-                        $("#FSCU_CUST_ANNUAL_INCOME").val(this.FSCU_CUST_ANNUAL_INCOME);
+                        $("#FSCU_CUST_ANNUAL_INCOME").val(nf.format(this.FSCU_CUST_ANNUAL_INCOME));
                         if (this.FSCU_IDENTISSUE_DATE != null && this.FSCU_IDENTIEXPIRY_DATE != null) {
                             let FSCU_IDENTISSUE_DATE = this.FSCU_IDENTISSUE_DATE.slice(0, 10);
                             let FSCU_IDENTIEXPIRY_DATE = this.FSCU_IDENTIEXPIRY_DATE.slice(0, 10);
@@ -275,7 +275,7 @@
                         let customer_code = this.FSCU_CUSTOMER_CODE;
                         sessionStorage.setItem("thisCustomerCode", customer_code);
                         sessionStorage.getItem("thisCustomerCode");
-                        $("#FSCU_CUST_ANNUAL_INCOME").val(this.FSCU_CUST_ANNUAL_INCOME);
+                        $("#FSCU_CUST_ANNUAL_INCOME").val(nf.format(this.FSCU_CUST_ANNUAL_INCOME));
                         if (this.FSCU_IDENTISSUE_DATE != null && this.FSCU_IDENTIEXPIRY_DATE != null) {
                             let FSCU_IDENTISSUE_DATE = this.FSCU_IDENTISSUE_DATE.slice(0, 10);
                             let FSCU_IDENTIEXPIRY_DATE = this.FSCU_IDENTIEXPIRY_DATE.slice(0, 10);
@@ -343,6 +343,7 @@
             let current_country = $("#FSSC_COUNTRY_ID").val();
             let cust_cnic = $("#FSCU_IDENTIFICATION_NO").val();
             let annual_income = $("#FSCU_CUST_ANNUAL_INCOME").val();
+            annual_income = Number(annual_income.replaceAll(",", ""));
             let cnic_issuedate = $("#FSCU_IDENTISSUE_DATE").val();
             let cnic_expirydate = $("#FSCU_IDENTIEXPIRY_DATE").val();
            
