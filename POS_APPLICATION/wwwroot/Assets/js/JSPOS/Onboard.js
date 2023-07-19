@@ -1,5 +1,6 @@
 ﻿!function () {
     $(document).ready(function () {
+        var nf = new Intl.NumberFormat('en-US');
         $('#CUOCP_FSCD_ID').select2();
         $(".select2-container").addClass("w-100");
         $(".select2-selection").addClass("h-75");
@@ -82,7 +83,7 @@
                 }
             }
         }
-        let nf = new Intl.NumberFormat('en-US');
+        //let nf = new Intl.NumberFormat('en-US');
         if (sessionStorage.getItem("GlobalPos") != null) {
             getFinancialQues(sessionStorage.getItem("GlobalPos"));
         }
@@ -167,14 +168,14 @@
                 success: function (result) {
                     $(result).each(function () {
                         $("#FCFA_FIN_ID").val(this.FCFA_FIN_ID);
-                        $("#FCFA_ANNUAL_INCOME").val(this.FCFA_ANNUAL_INCOME);
-                        $("#FCFA_OTHER_INCOME").val(this.FCFA_OTHER_INCOME);
-                        $("#FCFA_TOTAL_INCOME").val(this.FCFA_TOTAL_INCOME);
-                        $("#FCFA_CUST_EXPENSES").val(this.FCFA_CUST_EXPENSES);
-                        $("#FCFA_EXPENSES_LASTYR").val(this.FCFA_EXPENSES_LASTYR);
-                        $("#FCFA_EXPENSES_CURRENTYR").val(this.FCFA_EXPENSES_CURRENTYR);
-                        $("#FCFA_NET_SAVINGS").val(this.FCFA_NET_SAVINGS);
-                        $("#FCFA_ADDTNL_DTLS").val(this.FCFA_ADDTNL_DTLS);
+                        $("#FCFA_ANNUAL_INCOME").val(nf.format(this.FCFA_ANNUAL_INCOME));
+                        $("#FCFA_OTHER_INCOME").val(nf.format(this.FCFA_OTHER_INCOME));
+                        $("#FCFA_TOTAL_INCOME").val(nf.format(this.FCFA_TOTAL_INCOME));
+                        $("#FCFA_CUST_EXPENSES").val(nf.format(this.FCFA_CUST_EXPENSES));
+                        $("#FCFA_EXPENSES_LASTYR").val(nf.format(this.FCFA_EXPENSES_LASTYR));
+                        $("#FCFA_EXPENSES_CURRENTYR").val(nf.format(this.FCFA_EXPENSES_CURRENTYR));
+                        $("#FCFA_NET_SAVINGS").val(nf.format(this.FCFA_NET_SAVINGS));
+                        $("#FCFA_ADDTNL_DTLS").val(nf.format(this.FCFA_ADDTNL_DTLS));
                     })
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -279,14 +280,14 @@
                     success: function (result) {
                         $(result).each(function () {
                             $("#FCFA_FIN_ID").val(this.FCFA_FIN_ID);
-                            $("#FCFA_ANNUAL_INCOME").val(this.FCFA_ANNUAL_INCOME);
-                            $("#FCFA_OTHER_INCOME").val(this.FCFA_OTHER_INCOME);
-                            $("#FCFA_TOTAL_INCOME").val(this.FCFA_TOTAL_INCOME);
-                            $("#FCFA_CUST_EXPENSES").val(this.FCFA_CUST_EXPENSES);
-                            $("#FCFA_EXPENSES_LASTYR").val(this.FCFA_EXPENSES_LASTYR);
-                            $("#FCFA_EXPENSES_CURRENTYR").val(this.FCFA_EXPENSES_CURRENTYR);
-                            $("#FCFA_NET_SAVINGS").val(this.FCFA_NET_SAVINGS);
-                            $("#FCFA_ADDTNL_DTLS").val(this.FCFA_ADDTNL_DTLS);
+                            $("#FCFA_ANNUAL_INCOME").val(nf.format(this.FCFA_ANNUAL_INCOME));
+                            $("#FCFA_OTHER_INCOME").val(nf.format(this.FCFA_OTHER_INCOME));
+                            $("#FCFA_TOTAL_INCOME").val(nf.format(this.FCFA_TOTAL_INCOME));
+                            $("#FCFA_CUST_EXPENSES").val(nf.format(this.FCFA_CUST_EXPENSES));
+                            $("#FCFA_EXPENSES_LASTYR").val(nf.format(this.FCFA_EXPENSES_LASTYR));
+                            $("#FCFA_EXPENSES_CURRENTYR").val(nf.format(this.FCFA_EXPENSES_CURRENTYR));
+                            $("#FCFA_NET_SAVINGS").val(nf.format(this.FCFA_NET_SAVINGS));
+                            $("#FCFA_ADDTNL_DTLS").val(nf.format(this.FCFA_ADDTNL_DTLS));
                         })
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -708,6 +709,7 @@
             let occupation = $("#FCDM_OW_CUOCP_FSCD_ID").val();
             let takafulContrib = $("#FCDM_PLAN_CONTRIB").val();
             let covergeAmt = $("#FCDM_FACE_VALUE").val();
+            covergeAmt = Number(covergeAmt.replaceAll(",", ""));
             let sessionPos = getSessionpos();
             setTimeout(function () {
                 $(".validation-alert").fadeTo(500, 0).slideUp(500, function () {
@@ -754,12 +756,12 @@
                 $(window).scrollTop(0);
                 return false;
             }
-            if (takafulContrib == 0 || takafulContrib == null || takafulContrib == undefined) {
+            if (takafulContrib == 0 || takafulContrib == null || takafulContrib == "" || takafulContrib == undefined) {
                 $(".flex-div").after("<div class='row validation-alert mt-3 mb-3'><div class='col-md-3 pb-5'><div class='alert alert-danger alert-dismissible fade show p-3 mt-2' role='alert'>Please enter valid takaful contribution </div></div></div>")
                 $(window).scrollTop(0);
                 return false;
             }
-            if (covergeAmt == 0 || covergeAmt == null || covergeAmt == undefined) {
+            if (covergeAmt == 0 || covergeAmt == null || covergeAmt == "" || covergeAmt == undefined) {
                 $(".flex-div").after("<div class='row validation-alert mt-3 mb-3'><div class='col-md-3 pb-5'><div class='alert alert-danger alert-dismissible fade show p-3 mt-2' role='alert'>Please enter valid takaful contribution again </div></div></div>")
                 $(window).scrollTop(0);
                 return false;
@@ -1197,6 +1199,7 @@ function checkValue(val) {
 async function calculateFaceValue() {
     let sessionPos = getSessionpos()
     let annual_savings = $("#FCDM_PLAN_CONTRIB").val();
+    annual_savings = Number(annual_savings.replaceAll(",", ""));
     let contrib_frequency = $("#FCDM_PFREQ_FSCD_ID").val();
     let cover_multiple_standard = $("#FCDM_PLAN_CASE_STATUS").val();
     let cover_multiple = $("#FCDM_COVER_MULTIPLE").val();
@@ -1236,7 +1239,7 @@ async function calculateFaceValue() {
             });
 
             $(result).each(function () {
-                $("#FCDM_FACE_VALUE").val(this.V_FACE_VALUE);
+                $("#FCDM_FACE_VALUE").val(nf.format(this.V_FACE_VALUE));
                 maxlimitVal(this.V_FACE_VALUE);
             });
         } catch (jqXHR) {
@@ -1496,8 +1499,8 @@ function editThisDocument(ID) {
                 $("#FCDM_OWCUST_WEITUNT").val(this.FCDM_OWCUST_WEITUNT);
                 $("#FCDM_OWCUST_BMI").val(this.FCDM_OWCUST_BMI);
                 $("#FCDM_PAYING_TERM").val(this.MEMBERSHIP_TERM);
-                $("#FCDM_PLAN_CONTRIB").val(this.BASIC_CONTRIBUTION);
-                $("#FCDM_FACE_VALUE").val(this.POL_COVGE_SUMASSURD);
+                $("#FCDM_PLAN_CONTRIB").val(nf.format(this.BASIC_CONTRIBUTION));
+                $("#FCDM_FACE_VALUE").val(nf.format(this.POL_COVGE_SUMASSURD));
                 maxlimitVal(this.POL_COVGE_SUMASSURD);
                 $("#FSAG_AGENT_CODE").val(this.FSAG_AGENT_CODE);
             })
@@ -1587,11 +1590,15 @@ function ExistInsValNo(ID, VAL) {
 }
 function calcTotalIncome(VAL) {
     let annualIncome = $("#FCFA_ANNUAL_INCOME").val();
+    annualIncome = annualIncome.replaceAll(",", "");
     let otherIncome = $("#FCFA_OTHER_INCOME").val();
+    otherIncome = otherIncome.replaceAll(",", "");
     let expensesLastYr = $("#FCFA_EXPENSES_LASTYR").val();
+    expensesLastYr = expensesLastYr.replaceAll(",", "");
     let expensesCurrYr = $("#FCFA_EXPENSES_CURRENTYR").val();
-    $("#FCFA_TOTAL_INCOME").val(Number(annualIncome) + Number(otherIncome));
-    $("#FCFA_NET_SAVINGS").val((Number(annualIncome) + Number(otherIncome)) - (Number(expensesLastYr) + Number(expensesCurrYr)));
+    expensesCurrYr = expensesCurrYr.replaceAll(",", "");
+    $("#FCFA_TOTAL_INCOME").val(nf.format(Number(annualIncome) + Number(otherIncome)));
+    $("#FCFA_NET_SAVINGS").val(nf.format((Number(annualIncome) + Number(otherIncome)) - (Number(expensesLastYr) + Number(expensesCurrYr))));
 }
 function DiseaseAnalysis(QuesID, Val) {
     QuesID = QuesID.slice(21);

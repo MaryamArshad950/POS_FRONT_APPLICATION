@@ -27,9 +27,17 @@
 
 }();
 
-//$('.form-horizontal').submit(function () {
-//    $("#spinner").show();
-//});
+function formatNumber(input) {
+    // Remove any existing commas and non-digit characters from the input value
+    let rawValue = input.value.replace(/,/g, '').replace(/\D/g, '');
+
+    // Convert the raw value to a number
+    let number = parseInt(rawValue, 10);
+
+    // Add commas back to the number
+    input.value = number.toLocaleString();
+}
+
 function togglePasswordVisibility() {
     var passwordInput = document.getElementById("SUM_USER_PASSWORD");
     var icon = document.querySelector(".password-toggle i");
@@ -285,7 +293,6 @@ function PaymentByCash(PolicyNum) {
 }
 function PolicyNumberSelection() {
     let thisCustCNIC = sessionStorage.getItem("cnic.");
-
     if (thisCustCNIC[5] != "-" && thisCustCNIC[13] != "-") {
         let n1 = thisCustCNIC.substring(0, 5);
         let n2 = thisCustCNIC.substring(5, 12);

@@ -216,7 +216,7 @@
             "async": false,
             "crossDomain": true,
             type: "GET",
-            url: "" + Result_API + "/api/GET_PROILLUSTRATION/" + document_code + "/9",
+            url: "" + Result_API + "/api/GET_PROILLUSTRATION/" + document_code + "/6",
             contentType: "application/json; charset=utf-8",
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -228,6 +228,7 @@
             datatype: 'jsonp',
             timeout: 2000,
             success: function (data) {
+                console.log(data)
                 for (let i = 0; i <= data.length - 1; i++) {
                     $("#tableillustrative tbody").append("<tr id='row_" + next + "'>" +
                         "<td>" + data[i].V_YEAR + "</td>" +
@@ -245,7 +246,7 @@
                     "async": false,
                     "crossDomain": true,
                     type: "GET",
-                    url: "" + Result_API + "/api/GET_PROILLUSTRATION/" + document_code + "/11",
+                    url: "" + Result_API + "/api/GET_PROILLUSTRATION/" + document_code + "/9",
                     contentType: "application/json; charset=utf-8",
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -257,6 +258,7 @@
                     datatype: 'jsonp',
                     timeout: 3000,
                     success: function (data2) {
+                        console.log(data2)
                         for (let i = 0; i <= data2.length - 1; i++) {
                             let rowID2 = "#row_" + nextUgr11;
                             $(rowID2).append(
@@ -270,7 +272,7 @@
                             "async": false,
                             "crossDomain": true,
                             type: "GET",
-                            url: "" + Result_API + "/api/GET_PROILLUSTRATION/" + document_code + "/13",
+                            url: "" + Result_API + "/api/GET_PROILLUSTRATION/" + document_code + "/11",
                             contentType: "application/json; charset=utf-8",
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -282,6 +284,7 @@
                             datatype: 'jsonp',
                             timeout: 4000,
                             success: function (data3) {
+                                console.log(data3)
                                 for (let i = 0; i <= data3.length - 1; i++) {
                                     let rowID3 = "#row_" + nextUgr13;
                                     $(rowID3).append(
