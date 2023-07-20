@@ -295,7 +295,7 @@ namespace POS_APPLICATION.Controllers
                                                                   int[] FCUQ_CHNLUW_QSN_ID, int[] FSPQS_QSTNR_FSCD_ID, string[] FCUQ_ANSR_YN, int[] FCUQ_PARENT_ID,
                                                                   int[] FCIH_INSUREREXIST_ID, string FCIH_INSUREREXIST_YN, string[] FCIH_POLICY_NO, string[] FCIH_SA_AMOUNT, string[] FCIH_CONTRIB_AMT, DateTime[] FCIH_START_DATE, DateTime[] FCIH_MATURITY_DATE, string[] FCIH_INSURER_PURPOSE, string[] FCIH_INSURER_NM, string[] FCIH_COND_ACCPTNCE,
                                                                   int FCFA_FIN_ID, string FCFA_ANNUAL_INCOME, string FCFA_OTHER_INCOME, string FCFA_TOTAL_INCOME,
-                                                                  string FCFA_CUST_EXPENSES, string FCFA_EXPENSES_LASTYR, string FCFA_EXPENSES_CURRENTYR, string FCFA_NET_SAVINGS, string FCFA_ADDTNL_DTLS,
+                                       string FCFA_EXPENSES_LASTYR, string FCFA_EXPENSES_CURRENTYR, string FCFA_NET_SAVINGS, string FCFA_ADDTNL_DTLS,
                                                                   int[] FSFP_FINQUEST_FSCD_ID, int[] FSFP_FINQUEST_TYPE, int[] FCFN_FINQUEST_PRIORITYNO,
                                                                   int[] FSDI_DISEASE_ID, string[] FCDS_DISEASE_DURATION, string[] FCDS_DISEASE_DETAILS, int CHECK_RIDER, int[] FCDR_DOC_RDR_ID, int[] FSPM_PRODRDR_ID, int[] FCDR_PAYING_TERM, int[] FCDR_FACE_VALUE, IFormFile[] FPDD_PATH,
                                int[] FSCU_RELTN_FSCD_DID, int[] FSCF_AGE, string[] FSCF_STATOFHLTH, string[] FSCF_YEAROFDTH, int[] FSCF_AGEOFDTH, string[] FSCF_CAUSOFDTH)

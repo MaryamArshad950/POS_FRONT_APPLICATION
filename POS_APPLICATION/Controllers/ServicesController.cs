@@ -341,13 +341,14 @@ namespace POS_APPLICATION.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> REQUEST_FREE_LOOK_SURRNDR(int FSCU_CUSTOMER_CODE, string FSSH_POL_CODE, int FSSH_SRNDR_AMT, string SUM_FULL_NAME, string SUM_USER_EMAIL_ADDR, string SUM_CUST_CONTPHONE, string FSBK_BANK_NAME, string FSCB_BRANCH_NAME, string FSCB_ACCOUNT_TITLE, string FSCB_ACCOUNT_NO, string FPDM_PROPOSAL_NO)
+        public async Task<ActionResult> REQUEST_FREE_LOOK_SURRNDR(int FSCU_CUSTOMER_CODE, string FSSH_POL_CODE, int FSSH_SRNDR_AMT, int FSSH_FREELOOK_AMT, string SUM_FULL_NAME, string SUM_USER_EMAIL_ADDR, string SUM_CUST_CONTPHONE, string FSBK_BANK_NAME, string FSCB_BRANCH_NAME, string FSCB_ACCOUNT_TITLE, string FSCB_ACCOUNT_NO, string FPDM_PROPOSAL_NO)
         {
             CUSTOMER_BANK_DETL cust_bnk = new CUSTOMER_BANK_DETL();
             cust_bnk.FSCU_CUSTOMER_CODE = FSCU_CUSTOMER_CODE;
             cust_bnk.FSSH_POL_CODE = FSSH_POL_CODE;
             cust_bnk.FPDM_PROPOSAL_NO = FPDM_PROPOSAL_NO;
             cust_bnk.FSSH_SRNDR_AMT = FSSH_SRNDR_AMT;
+            cust_bnk.FSSH_FREELOOK_AMT = FSSH_FREELOOK_AMT;
             cust_bnk.FSBK_BANK_NAME = FSBK_BANK_NAME;
             cust_bnk.FSCB_BRANCH_NAME = FSCB_BRANCH_NAME;
             cust_bnk.FSCB_ACCOUNT_NO = FSCB_ACCOUNT_NO;
@@ -369,7 +370,7 @@ namespace POS_APPLICATION.Controllers
                         try
                         {
                             var Token = strToken.Replace("{", "}");
-                            client.BaseAddress = new Uri(Request_Freelook);
+                            client.BaseAddress = new Uri(Request_Surrender);
                             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
                             client.DefaultRequestHeaders.Accept.Add(contentType);
                             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
@@ -389,8 +390,8 @@ namespace POS_APPLICATION.Controllers
                                 {
                                     string ReqNo = ReqArr["REQ_CODE"].ToString();
                                     string msgText = "<p>Your request for policy surrender has been received under the request number " + ReqNo + "</p><p>We will get back to you soon.</p><p>Thank You for using our services</p><p>For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.</p>";
-                                    await this.SendEmail(SUM_FULL_NAME, msgText, SUM_USER_EMAIL_ADDR, "Partial Withdrawal Request");
-                                    var smsURL = "https://api.itelservices.net/send.php?transaction_id=" + randomNumber + "&user=salaamtakaf&pass=kdPre&number=" + (SUM_CUST_CONTPHONE).Substring(1) + "&text=Dear " + SUM_FULL_NAME + ", Your Request for Free Look has been received under the request number " + ReqNo + ". We will get back to you soon. Thank You for using our services. For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111." + "&from=44731&type=sms";
+                                    await this.SendEmail(SUM_FULL_NAME, msgText, SUM_USER_EMAIL_ADDR, "Policy Surrender Request");
+                                    var smsURL = "https://api.itelservices.net/send.php?transaction_id=" + randomNumber + "&user=salaamtakaf&pass=kdPre&number=" + (SUM_CUST_CONTPHONE).Substring(1) + "&text=Dear " + SUM_FULL_NAME + ", Your Request for Policy surrender has been received under the request number " + ReqNo + ". We will get back to you soon. Thank You for using our services. For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111." + "&from=44731&type=sms";
                                     await client.PostAsync(smsURL, SendRequest);
                                     TempData["successMessage"] = "Request Processed Successfully";
                                 }
@@ -436,9 +437,9 @@ namespace POS_APPLICATION.Controllers
                                 foreach (JObject ReqArr in dict2.Children<JObject>())
                                 {
                                     string ReqNo = ReqArr["REQ_CODE"].ToString();
-                                    string msgText = "<p>Your Request for Free Look has been received under the request number " + ReqNo + "</p><p>We will get back to you soon.</p><p>Thank You for using our services</p><p>For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.</p>";
-                                    await this.SendEmail(SUM_FULL_NAME, msgText, SUM_USER_EMAIL_ADDR, "Partial Withdrawal Request");
-                                    var smsURL = "https://api.itelservices.net/send.php?transaction_id=" + randomNumber + "&user=salaamtakaf&pass=kdPre&number=" + (SUM_CUST_CONTPHONE).Substring(1) + "&text=Dear " + SUM_FULL_NAME + ", Your Request for Free Look has been received under the request number " + ReqNo + ". We will get back to you soon. Thank You for using our services. For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111." + "&from=44731&type=sms";
+                                    string msgText = "<p>Your request for free look has been received under the request number " + ReqNo + "</p><p>We will get back to you soon.</p><p>Thank You for using our services</p><p>For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111.</p>";
+                                    await this.SendEmail(SUM_FULL_NAME, msgText, SUM_USER_EMAIL_ADDR, "Free Look Request");
+                                    var smsURL = "https://api.itelservices.net/send.php?transaction_id=" + randomNumber + "&user=salaamtakaf&pass=kdPre&number=" + (SUM_CUST_CONTPHONE).Substring(1) + "&text=Dear " + SUM_FULL_NAME + ", Your Request for free look has been received under the request number " + ReqNo + ". We will get back to you soon. Thank You for using our services. For any further assistance, please contact CS@salaamtakaful.com via WhatsApp/UAN on 021-111-875-111." + "&from=44731&type=sms";
                                     await client.PostAsync(smsURL, SendRequest);
                                     TempData["successMessage"] = "Request Processed Successfully";
                                 }
@@ -448,11 +449,12 @@ namespace POS_APPLICATION.Controllers
                         {
                             TempData["successUSER"] = ex.ToString();
                         }
-                        return RedirectToAction("FreeLook");
+                        return RedirectToAction("PolicySurrender");
                     }
                 }
             }
         }
+
 
         [HttpPost]
         public async Task<ActionResult> INTIMATE_CLAIM(string FPDH_POLICY_NO, string SUM_FULL_NAME, string SUM_USER_EMAIL_ADDR, string SUM_CUST_CONTPHONE, int FPCL_CLMTP_FSCD_ID, string FCIH_PLACE_OF_EVNT, DateTime FCIH_DATE_EVNT, DateTime FPCL_DATE_TREATMNT, string FPCL_CLAIM_DESC, string FPCL_SIMLR_CNDITION, string FPCL_YES_DETAIL, string FPCL_TREATED, string FPCL_NAME, string FPCL_ADDRESS, DateTime FPCL_HOSPADMT_DATE, DateTime FPCL_HOSDIS_DATE, DateTime FPCL_ATTND_WORKPLACE, DateTime FPCL_REJOING_WORKPLACE, string FPCL_ACC_NAME, string FPCL_BANK_NAME, string FPCL_ACC_TYPE, string FPCL_ACCNO_IBFT)
