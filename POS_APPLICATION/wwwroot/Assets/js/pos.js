@@ -436,6 +436,7 @@ function ProposalCashValues(selectdProposalNo, status) {
                 $(".refund_amount").html(nf.format(this.CONTRIB_AMOUNT));
                 $(".contrib_paid").html("<p class='text-center'>Total Takaful Contribution Paid</p><p class='text-center'>PKR " + nf.format(this.CONTRIB_AMOUNT) + "</p>");
                 $("#FSSH_SRNDR_AMT").val(this.CONTRIB_AMOUNT);
+                $("#FSSH_FREELOOK_AMT").val(this.CONTRIB_AMOUNT);
             })
         },
         error: function (jqXHR, textStatus, errorThrown) {
