@@ -449,7 +449,7 @@ namespace POS_APPLICATION.Controllers
                         {
                             TempData["successUSER"] = ex.ToString();
                         }
-                        return RedirectToAction("PolicySurrender");
+                        return RedirectToAction("FreeLook");
                     }
                 }
             }

@@ -86,15 +86,11 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
             if ((sessionStorage.getItem("PayCheck") == "RenewalPay" || sessionStorage.getItem("PayCheck") == "TopupPay") && sessionStorage.getItem("Policy_NoF") != null) {
                 console.log(result)
                 $(result).each(function () {
-                    //sessionStorage.setItem("NEW_POL_NO", this.NEW_POL_NO);
                     let NEW_POL_NO = this.NEW_POL_NO
                     let message = this.APP_ALTMSG;
                     if (this.APP_STS == "Y") {
-                        $("#policyText").removeAttr("hidden", true);
-                        let policyNumber = document.getElementById("policy-number");
-                        policyNumber.innerHTML = NEW_POL_NO;
-                        //let userID = sessionStorage.getItem("User");
                         let DOCUMENT_ID = Number(sessionStorage.getItem("DOCUMENT_ID"));
+                        let SERIAL_NO = Number(sessionStorage.getItem("SERIAL_NO"));
                         let TOPUP_CONTRIB = Number(sessionStorage.getItem("TOPUP_CONTRIB"));
                         let PRMFND_ID = Number(sessionStorage.getItem("PRMFND_ID"));
                         let DISTRIBURATE = Number(sessionStorage.getItem("DISTRIBURATE"));
@@ -103,8 +99,8 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
                         let STATUS = "Y";
                         $.ajax({
                             "crossDomain": true,
-                            url: "" + Result_API + "/API/TOPUP/SAVEorUPDATE_TOPUP_DETAILS?DOCUMENT_ID=" + DOCUMENT_ID + "&TOPUP_CONTRIB=" + TOPUP_CONTRIB + "&PRMFND_ID=" + PRMFND_ID + "&DISTRIBURATE=" + DISTRIBURATE + "&CURRENCY_CODE=" + CURRENCY_CODE + "&GLVOUCHR_NO=" + GLVOUCHR_NO + "&STATUS=" + STATUS,
-                            type: "GET",
+                            url: "" + Result_API + "/API/TOPUP/SAVEorUPDATE_TOPUP_DETAILS?DOCUMENT_ID=" + DOCUMENT_ID + "&SERIAL_NO=" + SERIAL_NO + "&TOPUP_CONTRIB=" + TOPUP_CONTRIB + "&PRMFND_ID=" + PRMFND_ID + "&DISTRIBURATE=" + DISTRIBURATE + "&CURRENCY_CODE=" + CURRENCY_CODE + "&GLVOUCHR_NO=" + GLVOUCHR_NO + "&STATUS=" + STATUS,
+                            type: "POST",
                             contentType: "application/json; charset=utf-8",
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -116,7 +112,7 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
                             datatype: 'jsonp',
                             success: function (result) {
                                 $(result).each(function () {
-                                    console.log(result)
+                                    window.location.href = "/ContributionPayment"
                                 })
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
@@ -124,64 +120,6 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
                                 }
                             }
                         });
-                    //    if (userID != null) {
-                    //        $.ajax({
-                    //            "crossDomain": true,
-                    //            url: "" + Result_API + "/api/PosUser/GetPOSUserDetails/" + userID,
-                    //            type: "GET",
-                    //            contentType: "application/json; charset=utf-8",
-                    //            headers: {
-                    //                'Content-Type': 'application/x-www-form-urlencoded',
-                    //                'Access-Control-Allow-Origin': Result_API,
-                    //                'Access-Control-Allow-Methods': 'POST, GET',
-                    //                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
-                    //                'Authorization': 'Bearer ' + getsession
-                    //            },
-                    //            datatype: 'jsonp',
-                    //            success: function (result) {
-                    //                $(result).each(function () {
-                    //                    let cust_name = this.SUM_FULL_NAME;
-                    //                    let cust_number = (this.SUM_CUST_CONTPHONE).slice(1);
-                    //                    CLLCT_AMOUNT = CLLCT_AMOUNT.slice(0, CLLCT_AMOUNT.length - 2);
-                    //                    let nf = new Intl.NumberFormat('en-US');
-                    //                    CLLCT_AMOUNT = nf.format(CLLCT_AMOUNT);
-                    //                })
-                    //            },
-                    //            error: function (jqXHR, textStatus, errorThrown) {
-                    //                if (jqXHR.status === 401) {
-                    //                }
-                    //            }
-                    //        });
-                    //    }
-                    //    if (userID == null) {
-                    //        $.ajax({
-                    //            "crossDomain": true,
-                    //            url: "" + Result_API + "/api/PosUser/GetUserByUserCd/" + sessionStorage.getItem("cnic."),
-                    //            type: "GET",
-                    //            contentType: "application/json; charset=utf-8",
-                    //            headers: {
-                    //                'Content-Type': 'application/x-www-form-urlencoded',
-                    //                'Access-Control-Allow-Origin': Result_API,
-                    //                'Access-Control-Allow-Methods': 'POST, GET',
-                    //                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
-                    //                'Authorization': 'Bearer ' + getsession
-                    //            },
-                    //            datatype: 'jsonp',
-                    //            success: function (result) {
-                    //                $(result).each(function () {
-                    //                    let cust_name = this.SUM_FULL_NAME;
-                    //                    let cust_number = (this.SUM_CUST_CONTPHONE).slice(1);
-                    //                    CLLCT_AMOUNT = CLLCT_AMOUNT.slice(0, CLLCT_AMOUNT.length - 2);
-                    //                    let nf = new Intl.NumberFormat('en-US');
-                    //                    CLLCT_AMOUNT = nf.format(CLLCT_AMOUNT);
-                    //                })
-                    //            },
-                    //            error: function (jqXHR, textStatus, errorThrown) {
-                    //                if (jqXHR.status === 401) {
-                    //                }
-                    //            }
-                    //        });
-                    //    }
                     }
                     else {
                         $("#policyfailed").removeAttr("hidden", true);

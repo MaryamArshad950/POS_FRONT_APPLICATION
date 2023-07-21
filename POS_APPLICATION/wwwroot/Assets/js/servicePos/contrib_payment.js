@@ -321,13 +321,64 @@ function showFund(ProposalNum, PolicyNumb) {
             },
             datatype: 'jsonp',
             success: function (result) {
-                console.log(result)
                 $(".topup-data").removeAttr("hidden", true);
                 $(result).each(function () {
                     $(".fund_name").html(this.FUND_NAME);
                     sessionStorage.setItem("PRMFND_ID", this.FSPRF_PRMFND_ID);
                     sessionStorage.setItem("DISTRIBURATE", this.FPDF_DISTRIBURATE);
                     sessionStorage.setItem("DOCUMENT_ID", this.DOCUMENT_ID);
+                })
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 401) {
+                }
+            }
+        });
+        $.ajax({
+            "crossDomain": true,
+            url: Result_API + "/API/TOPUP/GET_DOCID/" + PolicyNumb,
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Access-Control-Allow-Origin': Result_API,
+                'Access-Control-Allow-Methods': 'POST, GET',
+                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                'Authorization': 'Bearer ' + getsession
+            },
+            datatype: 'jsonp',
+            success: function (result) {
+                $(result).each(function () {
+                    sessionStorage.setItem("DOCUMENT_ID", this.DOCUMENT_ID);
+                    sessionStorage.setItem("DOC_CODE", this.DOCUMENT_CODE);
+                    $.ajax({
+                        "crossDomain": true,
+                        url: Result_API + "/API/TOPUP/GET_TOPUP/" + this.DOCUMENT_CODE,
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Access-Control-Allow-Origin': Result_API,
+                            'Access-Control-Allow-Methods': 'POST, GET',
+                            'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                            'Authorization': 'Bearer ' + getsession
+                        },
+                        datatype: 'jsonp',
+                        success: function (result) {
+                            if (result.length > 0) {
+                                $(result).each(function () {
+                                    sessionStorage.setItem("SERIAL_NO", this.FCDT_SERIAL_NO);
+                                })
+                            }
+                            else{
+                                sessionStorage.setItem("SERIAL_NO", 0);
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            if (jqXHR.status === 401) {
+                            }
+                        }
+                    });
                 })
             },
             error: function (jqXHR, textStatus, errorThrown) {
