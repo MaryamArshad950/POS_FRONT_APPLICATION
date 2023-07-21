@@ -629,7 +629,7 @@ namespace POS_APPLICATION.Controllers
                         fin_dtls.FCFA_FIN_ID = FCFA_FIN_ID;
                         fin_dtls.SUM_SYS_USER_CODE = customerCNIC;
                         fin_dtls.FCFA_ANNUAL_INCOME = int.Parse(FCFA_ANNUAL_INCOME.Replace(",", ""));
-                        if (FCFA_OTHER_INCOME != null || FCFA_OTHER_INCOME != "")
+                        if (FCFA_OTHER_INCOME != null)
                         {
                             fin_dtls.FCFA_OTHER_INCOME = int.Parse(FCFA_OTHER_INCOME.Replace(",", ""));
                         }

@@ -228,7 +228,6 @@
             datatype: 'jsonp',
             timeout: 2000,
             success: function (data) {
-                console.log(data)
                 for (let i = 0; i <= data.length - 1; i++) {
                     $("#tableillustrative tbody").append("<tr id='row_" + next + "'>" +
                         "<td>" + data[i].V_YEAR + "</td>" +
@@ -258,7 +257,6 @@
                     datatype: 'jsonp',
                     timeout: 3000,
                     success: function (data2) {
-                        console.log(data2)
                         for (let i = 0; i <= data2.length - 1; i++) {
                             let rowID2 = "#row_" + nextUgr11;
                             $(rowID2).append(
@@ -284,7 +282,6 @@
                             datatype: 'jsonp',
                             timeout: 4000,
                             success: function (data3) {
-                                console.log(data3)
                                 for (let i = 0; i <= data3.length - 1; i++) {
                                     let rowID3 = "#row_" + nextUgr13;
                                     $(rowID3).append(

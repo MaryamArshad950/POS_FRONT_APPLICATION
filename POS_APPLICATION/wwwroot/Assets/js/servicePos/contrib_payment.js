@@ -20,16 +20,18 @@
                 if ($("#policy_number").val() != "" && $("#TOTAL_AMOUNT").val() != "") {
                     let orderId = Math.floor(Math.random() * 9000000) + 1000000;
                     orderId = orderId.toString();
+                    let totalAmt = $("#TOTAL_AMOUNT").val();
+                    totalAmt = totalAmt.replaceAll(",", "");
                     sessionStorage.setItem("Policy_NoF", $("#policy_number").val());
-                    sessionStorage.setItem("TOPUP_CONTRIB", $("#TOTAL_AMOUNT").val());
+                    sessionStorage.setItem("TOPUP_CONTRIB", totalAmt);
                     $("#HS_TransactionReferenceNumber").val(orderId);
                     $("#TransactionReferenceNumber").val(orderId);
-                    $("#TransactionAmount").val($("#TOTAL_AMOUNT").val());
+                    $("#TransactionAmount").val(totalAmt);
                     $(".paymode-select").removeAttr("hidden", true);
                 }
                 $("#btnCreditCard").click(function () {
                     $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
-                    $("#FIPR_COLL_AMOUNT").val($("#TOTAL_AMOUNT").val());
+                    $("#FIPR_COLL_AMOUNT").val(totalAmt);
                     $("#PaymentType").val("CC");
                     $(".bank_charges").html("2.6%")
                     $("#chargesDisclaimer").modal("show");
@@ -37,7 +39,7 @@
                 })
                 $("#btnNIFTPay").click(function () {
                     $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
-                    $("#FIPR_COLL_AMOUNT").val($("#TOTAL_AMOUNT").val());
+                    $("#FIPR_COLL_AMOUNT").val(totalAmt);
                     $("#PaymentType").val("NI");
                     $(".disclaimer-text").html("Free! Zero bank transactional fee on Bank Transfer & Easy Paisa Premium / Loan Payments!")
                     //$(".bank_charges").html("Free")
@@ -45,12 +47,12 @@
                 })
                 $("#btnJazzCash").click(function () {
                     $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
-                    $("#FIPR_COLL_AMOUNT").val($("#TOTAL_AMOUNT").val());
+                    $("#FIPR_COLL_AMOUNT").val(totalAmt);
                     $("#PaymentType").val("JC");
                 })
                 $("#btnEasyPaisaPay").click(function () {
                     $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
-                    $("#FIPR_COLL_AMOUNT").val($("#TOTAL_AMOUNT").val());
+                    $("#FIPR_COLL_AMOUNT").val(totalAmt);
                     $("#PaymentType").val("EP");
                 })
             })
@@ -143,42 +145,6 @@ function checkValue(val) {
                 text: 'No policy has been issued yet! Please isssue your policy if you want to make a topup policy payment'
             })
         }
-    //    $.ajax({
-    //        "crossDomain": true,
-    //        url: "" + Result_API + "/api/Inquiry/GetInquiryByUsername/" + custCNIC,
-    //        type: "GET",
-    //        contentType: "application/json; charset=utf-8",
-    //        headers: {
-    //            'Content-Type': 'application/x-www-form-urlencoded',
-    //            'Access-Control-Allow-Origin': Result_API,
-    //            'Access-Control-Allow-Methods': 'POST, GET',
-    //            'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
-    //            'Authorization': 'Bearer ' + getsession
-    //        },
-    //        datatype: 'jsonp',
-    //        success: function (result) {
-    //            console.log(result)
-    //            if (result.length >= 1) {
-    //                $(".policy-topup-no").removeAttr("hidden")
-    //                for (let i = 0; i < result.length; i++) {
-    //                    if (result[i].FPDM_POLICY_NO != null) {
-    //                        $("#policy_number").empty();
-    //                        $("#policy_number").append($("<option value=''>Select</option>"))
-    //                        $("#policy_number").append($("<option></option>").val(result[i].FPDM_POLICY_NO).html(result[i].FPDM_POLICY_NO));
-    //                    }
-    //                }
-    //            }
-    //            if (result.length == 0) {
-    //                $(".policy-topup-no").attr("hidden")
-    //                Swal.fire({
-    //                    icon: 'info',
-    //                    title: 'Alert',
-    //                    text: 'No policy has been issued yet! Please isssue your policy if you want to make a topup policy payment'
-    //                })
-    //            }
-    //        },
-    //        error: function (data2) { }
-    //    });
     }
 }
 
@@ -392,7 +358,7 @@ function calculateTotalPayment(Amount) {
     if (Amount == "" || Amount == undefined) {
         $("#TOTAL_AMOUNT").val($("#fund_payment").val());
     } else {
-        $("#TOTAL_AMOUNT").val(Amount)
+        $("#TOTAL_AMOUNT").val(Amount);
     }
 }
 function paymentSelection() {

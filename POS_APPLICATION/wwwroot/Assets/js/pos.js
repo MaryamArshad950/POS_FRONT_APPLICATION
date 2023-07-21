@@ -130,7 +130,6 @@ let objDmsHdr = {
     FPDH_APPROVED_YN: 'Y',
     FPDH_STATUS: 'Y'
 }
-//console.log(selectedOption)
 if (sessionStorage.getItem("cnic.") != null) {
     objDmsHdr.FPDH_DMSCUS_CNIC = sessionStorage.getItem("cnic.");
 } else {
@@ -160,31 +159,6 @@ function PaymentByCash(PolicyNum) {
         }
     }
     objDmsHdr = JSON.stringify(objDmsHdr);
-    console.log(objDmsHdr)
-    //const select = document.createElement('select');
-    //select.className = 'swal2-input'
-    //const optionselect = document.createElement('option');
-    //optionselect.textContent = 'Select';
-    //optionselect.value = '';
-    //select.appendChild(optionselect);
-    //if (sessionStorage.getItem("proposalResult") != null) {
-    //    let ProposalNumbers = sessionStorage.getItem("proposalResult").split(",");
-    //    ProposalNumbers.forEach((proposalNo) => {
-    //        const option = document.createElement('option');
-    //        option.textContent = proposalNo;
-    //        option.value = proposalNo;
-    //        select.appendChild(option);
-    //    });
-    //}
-    //if (sessionStorage.getItem("policyResult") != null) {
-    //    let PolicyNumbers = sessionStorage.getItem("policyResult").split(",");
-    //    PolicyNumbers.forEach((policyNo) => {
-    //        const option = document.createElement('option');
-    //        option.textContent = policyNo;
-    //        option.value = policyNo;
-    //        select.appendChild(option);
-    //    });
-    //}
 
     Swal.fire({
         title: 'Cash/ Cheque',
@@ -233,7 +207,6 @@ function PaymentByCash(PolicyNum) {
                 datatype: JSON,
                 data: objDmsHdr,
                 success: function (result) {
-                    console.log(result);
                     let dmsHdrId = result[0].NEW_DMSHDR_ID;
                     $.ajax({
                         url: '/User/uploadFile',
@@ -242,7 +215,6 @@ function PaymentByCash(PolicyNum) {
                         processData: false,
                         contentType: false,
                         success: function (result) {
-                            console.log(result);
                             let objDmsDtls = {
                                 FPDH_DMSHDR_ID: dmsHdrId,
                                 FPDD_PATH: result,
@@ -263,7 +235,6 @@ function PaymentByCash(PolicyNum) {
                                 datatype: JSON,
                                 data: objDmsDtls,
                                 success: function (result) {
-                                    console.log(result);
                                     if (result[0].NEW_DMSDTL_ID != null) {
                                         Swal.fire({
                                             text: 'Thanks for paying the contribution',

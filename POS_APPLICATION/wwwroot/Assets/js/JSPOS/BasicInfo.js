@@ -66,7 +66,6 @@
             },
             datatype: 'jsonp',
             success: function (result) {
-                console.log(result)
                 if (result.length != 0) {
                     $("#basicInfo-tab").attr("disabled", true);
                     $("#userIdentification-tab").attr("disabled", true);
@@ -89,7 +88,6 @@
                         },
                         datatype: 'jsonp',
                         success: function (result) {
-                            console.log(result)
                             sessionStorage.setItem("docIdPrpsl", document_code.slice(3));
                             sessionStorage.getItem("docIdPrpsl");
                             $(result).each(function () {
@@ -112,7 +110,6 @@
                                     },
                                     datatype: 'jsonp',
                                     success: function (result) {
-                                        console.log(result)
                                         if (result.length == 0) {
                                             $("#proposalMesg").attr("hidden", true);
                                             $(".returnToFlagship").removeAttr("hidden", true);
@@ -275,6 +272,7 @@
                         let customer_code = this.FSCU_CUSTOMER_CODE;
                         sessionStorage.setItem("thisCustomerCode", customer_code);
                         sessionStorage.getItem("thisCustomerCode");
+
                         $("#FSCU_CUST_ANNUAL_INCOME").val(nf.format(this.FSCU_CUST_ANNUAL_INCOME));
                         if (this.FSCU_IDENTISSUE_DATE != null && this.FSCU_IDENTIEXPIRY_DATE != null) {
                             let FSCU_IDENTISSUE_DATE = this.FSCU_IDENTISSUE_DATE.slice(0, 10);
@@ -582,44 +580,6 @@
             $("#basicInfo-tab").click();
             $(window).scrollTop(0);
         })
-        //$("#btnNextIdentify").click(function () {
-        //    //debugger;
-        //    //let FPDH_DMSCUS_CNIC = $("#FPDH_DMSCUS_CNIC").val();
-
-        //    ////let FPDD_PATH = $("input[name=FPDD_PATH]");
-        //    //let FPDD_PATH = $("input[name=FPDD_PATH]");
-        //    //FPDD_PATH = FPDD_PATH.toArray();
-
-        //    ////let FPDD_PATH1 = $("#FPDD_PATH1");
-        //    ////let FPDD_PATH2 = $("#FPDD_PATH2");
-        //    ////let FPDD_PATH3 = $("#FPDD_PATH3");
-        //    ////let FPDD_PATH = [FPDD_PATH1, FPDD_PATH2, FPDD_PATH3]
-        //    //console.log(FPDD_PATH)
-
-        //    //$.ajax({
-        //    //    //"async": false,
-        //    //    "crossDomain": true,
-
-        //    //    url: "/User/SaveDMS?FPDH_DMSCUS_CNIC=" + FPDH_DMSCUS_CNIC + "&FPDD_PATH=" + FPDD_PATH,
-        //    //    type: "POST",
-        //    //    contentType: "application/json; charset=utf-8",
-        //    //    headers: {
-        //    //        'Content-Type': 'application/x-www-form-urlencoded',
-        //    //        'Access-Control-Allow-Origin': Result_API,
-        //    //        'Access-Control-Allow-Methods': 'POST, GET',
-        //    //        'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
-        //    //        'Authorization': 'Bearer ' + getsession
-        //    //    },
-        //    //    datatype: 'jsonp',
-        //    //    success: function (result) {
-        //    //        console.log(result);
-        //    //    },
-        //    //    error: function (data) { }
-        //    //});
-
-        ////    $("#beneficiary-tab").removeAttr("disabled", true);
-        ////    $("#beneficiary-tab").click();
-        //})
         $("#btnPrevBenef").click(function () {
             $("#userIdentification-tab").click();
             $(window).scrollTop(0);
