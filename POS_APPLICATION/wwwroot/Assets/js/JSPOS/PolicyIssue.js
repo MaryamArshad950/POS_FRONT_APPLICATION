@@ -84,7 +84,6 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
         datatype: 'jsonp',
         success: function (result) {
             if ((sessionStorage.getItem("PayCheck") == "RenewalPay" || sessionStorage.getItem("PayCheck") == "TopupPay") && sessionStorage.getItem("Policy_NoF") != null) {
-                console.log(result)
                 $(result).each(function () {
                     let NEW_POL_NO = this.NEW_POL_NO
                     let message = this.APP_ALTMSG;

@@ -36,7 +36,6 @@
                 },
                 datatype: 'jsonp',
                 success: function (result) {
-                    console.log(result)
                     $(result).each(function () {
                         let units = this.FPDF_UNITS_END;
                         if (units == null) {
