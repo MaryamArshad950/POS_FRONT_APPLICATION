@@ -1481,6 +1481,9 @@ function editThisDocument(ID) {
                 $("#FCDM_PLAN_CONTRIB").val(nf.format(this.BASIC_CONTRIBUTION));
                 $("#FCDM_FACE_VALUE").val(nf.format(this.POL_COVGE_SUMASSURD));
                 maxlimitVal(this.POL_COVGE_SUMASSURD);
+                //if (this.POL_COVGE_SUMASSURD >= 500000) {
+                //    genderQuestionnaire(this.GENDER, this.POL_COVGE_SUMASSURD);
+                //}
                 $("#FSAG_AGENT_CODE").val(this.FSAG_AGENT_CODE);
             })
         },
@@ -1881,11 +1884,35 @@ function MedCatgryUniqueAdd(ID, name, table) {
 function selectOccup(CUOCP_ID) {
     $("#FCDM_OW_CUOCP_FSCD_ID").val(CUOCP_ID)
 }
+const genderQuestionnaire = (gender, Amount) => {
+    if (Amount == undefined) {
+        Amount = $("#FCDM_FACE_VALUE").val();
+        Amount = Amount.replaceAll(",", "");
+        gender = Number(gender);
+        Amount = Number(Amount);
+    }
+    if (gender == 1 && Amount >= 500000) {
+        $(".contribLimit7").attr("hidden", true);
+        $("#FSPQS_QSTNR_FSCD_ID8").removeAttr("required", true);
+        $("#FCUQ_ANSR_YN8").removeAttr("required", true);
+    }
+    if(gender == 2 && Amount >= 500000) {
+        $(".contribLimit7").removeAttr("hidden", true);
+        $("#FSPQS_QSTNR_FSCD_ID8").attr("required", true);
+        $("#FCUQ_ANSR_YN8").attr("required", true);
+    }
+}
 const maxlimitVal = (Contribution) => {
     if (Contribution >= 500000) {
         $(".contribLimit").removeAttr("hidden", true);
         $('.FCUQ_ANSR_YN').attr("required", true);
         $('.FSPQS_QSTNR_FSCD_ID').attr("required", true);
+        if ($("#FCDM_OW_GENDR_FSCD_ID").val() == 1) {
+            genderQuestionnaire(1,Contribution);
+        }
+        if ($("#FCDM_OW_GENDR_FSCD_ID").val() == 2) {
+            genderQuestionnaire(2, Contribution);
+        }
     } else {
         $(".contribLimit").attr("hidden", true);
         $('.FCUQ_ANSR_YN').removeAttr("required", true);
