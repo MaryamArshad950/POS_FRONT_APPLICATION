@@ -167,7 +167,7 @@ function ProcessGlobalCore(coresession) {
                             for (let i = 0; i < result.length; i++) {
                                 if (result[i].FSPQS_QSTNR_FSCD_ID >= 3641 && result[i].FSPQS_QSTNR_FSCD_ID <= 3645) {
                                     $("#questionare_section").append(
-                                        "<div class='col-md-12 mt-3 contribLimit' hidden>" +
+                                        "<div class='col-md-12 mt-3 contribLimit contribLimit" + i +"' hidden>" +
                                         "<input name='FSPQS_QSTNR_FSCD_ID' class='FSPQS_QSTNR_FSCD_ID' id='FSPQS_QSTNR_FSCD_ID" + (i + 1) + "' value='" + result[i].FSPQS_QSTNR_FSCD_ID + "'  hidden/>" +
                                         "<input name='FCUQ_ANSR_YN' class='FCUQ_ANSR_YN' id='FCUQ_ANSR_YN" + (i + 1) + "' hidden/>" +
                                         "<p class='text-white text-question line-height-2'> " + result[i].FSCD_SYS_CODE_DESCR + " " +

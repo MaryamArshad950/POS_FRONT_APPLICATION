@@ -21,40 +21,40 @@
                     let orderId = Math.floor(Math.random() * 9000000) + 1000000;
                     orderId = orderId.toString();
                     let totalAmt = $("#TOTAL_AMOUNT").val();
-                    totalAmt = totalAmt.replaceAll(",", "");
+                    totalAmt = Number(totalAmt.replaceAll(",", ""));
                     sessionStorage.setItem("Policy_NoF", $("#policy_number").val());
                     sessionStorage.setItem("TOPUP_CONTRIB", totalAmt);
                     $("#HS_TransactionReferenceNumber").val(orderId);
                     $("#TransactionReferenceNumber").val(orderId);
                     $("#TransactionAmount").val(totalAmt);
                     $(".paymode-select").removeAttr("hidden", true);
+                    $("#btnCreditCard").click(function () {
+                        $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+                        $("#FIPR_COLL_AMOUNT").val(totalAmt);
+                        $("#PaymentType").val("CC");
+                        $(".bank_charges").html("2.6%")
+                        $("#chargesDisclaimer").modal("show");
+                        sessionStorage.setItem("BNK_CHRGS", "2669");
+                    })
+                    $("#btnNIFTPay").click(function () {
+                        $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+                        $("#FIPR_COLL_AMOUNT").val(totalAmt);
+                        $("#PaymentType").val("NI");
+                        $(".disclaimer-text").html("Free! Zero bank transactional fee on Bank Transfer & Easy Paisa Premium / Loan Payments!")
+                        //$(".bank_charges").html("Free")
+                        $("#chargesDisclaimer").modal("show");
+                    })
+                    $("#btnJazzCash").click(function () {
+                        $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+                        $("#FIPR_COLL_AMOUNT").val(totalAmt);
+                        $("#PaymentType").val("JC");
+                    })
+                    $("#btnEasyPaisaPay").click(function () {
+                        $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+                        $("#FIPR_COLL_AMOUNT").val(totalAmt);
+                        $("#PaymentType").val("EP");
+                    })
                 }
-                $("#btnCreditCard").click(function () {
-                    $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
-                    $("#FIPR_COLL_AMOUNT").val(totalAmt);
-                    $("#PaymentType").val("CC");
-                    $(".bank_charges").html("2.6%")
-                    $("#chargesDisclaimer").modal("show");
-                    sessionStorage.setItem("BNK_CHRGS", "2669");
-                })
-                $("#btnNIFTPay").click(function () {
-                    $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
-                    $("#FIPR_COLL_AMOUNT").val(totalAmt);
-                    $("#PaymentType").val("NI");
-                    $(".disclaimer-text").html("Free! Zero bank transactional fee on Bank Transfer & Easy Paisa Premium / Loan Payments!")
-                    //$(".bank_charges").html("Free")
-                    $("#chargesDisclaimer").modal("show");
-                })
-                $("#btnJazzCash").click(function () {
-                    $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
-                    $("#FIPR_COLL_AMOUNT").val(totalAmt);
-                    $("#PaymentType").val("JC");
-                })
-                $("#btnEasyPaisaPay").click(function () {
-                    $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
-                    $("#FIPR_COLL_AMOUNT").val(totalAmt);
-                    $("#PaymentType").val("EP");
-                })
             })
         }
     })
