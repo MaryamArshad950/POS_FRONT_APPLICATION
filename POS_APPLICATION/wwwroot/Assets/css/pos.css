@@ -1256,27 +1256,47 @@ label {
     line-height: 1.5;
 }
 
-#VerifyModal > .modal-dialog .modal-content .modal-body .code-number {
+/*#VerifyModal > .modal-dialog .modal-content .modal-body .code-number {
+    padding: 0;
+    margin: 36px 0 30px;
+    list-style: none;
+}*/
+.code-number {
     padding: 0;
     margin: 36px 0 30px;
     list-style: none;
 }
 
-    #VerifyModal > .modal-dialog .modal-content .modal-body .code-number li {
+    /*#VerifyModal > .modal-dialog .modal-content .modal-body .code-number li {
         color: #000;
-        background: #F2F2F2;
+        background: #F2F2F2;*/
         /*font-size: 22px;*/
-        font-weight: 600;
+        /*font-weight: 600;
         line-height: 60px;
-        width: 70px;
+        width: 70px;*/
         /*        width: 68px;
-*/ height: 70px;
+*/ /*height: 70px;
         margin: 0 10px;
         border-radius: 50%;
-        display: inline-block;
+        display: inline-block;*/
         /*padding-top: 0.5em !important;*/
-        padding-left: 1em !important;
-    }
+        /*padding-left: 1em !important;
+    }*/
+.code-number li {
+    color: #000;
+    background: #F2F2F2;
+    /*font-size: 22px;*/
+    font-weight: 600;
+    line-height: 60px;
+    width: 70px;
+    /*        width: 68px;
+*/ height: 70px;
+    margin: 0 10px;
+    border-radius: 50%;
+    display: inline-block;
+    /*padding-top: 0.5em !important;*/
+    padding-left: 1em !important;
+}
 
 #VerifyModal > .modal-dialog .modal-content .modal-body .btn-submit-code {
     color: #fff;
@@ -1318,8 +1338,19 @@ label {
     }
 }
 
-@media only screen and (max-width: 476px) {
+/*@media only screen and (max-width: 476px) {
     #VerifyModal > .modal-dialog .modal-content .modal-body .code-number li {
+        font-size: 18px;
+        line-height: 40px;
+        height: 53px;
+        width: 55px;
+        margin: 6px 7px;
+        padding-top: 0.2em !important;
+        padding-left: 0.7em !important;
+    }
+}*/
+@media only screen and (max-width: 476px) {
+    .code-number li {
         font-size: 18px;
         line-height: 40px;
         height: 53px;

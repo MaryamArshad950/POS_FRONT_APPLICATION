@@ -59,6 +59,7 @@ namespace POS_APPLICATION.Controllers
         private readonly string Add_DMS_DETAILS = "" + Result_API + "/API/DMS/POST_DMS_DETAILS";
         private readonly string Add_Rider_Dtls = "" + Result_API + "/api/Participant/PostRiderDetails";
         private readonly string Add_familyhistory = "" + Result_API + "/API/CUSTOMER_FAMILY_HISTRY/";
+        private readonly string updateUserPswd = "" + Result_API + "/api/PosUser/UpdatePasswd";
         public string GetIPHostAPI()
         {
             IP_Address = Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value;
@@ -81,11 +82,14 @@ namespace POS_APPLICATION.Controllers
         {
             return View();
         }
+        public IActionResult RecoverPassword()
+        {
+            return View();
+        }
         [HttpPost]
         public IActionResult GetSessionValue(string key)
         {
             return Ok(HttpContext.Session.GetString(key));
-            //return Ok();
         }
         [HttpPost]
         public IActionResult SetSessionValue(string key, string value)
@@ -112,6 +116,7 @@ namespace POS_APPLICATION.Controllers
             user.SUM_USER_PASSWORD = DefaultPosUser;
             user.SUM_CRUSER = 1;
             user.SUM_CRDATE = DateTime.Today;
+            //HttpContext.Session.Clear();
             using (var handler = new HttpClientHandler())
             {
                 // allow the bad certificate
@@ -180,7 +185,61 @@ namespace POS_APPLICATION.Controllers
             }
             return Ok(JWTToken.ToString());
         }
+        [HttpPost]
+        public async Task<IActionResult> authorizePOSAcc()
+        {
+            userMaster user_master = new userMaster();
+            string JWTToken = null;
+            user_master.UserName = "POSUSER";
+            user_master.Password = "POSUSER";
+            HttpContext.Session.Clear();
+            using (var handler = new HttpClientHandler())
+            {
+                // allow the bad certificate
+                handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
 
+                using (var client = new HttpClient(handler))
+                {
+                    SendRequest = null;
+                    try
+                    {
+                        //Token authenticate
+                        SendRequest = new StringContent(JsonConvert.SerializeObject(user_master), Encoding.UTF8, "application/json");
+                        using (var response = await client.PostAsync(checkUserValidate, SendRequest))
+                        {
+                            string apiResponse = await response.Content.ReadAsStringAsync();
+                            if (apiResponse == "\"Invalid user\"" ||
+                                apiResponse == "\"Database Connection fail\"" ||
+                                apiResponse == "\"Token Exception!" ||
+                                apiResponse == "\"Incorrect credentials. Please try again!\"" ||
+                                apiResponse == "\"User account Locked, Please contact System Administrator!\"" ||
+                                apiResponse == "\"You have entered an Invalid credentials 3 times User has been Locked\"")
+                            {
+                                TempData["WrongStatus"] = apiResponse.ToString().Trim('"');
+                            }
+                            else
+                            {
+                                var reg = new Regex("\".*?\"");
+                                var matches = reg.Matches((string)apiResponse);
+                                for (int i = 1; i < 3; i++)
+                                {
+                                    if (i == 2)
+                                    {
+                                        JWTToken = (string)matches[1].ToString().Trim('"');
+                                        HttpContext.Session.SetString("JwTokenUser", JWTToken);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["successUSER"] = ex.ToString();
+                    }
+                }
+            }
+            return Ok(JWTToken.ToString());
+        }
         public string PosReport(string P_DOCUMENT_CODE)
         {
             var reportServerUrl = Configuration.GetSection("ReportServer").GetSection("ServerName").Value;
@@ -417,6 +476,7 @@ namespace POS_APPLICATION.Controllers
                         {
                             questionsLength = FSPQS_QSTNR_FSCD_ID.Length - 5;
                         }
+
                         //medical info insert
                         for (int i = 0; i <= questionsLength - 1; i++)
                         {
@@ -574,11 +634,21 @@ namespace POS_APPLICATION.Controllers
                         }
                         //***************need analysis form data*******************//
                         customerCNIC = FCDM_OWCUST_CNIC.Replace("-", "");
+
                         //Takaful History
                         if (FCIH_INSUREREXIST_YN == "N")
                         {
                             takaful_hist.SUM_SYS_USER_CODE = customerCNIC;
+                            takaful_hist.FCIH_INSUREREXIST_ID = FCIH_INSUREREXIST_ID[0];
                             takaful_hist.FCIH_INSUREREXIST_YN = FCIH_INSUREREXIST_YN;
+                            takaful_hist.FCIH_POLICY_NO = "";
+                            takaful_hist.FCIH_SA_AMOUNT = 0;
+                            takaful_hist.FCIH_CONTRIB_AMT = 0;
+                            //takaful_hist.FCIH_START_DATE = ;
+                            //takaful_hist.FCIH_MATURITY_DATE = ""
+                            takaful_hist.FCIH_INSURER_PURPOSE = "";
+                            takaful_hist.FCIH_INSURER_NM = "";
+                            takaful_hist.FCIH_COND_ACCPTNCE = "";
                             takaful_hist.FCIH_CRDATE = DateTime.Today;
                             try
                             {
@@ -890,6 +960,42 @@ namespace POS_APPLICATION.Controllers
                     {
                         TempData["successUSER"] = ex.ToString();
                     }
+                    return RedirectToAction("Index");
+                }
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UPDATE_USER_PASSWD(string SUM_SYS_USER_CODE, string SUM_USER_PASSWORD, string SUM_USER_EMAIL_ADDR)
+        {
+            POS_USER user = new POS_USER();
+            user.SUM_SYS_USER_CODE = SUM_SYS_USER_CODE;
+            var key = Configuration.GetSection("Credentials").GetSection("SymKey").Value;
+            user.SUM_USER_PASSWORD = EncryptString(key, SUM_USER_PASSWORD);
+            var strToken = HttpContext.Session.GetString("JwTokenUser");
+            using (var handler = new HttpClientHandler())
+            {
+                handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
+
+                using (var client = new HttpClient(handler))
+                {
+                    SendRequest = null;
+                    try
+                    {
+                        SendRequest = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+                        using (var response = await client.PostAsync(updateUserPswd, SendRequest))
+                        {
+                            string apiResponse = await response.Content.ReadAsStringAsync();
+                            TempData["WrongStatus"] = "Password Changed Successfully";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["WrongStatus"] = ex.ToString();
+                    }
+                    string msgText = "<p>Your password for Salam Family Takaful Customer Portal has been changed successfully</p><p>If you have not done this transaction please reach out to us</p>";
+                    await this.SendEmail("customer", msgText, SUM_USER_EMAIL_ADDR, "Password Changed");
+                    HttpContext.Session.Clear();
                     return RedirectToAction("Index");
                 }
             }
