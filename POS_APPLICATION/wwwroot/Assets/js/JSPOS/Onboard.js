@@ -125,6 +125,7 @@
                         $(result).each(function () {
                             if (this.FCIH_INSUREREXIST_YN == "N") {
                                 $("#INSUREREXIST_N").attr("checked", true)
+                                $("#FCIH_INSUREREXIST_ID").val(this.FCIH_INSUREREXIST_ID);
                             }
                             if (this.FCIH_INSUREREXIST_YN == "Y") {
                                 if (this.FCIH_START_DATE != null && this.FCIH_MATURITY_DATE != null) {
@@ -175,7 +176,7 @@
                         $("#FCFA_EXPENSES_LASTYR").val(nf.format(this.FCFA_EXPENSES_LASTYR));
                         $("#FCFA_EXPENSES_CURRENTYR").val(nf.format(this.FCFA_EXPENSES_CURRENTYR));
                         $("#FCFA_NET_SAVINGS").val(nf.format(this.FCFA_NET_SAVINGS));
-                        $("#FCFA_ADDTNL_DTLS").val(nf.format(this.FCFA_ADDTNL_DTLS));
+                        $("#FCFA_ADDTNL_DTLS").val(this.FCFA_ADDTNL_DTLS);
                     })
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -237,6 +238,7 @@
                             $(result).each(function () {
                                 if (this.FCIH_INSUREREXIST_YN == "N") {
                                     $("#INSUREREXIST_N").attr("checked", true)
+                                    $("#FCIH_INSUREREXIST_ID").val(this.FCIH_INSUREREXIST_ID);
                                 }
                                 if (this.FCIH_INSUREREXIST_YN == "Y") {
                                     if (this.FCIH_START_DATE != null && this.FCIH_MATURITY_DATE != null) {
@@ -287,7 +289,7 @@
                             $("#FCFA_EXPENSES_LASTYR").val(nf.format(this.FCFA_EXPENSES_LASTYR));
                             $("#FCFA_EXPENSES_CURRENTYR").val(nf.format(this.FCFA_EXPENSES_CURRENTYR));
                             $("#FCFA_NET_SAVINGS").val(nf.format(this.FCFA_NET_SAVINGS));
-                            $("#FCFA_ADDTNL_DTLS").val(nf.format(this.FCFA_ADDTNL_DTLS));
+                            $("#FCFA_ADDTNL_DTLS").val(this.FCFA_ADDTNL_DTLS);
                         })
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -1176,6 +1178,7 @@ function checkValue(val) {
     }
 }
 async function calculateFaceValue() {
+    let nf = new Intl.NumberFormat('en-US');
     let sessionPos = getSessionpos()
     let annual_savings = $("#FCDM_PLAN_CONTRIB").val();
     annual_savings = Number(annual_savings.replaceAll(",", ""));
@@ -1267,6 +1270,7 @@ function isValidInput(inputString) {
     return regex.test(inputString);
 }
 function checkCNICQuotations(Val, ID2) {
+    let nf = new Intl.NumberFormat('en-US');
     let sessionPos = getSessionpos()
     if (Val.length == 15 && Val[5] == "-" && Val[13] == "-") {
         sessionStorage.setItem("thisCustCNIC", Val);
@@ -1295,8 +1299,6 @@ function checkCNICQuotations(Val, ID2) {
             datatype: 'jsonp',
             timeout: 2000,
             success: function (data) {
-                let nf = new Intl.NumberFormat('en-US');
-
                 if (data.length >= 1) {
                     $("#mySavedIllustModal").modal("show");
                     $("#tableSavedillust tbody").empty();
@@ -1437,6 +1439,8 @@ function continueThisDocument(ID) {
     });
 }
 function editThisDocument(ID) {
+    let nf = new Intl.NumberFormat('en-US');
+
     ID = ID.slice(7);
     let thisDocumentCode = $("#DOCUMENT_CODE" + ID).val();
     $("#mySavedIllustModal").modal("hide");
@@ -1568,6 +1572,7 @@ function ExistInsValNo(ID, VAL) {
     $(".fact_find").val("");
 }
 function calcTotalIncome(VAL) {
+    let nf = new Intl.NumberFormat('en-US');
     let annualIncome = $("#FCFA_ANNUAL_INCOME").val();
     annualIncome = annualIncome.replaceAll(",", "");
     let otherIncome = $("#FCFA_OTHER_INCOME").val();

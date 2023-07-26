@@ -52,6 +52,11 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#spinner").hide();
+            $(".sign_out").click(function () {
+                window.location.href = "/";
+                sessionStorage.clear();
+                localStorage.clear();
+            })
             $(".regularDepositPlan").click(function () {
                 $("#videoGraphy").modal("show");
             })
