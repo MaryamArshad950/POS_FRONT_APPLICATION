@@ -163,7 +163,6 @@ function ProcessGlobalCore(coresession) {
                     success: function (result) {
                         if (result.length >= 1) {
                             $("#questionare_section").empty();
-                            console.log(result)
                             for (let i = 0; i < result.length; i++) {
                                 if (result[i].FSPQS_QSTNR_FSCD_ID >= 3641 && result[i].FSPQS_QSTNR_FSCD_ID <= 3645) {
                                     $("#questionare_section").append(
