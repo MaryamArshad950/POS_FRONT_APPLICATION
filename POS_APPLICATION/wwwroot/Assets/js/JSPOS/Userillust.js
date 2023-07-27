@@ -7,21 +7,6 @@
             sessionStorage.getItem("DocCODE");
         }
 
-        //if (sessionStorage.getItem("User") != null) {
-        //    $("#btnAgreeTermsCond").removeAttr("type", true);
-        //    $("#btnAgreeTermsCond").attr("type", "button");
-        //    $("#btnAgreeTermsCond").click(function () {
-        //        window.location.href = "/Onboarding"
-        //    })
-        //}
-
-        //if (sessionStorage.getItem("tokenIndex") != null && sessionStorage.getItem("tokenIndex") != "" && sessionStorage.getItem("User") == null) {
-        //    $("#btnAgreeTermsCond").attr("type", "button");
-        //    $("#btnAgreeTermsCond").click(function () {
-        //        window.location.href = "/Onboarding"
-        //    })
-        //}
-
         if (sessionStorage.getItem("tokenIndex") == null && sessionStorage.getItem("token") != "" && localStorage.getItem("token1") == null && localStorage.getItem("token3") == null) {
             localStorage.setItem("token3", sessionStorage.getItem("token"));
         }
@@ -134,6 +119,12 @@
                     }
                     else {
                         $("#p_GENDER").val("Male")
+                    }
+                    if (this.EM_TXT_VALUE == 'Y') {
+                        $("#extraMortality").val("Applicable")
+                    }
+                    else {
+                        $("#extraMortality").val("N/A")
                     }
                     $("#p_DOB").val(birth_date);
                     $("#p_CONTRIBUTION_FREQUENCY").val(this.CONTRIBUTION_FREQENCY);
