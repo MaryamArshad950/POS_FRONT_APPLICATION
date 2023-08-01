@@ -141,7 +141,6 @@ function checkValue(val) {
             $(".policy-topup-no").attr("hidden")
             Swal.fire({
                 icon: 'info',
-                title: 'Alert',
                 text: 'No policy has been issued yet! Please isssue your policy if you want to make a topup policy payment'
             })
         }
@@ -161,7 +160,6 @@ function NB_Payments(Val, ID) {
         if (proposalIn.options.length == 1) {
             Swal.fire({
                 icon: 'info',
-                title: 'Alert',
                 text: 'No proposal payment is left! Please generate a new proposal if you want to make a payment'
             })
         }
@@ -177,7 +175,6 @@ function NB_Payments(Val, ID) {
         if (policyIn.options.length == 1) {
             Swal.fire({
                 icon: 'info',
-                title: 'Alert',
                 text: 'No policy has been issued yet! Please isssue your policy if you want to make a renewal policy payment'
             })
         }
@@ -427,7 +424,6 @@ function paymentSelection() {
     } else {
         Swal.fire({
             icon: 'info',
-            title: 'Alert',
             text: 'The gross payment input is not checked!',
         })
     }

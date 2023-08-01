@@ -36,8 +36,6 @@
                 },
                 datatype: 'jsonp',
                 success: function (result) {
-                    console.log(result)
-
                     $(result).each(function () {
                         let cashValue = this.FPDF_CASHVALUE_BC;
                         if (cashValue == null) {
