@@ -1,5 +1,6 @@
 ﻿!function () {
     $(document).ready(function () {
+        let nf = new Intl.NumberFormat('en-US');
         var cust_email = '';
         var cust_phone = '';
         $.ajax({

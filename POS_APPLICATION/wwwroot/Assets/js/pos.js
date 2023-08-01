@@ -341,7 +341,7 @@ function PolicyNumberSelection() {
                 success: function (result) {
                     $(result).each(function () {
                         if (this.FPDM_POLICY_NO == selectedPolicy) {
-                            ProposalCashValues(this.FPDM_PROPOSAL_NO, this.FPDM_APPROVED);
+                            ProposalCashValues(this.FPDM_PROPOSAL_NO, this.FPDM_APPROVED, this.FCDM_PLAN_CONTRIB);
                         }
                     })
                 },
@@ -357,7 +357,7 @@ function PolicyNumberSelection() {
     });
 }
 
-function ProposalCashValues(selectdProposalNo, status) {
+function ProposalCashValues(selectdProposalNo, status, contribAmount) {
     $("#FPDM_PROPOSAL_NO").val(selectdProposalNo);
     let thisCustCNIC = sessionStorage.getItem("cnic.");
     thisCustCNIC = thisCustCNIC.replace(/^(\d{5})(\d{7})(\d)$/, "$1-$2-$3");
@@ -381,7 +381,16 @@ function ProposalCashValues(selectdProposalNo, status) {
         },
         datatype: 'jsonp',
         success: function (result) {
+            $(".refund_amount").html(nf.format(contribAmount));
+            $(".contrib_paid").html("<p class='text-center'>Total Takaful Contribution Paid</p><p class='text-center'>PKR " + nf.format(contribAmount) + "</p>");
+            $("#FSSH_SRNDR_AMT").val(contribAmount);
+            $("#FSSH_FREELOOK_AMT").val(contribAmount);
+
             $(result).each(function () {
+                let cashValue = this.FPDF_CASHVALUE_BC;
+                if (cashValue == null) {
+                    cashValue = contribAmount;
+                }
                 let units = this.FPDF_UNITS_END;
                 if (units == null) {
                     units = "N/A";
@@ -392,10 +401,10 @@ function ProposalCashValues(selectdProposalNo, status) {
                     bidPrice = "N/A";
                     $(".text-cash").removeAttr("hidden", true);
                 }
-                let residualVal = (10 / 100) * (this.FPDF_CASHVALUE_BC);
-                $(".currentCashValue").html("<p class='text-center'>Current Cash Value</p><p class='text-center'>PKR " + nf.format(this.FPDF_CASHVALUE_BC) + "</p>");
+                let residualVal = (10 / 100) * (cashValue);
+                $(".currentCashValue").html("<p class='text-center'>Current Cash Value</p><p class='text-center'>PKR " + nf.format(cashValue) + "</p>");
                 $(".residual_val").html("<p class='text-center'>Residual Value (10%)</p><p class='text-center'>PKR " + nf.format(residualVal) + "</p>")
-                let withdrwlAmount = this.FPDF_CASHVALUE_BC - residualVal;
+                let withdrwlAmount = cashValue - residualVal;
                 sessionStorage.setItem("withdrwlAmount", withdrwlAmount);
                 $(".withdrwlAmount").html(nf.format(withdrwlAmount) + " only");
                 $(".withdrwlText").removeAttr("hidden", true);
@@ -407,32 +416,32 @@ function ProposalCashValues(selectdProposalNo, status) {
             }
         }
     });
-    $.ajax({
-        "crossDomain": true,
-        url: Result_API + "/api/DcmntNominee/GetPrpslDetails/" + selectdProposalNo + "/Y",
-        type: "GET",
-        contentType: "application/json; charset=utf-8",
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': Result_API,
-            'Access-Control-Allow-Methods': 'POST, GET',
-            'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
-            'Authorization': 'Bearer ' + getsession
-        },
-        datatype: 'jsonp',
-        success: function (result) {
-            $(result).each(function () {
-                $(".refund_amount").html(nf.format(this.CONTRIB_AMOUNT));
-                $(".contrib_paid").html("<p class='text-center'>Total Takaful Contribution Paid</p><p class='text-center'>PKR " + nf.format(this.CONTRIB_AMOUNT) + "</p>");
-                $("#FSSH_SRNDR_AMT").val(this.CONTRIB_AMOUNT);
-                $("#FSSH_FREELOOK_AMT").val(this.CONTRIB_AMOUNT);
-            })
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            if (jqXHR.status === 401) {
-            }
-        }
-    });
+    //$.ajax({
+    //    "crossDomain": true,
+    //    url: Result_API + "/api/DcmntNominee/GetPrpslDetails/" + selectdProposalNo + "/Y",
+    //    type: "GET",
+    //    contentType: "application/json; charset=utf-8",
+    //    headers: {
+    //        'Content-Type': 'application/x-www-form-urlencoded',
+    //        'Access-Control-Allow-Origin': Result_API,
+    //        'Access-Control-Allow-Methods': 'POST, GET',
+    //        'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+    //        'Authorization': 'Bearer ' + getsession
+    //    },
+    //    datatype: 'jsonp',
+    //    success: function (result) {
+    //        $(result).each(function () {
+    //            $(".refund_amount").html(nf.format(this.CONTRIB_AMOUNT));
+    //            $(".contrib_paid").html("<p class='text-center'>Total Takaful Contribution Paid</p><p class='text-center'>PKR " + nf.format(this.CONTRIB_AMOUNT) + "</p>");
+    //            $("#FSSH_SRNDR_AMT").val(this.CONTRIB_AMOUNT);
+    //            $("#FSSH_FREELOOK_AMT").val(this.CONTRIB_AMOUNT);
+    //        })
+    //    },
+    //    error: function (jqXHR, textStatus, errorThrown) {
+    //        if (jqXHR.status === 401) {
+    //        }
+    //    }
+    //});
     $.ajax({
         "crossDomain": true,
         url: "" + Result_API + "/api/PosUser/GetUserByUserCd/" + sessionStorage.getItem("cnic."),
@@ -527,7 +536,6 @@ function ProposalCashValues(selectdProposalNo, status) {
     })
     $("#btnProceedFreeLook").click(function () {
         if ($("#SUM_CUST_CONTPHONE").val() != null && $("#FSSH_POL_CODE").val() != null) {
-            //$("#AgreementModal").modal("show");
             Swal.fire({
                 title: 'Please Confirm',
                 confirmButtonText: 'I want to proceed',
@@ -541,12 +549,6 @@ function ProposalCashValues(selectdProposalNo, status) {
             });
         }
     })
-    //$("#btnAgreeTermsCond").click(function () {
-
-    //});
-    //$("#btnDisAgreeTerms").click(function () {
-    //    $("#AgreementModal").modal("hide");
-    //});
 
     $("#verifyOTP").click(function () {
         let digitsArray = [];
@@ -570,10 +572,6 @@ function ProposalCashValues(selectdProposalNo, status) {
         sessionStorage.removeItem("code");
         $("#custBankDtls").modal("hide");
     })
-    //$(".closeRequestSuccess").click(function () {
-    //    sessionStorage.removeItem("code");
-    //    $("#successRequest").modal("hide");
-    //})
 }
 
 function sendCode(transactionID, cust_number, cust_name, cust_email) {
