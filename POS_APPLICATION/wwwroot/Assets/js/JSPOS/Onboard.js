@@ -1860,6 +1860,13 @@ function AddRdr(elem, ID) {
         }
     }
 }
+const TrackDiseaseDoc = (elem) => {
+    console.log("elem called")
+    let ID = elem.parentNode.parentNode.children[0].children[0].value;
+
+    let DiseaseIDDoc = document.getElementById("DiseaseDoc" + ID);
+    DiseaseIDDoc.value = "Doc for Disease ID " + ID;
+}
 function RidersUniqueAdd(ID, name) {
     $("#tableRiders tbody").append("<tr><td hidden><input class='form-control' name='FCDR_DOC_RDR_ID' id='FCDR_DOC_RDR_ID" + ID + "' value='0' /></td>" +
         "<td hidden><input class='form-control' name='FSPM_PRODRDR_ID' id='FSPM_PRODRDR_ID" + ID + "' value='" + ID + "' /></td>" +
@@ -1874,16 +1881,18 @@ function MedDiseasesUniqueAdd(ID, name) {
         "<td><input style='width:200px' class='form-control readonly' name='DISEAESE_NAME' id='DISEAESE_NAME" + ID + "' value='" + name + "' readonly /></td>" +
         "<td><select style='width:119px' class='form-control' name='FCDS_DISEASE_DURATION' id='FCDS_DISEASE_DURATION" + ID + "'><option value=''>Select</option><option value='1'>Less than an year</option><option value='3'>1-5 years</option><option value='5'>Above 5 yearsr</option></select></td>" +
         "<td><input style='width:150px' class='form-control' name='FCDS_DISEASE_DETAILS' id='FCDS_DISEASE_DETAILS" + ID + "' placeholder='More Details' /></td>" +
-        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH' /></td>" +
-        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td></tr>"
+        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH' oninput='TrackDiseaseDoc(this)' /></td>" +
+        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td>" +
+        "<td><input style='width:80px' class='form-control' name='DiseaseDoc' id='DiseaseDoc" + ID + "' value='none' readonly /></td></tr>"
     )
 }
 function MedCatgryUniqueAdd(ID, name, table) {
     $("#" + table + " tbody").append("<tr><td hidden><input class='form-control' name='DiseaseID' id='DiseaseID" + ID + "' value='" + ID + "' /></td>" +
         "<td><input style='width:280px' class='form-control readonly' name='DISEAESE_NAME' id='DISEAESE_NAME" + ID + "' value='" + name + "' readonly /></td>" +
         "<td><input style='width:150px' class='form-control' name='FCDS_DISEASE_DETAILS' id='FCDS_DISEASE_DETAILS" + ID + "' placeholder='Details' /></td>" +
-        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH' /></td>" +
-        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td></tr>"
+        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH' oninput='TrackDiseaseDoc(this)' /></td>" +
+        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td>" +
+        "<td><input style='width:80px' class='form-control' name='DiseaseDoc' id='DiseaseDoc" + ID + "' value='none' readonly /></td></tr>"
     )
 }
 function selectOccup(CUOCP_ID) {
@@ -1896,19 +1905,19 @@ const genderQuestionnaire = (gender, Amount) => {
         gender = Number(gender);
         Amount = Number(Amount);
     }
-    if (gender == 1 && Amount >= 500000) {
+    if (gender == 1 && Amount >= 5000000) {
         $(".contribLimit7").attr("hidden", true);
         $("#FSPQS_QSTNR_FSCD_ID8").removeAttr("required", true);
         $("#FCUQ_ANSR_YN8").removeAttr("required", true);
     }
-    if(gender == 2 && Amount >= 500000) {
+    if(gender == 2 && Amount >= 5000000) {
         $(".contribLimit7").removeAttr("hidden", true);
         $("#FSPQS_QSTNR_FSCD_ID8").attr("required", true);
         $("#FCUQ_ANSR_YN8").attr("required", true);
     }
 }
 const maxlimitVal = (Contribution) => {
-    if (Contribution >= 500000) {
+    if (Contribution >= 5000000) {
         $(".contribLimit").removeAttr("hidden", true);
         $('.FCUQ_ANSR_YN').attr("required", true);
         $('.FSPQS_QSTNR_FSCD_ID').attr("required", true);

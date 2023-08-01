@@ -120,12 +120,13 @@
                     else {
                         $("#p_GENDER").val("Male")
                     }
-                    if (this.EM_TXT_VALUE == 'Y') {
-                        $("#extraMortality").val("Applicable")
-                    }
-                    else {
-                        $("#extraMortality").val("N/A")
-                    }
+                    //if (this.EM_TXT_VALUE == 'Y') {
+                    //    $("#extraMortality").val("Applicable")
+                    //}
+                    //else {
+                    //    $("#extraMortality").val("N/A")
+                    //}
+                    $("#extraMortality").val(this.EM_TXT_VALUE)
                     $("#p_DOB").val(birth_date);
                     $("#p_CONTRIBUTION_FREQUENCY").val(this.CONTRIBUTION_FREQENCY);
                     let BASIC_CONTRIBUTION = this.BASIC_CONTRIBUTION;
