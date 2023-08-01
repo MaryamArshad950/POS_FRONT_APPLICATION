@@ -185,7 +185,7 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
                                             let msgEmail = "M";
                                             $.ajax({
                                                 "crossDomain": true,
-                                                url: "" + Result_API + "/api/EMAIL/POST_SendEmailNotification/" + email + "/" + FPDM_PROPOSAL_NO + "/" + doc_code + "/" + subject + "/" + cust_name + "/" + msgEmail,
+                                                url: "" + Result_API + "/api/EMAIL/POST_SendEmailNotification/" + email + "/" + FPDM_PROPOSAL_NO + "/" + doc_code + "/" + subject + "/" + cust_name + "/" + msgEmail + "/" + CLLCT_AMOUNT,
                                                 type: "POST",
                                                 headers: {
                                                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -266,7 +266,7 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
                                             let msgEmail = "M";
                                             $.ajax({
                                                 "crossDomain": true,
-                                                url: "" + Result_API + "/api/EMAIL/POST_SendEmailNotification/" + email + "/" + FPDM_PROPOSAL_NO + "/" + doc_code + "/" + subject + "/" + cust_name + "/" + msgEmail,
+                                                url: "" + Result_API + "/api/EMAIL/POST_SendEmailNotification/" + email + "/" + FPDM_PROPOSAL_NO + "/" + doc_code + "/" + subject + "/" + cust_name + "/" + msgEmail + "/" + CLLCT_AMOUNT,
                                                 type: "POST",
                                                 headers: {
                                                     'Content-Type': 'application/x-www-form-urlencoded',
