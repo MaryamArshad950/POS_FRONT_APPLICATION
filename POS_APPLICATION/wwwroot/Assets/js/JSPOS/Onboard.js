@@ -789,13 +789,12 @@
                                 $("#needAnalysisModal").modal("hide");
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Alert',
                                     text: 'Something went wrong! Your account already exists.\nPlease sign in',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         sessionStorage.clear();
                                         localStorage.clear();
-                                        $.post("/User/uploadimage", function (token) {
+                                        $.post("/User/removeSessionValue", function (token) {
                                             window.location.href = "/"
                                         });
                                     }
@@ -1413,7 +1412,6 @@ function continueThisDocument(ID) {
                         $("#" + ID).removeClass("illustIcons", true);
                         Swal.fire({
                             icon: 'info',
-                            title: 'Alert',
                             text: 'You have already issued Policy on this document!',
                         })
                     }
@@ -1861,7 +1859,6 @@ function AddRdr(elem, ID) {
     }
 }
 const TrackDiseaseDoc = (elem) => {
-    console.log("elem called")
     let ID = elem.parentNode.parentNode.children[0].children[0].value;
 
     let DiseaseIDDoc = document.getElementById("DiseaseDoc" + ID);
