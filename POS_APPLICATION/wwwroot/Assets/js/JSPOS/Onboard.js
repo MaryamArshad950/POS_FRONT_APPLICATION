@@ -125,6 +125,7 @@
                         $(result).each(function () {
                             if (this.FCIH_INSUREREXIST_YN == "N") {
                                 $("#INSUREREXIST_N").attr("checked", true)
+                                $("#FCIH_INSUREREXIST_ID").val(this.FCIH_INSUREREXIST_ID);
                             }
                             if (this.FCIH_INSUREREXIST_YN == "Y") {
                                 if (this.FCIH_START_DATE != null && this.FCIH_MATURITY_DATE != null) {
@@ -175,7 +176,7 @@
                         $("#FCFA_EXPENSES_LASTYR").val(nf.format(this.FCFA_EXPENSES_LASTYR));
                         $("#FCFA_EXPENSES_CURRENTYR").val(nf.format(this.FCFA_EXPENSES_CURRENTYR));
                         $("#FCFA_NET_SAVINGS").val(nf.format(this.FCFA_NET_SAVINGS));
-                        $("#FCFA_ADDTNL_DTLS").val(nf.format(this.FCFA_ADDTNL_DTLS));
+                        $("#FCFA_ADDTNL_DTLS").val(this.FCFA_ADDTNL_DTLS);
                     })
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -237,6 +238,7 @@
                             $(result).each(function () {
                                 if (this.FCIH_INSUREREXIST_YN == "N") {
                                     $("#INSUREREXIST_N").attr("checked", true)
+                                    $("#FCIH_INSUREREXIST_ID").val(this.FCIH_INSUREREXIST_ID);
                                 }
                                 if (this.FCIH_INSUREREXIST_YN == "Y") {
                                     if (this.FCIH_START_DATE != null && this.FCIH_MATURITY_DATE != null) {
@@ -287,7 +289,7 @@
                             $("#FCFA_EXPENSES_LASTYR").val(nf.format(this.FCFA_EXPENSES_LASTYR));
                             $("#FCFA_EXPENSES_CURRENTYR").val(nf.format(this.FCFA_EXPENSES_CURRENTYR));
                             $("#FCFA_NET_SAVINGS").val(nf.format(this.FCFA_NET_SAVINGS));
-                            $("#FCFA_ADDTNL_DTLS").val(nf.format(this.FCFA_ADDTNL_DTLS));
+                            $("#FCFA_ADDTNL_DTLS").val(this.FCFA_ADDTNL_DTLS);
                         })
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -787,13 +789,12 @@
                                 $("#needAnalysisModal").modal("hide");
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Alert',
                                     text: 'Something went wrong! Your account already exists.\nPlease sign in',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         sessionStorage.clear();
                                         localStorage.clear();
-                                        $.post("/User/uploadimage", function (token) {
+                                        $.post("/User/removeSessionValue", function (token) {
                                             window.location.href = "/"
                                         });
                                     }
@@ -1176,6 +1177,7 @@ function checkValue(val) {
     }
 }
 async function calculateFaceValue() {
+    let nf = new Intl.NumberFormat('en-US');
     let sessionPos = getSessionpos()
     let annual_savings = $("#FCDM_PLAN_CONTRIB").val();
     annual_savings = Number(annual_savings.replaceAll(",", ""));
@@ -1267,6 +1269,7 @@ function isValidInput(inputString) {
     return regex.test(inputString);
 }
 function checkCNICQuotations(Val, ID2) {
+    let nf = new Intl.NumberFormat('en-US');
     let sessionPos = getSessionpos()
     if (Val.length == 15 && Val[5] == "-" && Val[13] == "-") {
         sessionStorage.setItem("thisCustCNIC", Val);
@@ -1295,8 +1298,6 @@ function checkCNICQuotations(Val, ID2) {
             datatype: 'jsonp',
             timeout: 2000,
             success: function (data) {
-                let nf = new Intl.NumberFormat('en-US');
-
                 if (data.length >= 1) {
                     $("#mySavedIllustModal").modal("show");
                     $("#tableSavedillust tbody").empty();
@@ -1411,7 +1412,6 @@ function continueThisDocument(ID) {
                         $("#" + ID).removeClass("illustIcons", true);
                         Swal.fire({
                             icon: 'info',
-                            title: 'Alert',
                             text: 'You have already issued Policy on this document!',
                         })
                     }
@@ -1437,6 +1437,8 @@ function continueThisDocument(ID) {
     });
 }
 function editThisDocument(ID) {
+    let nf = new Intl.NumberFormat('en-US');
+
     ID = ID.slice(7);
     let thisDocumentCode = $("#DOCUMENT_CODE" + ID).val();
     $("#mySavedIllustModal").modal("hide");
@@ -1481,6 +1483,9 @@ function editThisDocument(ID) {
                 $("#FCDM_PLAN_CONTRIB").val(nf.format(this.BASIC_CONTRIBUTION));
                 $("#FCDM_FACE_VALUE").val(nf.format(this.POL_COVGE_SUMASSURD));
                 maxlimitVal(this.POL_COVGE_SUMASSURD);
+                //if (this.POL_COVGE_SUMASSURD >= 500000) {
+                //    genderQuestionnaire(this.GENDER, this.POL_COVGE_SUMASSURD);
+                //}
                 $("#FSAG_AGENT_CODE").val(this.FSAG_AGENT_CODE);
             })
         },
@@ -1565,6 +1570,7 @@ function ExistInsValNo(ID, VAL) {
     $(".fact_find").val("");
 }
 function calcTotalIncome(VAL) {
+    let nf = new Intl.NumberFormat('en-US');
     let annualIncome = $("#FCFA_ANNUAL_INCOME").val();
     annualIncome = annualIncome.replaceAll(",", "");
     let otherIncome = $("#FCFA_OTHER_INCOME").val();
@@ -1852,6 +1858,12 @@ function AddRdr(elem, ID) {
         }
     }
 }
+const TrackDiseaseDoc = (elem) => {
+    let ID = elem.parentNode.parentNode.children[0].children[0].value;
+
+    let DiseaseIDDoc = document.getElementById("DiseaseDoc" + ID);
+    DiseaseIDDoc.value = "Doc for Disease ID " + ID;
+}
 function RidersUniqueAdd(ID, name) {
     $("#tableRiders tbody").append("<tr><td hidden><input class='form-control' name='FCDR_DOC_RDR_ID' id='FCDR_DOC_RDR_ID" + ID + "' value='0' /></td>" +
         "<td hidden><input class='form-control' name='FSPM_PRODRDR_ID' id='FSPM_PRODRDR_ID" + ID + "' value='" + ID + "' /></td>" +
@@ -1866,26 +1878,52 @@ function MedDiseasesUniqueAdd(ID, name) {
         "<td><input style='width:200px' class='form-control readonly' name='DISEAESE_NAME' id='DISEAESE_NAME" + ID + "' value='" + name + "' readonly /></td>" +
         "<td><select style='width:119px' class='form-control' name='FCDS_DISEASE_DURATION' id='FCDS_DISEASE_DURATION" + ID + "'><option value=''>Select</option><option value='1'>Less than an year</option><option value='3'>1-5 years</option><option value='5'>Above 5 yearsr</option></select></td>" +
         "<td><input style='width:150px' class='form-control' name='FCDS_DISEASE_DETAILS' id='FCDS_DISEASE_DETAILS" + ID + "' placeholder='More Details' /></td>" +
-        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH' /></td>" +
-        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td></tr>"
+        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH' oninput='TrackDiseaseDoc(this)' /></td>" +
+        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td>" +
+        "<td><input style='width:80px' class='form-control' name='DiseaseDoc' id='DiseaseDoc" + ID + "' value='none' readonly /></td></tr>"
     )
 }
 function MedCatgryUniqueAdd(ID, name, table) {
     $("#" + table + " tbody").append("<tr><td hidden><input class='form-control' name='DiseaseID' id='DiseaseID" + ID + "' value='" + ID + "' /></td>" +
         "<td><input style='width:280px' class='form-control readonly' name='DISEAESE_NAME' id='DISEAESE_NAME" + ID + "' value='" + name + "' readonly /></td>" +
         "<td><input style='width:150px' class='form-control' name='FCDS_DISEASE_DETAILS' id='FCDS_DISEASE_DETAILS" + ID + "' placeholder='Details' /></td>" +
-        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH' /></td>" +
-        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td></tr>"
+        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH' oninput='TrackDiseaseDoc(this)' /></td>" +
+        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td>" +
+        "<td><input style='width:80px' class='form-control' name='DiseaseDoc' id='DiseaseDoc" + ID + "' value='none' readonly /></td></tr>"
     )
 }
 function selectOccup(CUOCP_ID) {
     $("#FCDM_OW_CUOCP_FSCD_ID").val(CUOCP_ID)
 }
+const genderQuestionnaire = (gender, Amount) => {
+    if (Amount == undefined) {
+        Amount = $("#FCDM_FACE_VALUE").val();
+        Amount = Amount.replaceAll(",", "");
+        gender = Number(gender);
+        Amount = Number(Amount);
+    }
+    if (gender == 1 && Amount >= 5000000) {
+        $(".contribLimit7").attr("hidden", true);
+        $("#FSPQS_QSTNR_FSCD_ID8").removeAttr("required", true);
+        $("#FCUQ_ANSR_YN8").removeAttr("required", true);
+    }
+    if(gender == 2 && Amount >= 5000000) {
+        $(".contribLimit7").removeAttr("hidden", true);
+        $("#FSPQS_QSTNR_FSCD_ID8").attr("required", true);
+        $("#FCUQ_ANSR_YN8").attr("required", true);
+    }
+}
 const maxlimitVal = (Contribution) => {
-    if (Contribution >= 500000) {
+    if (Contribution >= 5000000) {
         $(".contribLimit").removeAttr("hidden", true);
         $('.FCUQ_ANSR_YN').attr("required", true);
         $('.FSPQS_QSTNR_FSCD_ID').attr("required", true);
+        if ($("#FCDM_OW_GENDR_FSCD_ID").val() == 1) {
+            genderQuestionnaire(1,Contribution);
+        }
+        if ($("#FCDM_OW_GENDR_FSCD_ID").val() == 2) {
+            genderQuestionnaire(2, Contribution);
+        }
     } else {
         $(".contribLimit").attr("hidden", true);
         $('.FCUQ_ANSR_YN').removeAttr("required", true);
