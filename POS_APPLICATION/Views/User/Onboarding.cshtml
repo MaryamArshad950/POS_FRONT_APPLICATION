@@ -90,21 +90,21 @@
                                         </label>
                                     </div>
                                 </div>
+                                <input class="form-control" name="FCIH_INSUREREXIST_ID" id="FCIH_INSUREREXIST_ID" hidden>
                             </div>
                             <div class="row mt-3 ml-1 ExistingLifePlans" hidden>
                                 <div class="row w-100 mb-2">
                                     <div class="col-md-3">
-                                        <input class="form-control" name="FCIH_INSUREREXIST_ID" id="FCIH_INSUREREXIST_ID" value="0" hidden>
                                         <label for="" class="font-size-2 text-success">Policy Number</label>
                                         <input class="form-control fact_find" name="FCIH_POLICY_NO" id="FCIH_POLICY_NO" placeholder="Policy Number" />
                                     </div>
                                     <div class="col-md-3">
                                         <label for="" class="font-size-2 text-success">Sum Assured</label>
-                                        <input class="form-control fact_find" name="FCIH_SA_AMOUNT" id="FCIH_SA_AMOUNT" type="number" placeholder="500,000" />
+                                        <input class="form-control fact_find" name="FCIH_SA_AMOUNT" id="FCIH_SA_AMOUNT" type="text" placeholder="500,000" oninput="formatNumber(this)" />
                                     </div>
                                     <div class="col-md-3">
                                         <label for="" class="font-size-2 text-success">Contribution/Deposit</label>
-                                        <input class="form-control fact_find" name="FCIH_CONTRIB_AMT" id="FCIH_CONTRIB_AMT" type="number" placeholder="100,000" />
+                                        <input class="form-control fact_find" name="FCIH_CONTRIB_AMT" id="FCIH_CONTRIB_AMT" type="text" placeholder="100,000" oninput="formatNumber(this)" />
                                     </div>
                                     <div class="col-md-3">
                                         <label for="" class="font-size-2 text-success">Start Date</label>
@@ -145,7 +145,7 @@
                                             <label for="" class="font-size-2 text-success">Annual Income</label>
                                         </div>
                                         <div class="col-md-6">
-                                            <input class="form-control" name="FCFA_ANNUAL_INCOME" id="FCFA_ANNUAL_INCOME" type="number" required onkeyup="calcTotalIncome(this.value)" />
+                                            <input class="form-control" name="FCFA_ANNUAL_INCOME" id="FCFA_ANNUAL_INCOME" type="text" required onkeyup="calcTotalIncome(this.value)" oninput="formatNumber(this)" />
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -154,7 +154,7 @@
                                             <i class="text-danger text-sml">(Bonuses/Commission/Dividends/Share of Profit)</i>
                                         </div>
                                         <div class="col-md-6">
-                                            <input class="form-control" name="FCFA_OTHER_INCOME" id="FCFA_OTHER_INCOME" type="number" onkeyup="calcTotalIncome(this.value)" min="0" />
+                                            <input class="form-control" name="FCFA_OTHER_INCOME" id="FCFA_OTHER_INCOME" type="text" onkeyup="calcTotalIncome(this.value)" min="0" oninput="formatNumber(this)" />
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -163,7 +163,7 @@
                                             <i class="text-danger text-sml">All sources</i>
                                         </div>
                                         <div class="col-md-6">
-                                            <input class="form-control readonly" name="FCFA_TOTAL_INCOME" id="FCFA_TOTAL_INCOME" onclick="calcTotalIncome(this.value)" readonly />
+                                            <input class="form-control readonly" name="FCFA_TOTAL_INCOME" id="FCFA_TOTAL_INCOME" onclick="calcTotalIncome(this.value)" type="text" readonly />
                                         </div>
                                     </div>
                                 </div>
@@ -176,7 +176,7 @@
                                             <label for="" class="font-size-2 text-success">Expenses last year</label>
                                         </div>
                                         <div class="col-md-6">
-                                            <input class="form-control" name="FCFA_EXPENSES_LASTYR" id="FCFA_EXPENSES_LASTYR" type="number" onkeyup="calcTotalIncome(this.value)" required />
+                                            <input class="form-control" name="FCFA_EXPENSES_LASTYR" id="FCFA_EXPENSES_LASTYR" type="text" onkeyup="calcTotalIncome(this.value)" oninput="formatNumber(this)" required />
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -185,7 +185,7 @@
                                             <i class="text-danger text-sml">(Yearly)</i>
                                         </div>
                                         <div class="col-md-6">
-                                            <input class="form-control" name="FCFA_EXPENSES_CURRENTYR" id="FCFA_EXPENSES_CURRENTYR" type="number" onkeyup="calcTotalIncome(this.value)" required />
+                                            <input class="form-control" name="FCFA_EXPENSES_CURRENTYR" id="FCFA_EXPENSES_CURRENTYR" type="text" onkeyup="calcTotalIncome(this.value)" oninput="formatNumber(this)" required />
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -193,7 +193,7 @@
                                             <label for="" class="font-size-2 text-success">Net Savings</label>
                                         </div>
                                         <div class="col-md-6">
-                                            <input class="form-control" name="FCFA_NET_SAVINGS" id="FCFA_NET_SAVINGS" type="number" required />
+                                            <input class="form-control" name="FCFA_NET_SAVINGS" id="FCFA_NET_SAVINGS" type="text" readonly required />
                                         </div>
                                     </div>
                                 </div>
@@ -203,7 +203,7 @@
                                         <i class="text-danger text-sml">If yes, details please</i>
                                     </div>
                                     <div class="col-md-6">
-                                        <textarea class="form-control" name="FCFA_ADDTNL_DTLS" id="FCFA_ADDTNL_DTLS" type="number"></textarea>
+                                        <textarea class="form-control" name="FCFA_ADDTNL_DTLS" id="FCFA_ADDTNL_DTLS" type="text"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -368,7 +368,7 @@
             <div class="row gendetails">
                 <div class="col-md-3 mb-3">
                     <label for="" class="mr-5 text-success">Gender</label>
-                    <select class="form-control" name="FCDM_OW_GENDR_FSCD_ID" id="FCDM_OW_GENDR_FSCD_ID" required><option value="">Select</option><option value="1">Male</option><option value="2">Female</option><option value="3">Others</option></select>
+                    <select class="form-control" name="FCDM_OW_GENDR_FSCD_ID" id="FCDM_OW_GENDR_FSCD_ID" onchange="genderQuestionnaire(this.value)" required><option value="">Select</option><option value="1">Male</option><option value="2">Female</option><option value="3">Others</option></select>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="CUOCP_FSCD_ID" class="mr-5 text-success">Occupation</label>
@@ -392,7 +392,6 @@
                 <div class="col-md-3 mb-3">
                     <label for="" class="mr-5 text-success">Height <span class="text-danger font-weight-light">Feet & Inches</span></label>
                     <div class="input-group slidecontainer">
-
                         <input type="number" class="form-control" max="8" min="3" id="heightFt" onkeyup="selectHeightFeet(this.value)" placeholder="Feet" value="5" onclick="setHeightMaxLength(this.value)">
                         <input type="number" class="form-control" max="11" min="0" id="heightIn" onkeyup="selectHeightInches(this.value)" placeholder="Inches" value="7" onclick="setHeightMaxLength(this.value)">
 
@@ -455,13 +454,12 @@
                     <input class="form-control" placeholder="Ex 10 years" type="number" name="FCDM_PAYING_TERM" id="FCDM_PAYING_TERM" required onkeyup="calculateFaceValue()" min="5" max="30" />
                 </div>
                 <div class="col-md-3 mb-3">
-
                     <label for="" class="mr-5 text-success">Takaful Contribution/ Deposit</label>
-                    <input class="form-control" id="FCDM_PLAN_CONTRIB" type="number" name="FCDM_PLAN_CONTRIB" placeholder="Contribution" required onkeyup="calculateFaceValue()" onchange=" maxlimitVal(this.value)" min="100" max="10000000" />
+                    <input class="form-control" id="FCDM_PLAN_CONTRIB" type="text" name="FCDM_PLAN_CONTRIB" placeholder="Contribution" required onkeyup="calculateFaceValue()" min="100" max="10000000" oninput="formatNumber(this)" />
                 </div>
                 <div class="col-md-3">
                     <label for="" class="mr-5 text-success">Sum Assured</label>
-                    <input class="form-control" id="FCDM_FACE_VALUE" type="number" name="FCDM_FACE_VALUE" placeholder="Sum Assured" onclick="calculateFaceValue()" readonly required />
+                    <input class="form-control" id="FCDM_FACE_VALUE" type="text" name="FCDM_FACE_VALUE" placeholder="Sum Assured" onclick="calculateFaceValue()" readonly required />
                 </div>
             </div>
             <div class="row mt-3 mb-3">
@@ -823,6 +821,7 @@
                                     <th>More Details (If Any)</th>
                                     <th>Upload Document</th>
                                     <th>Delete</th>
+                                    <th>DiseaseDoc</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -939,6 +938,7 @@
                                     <th>More Details (If Any)</th>
                                     <th>Upload Document</th>
                                     <th>Delete</th>
+                                    <th>DiseaseDoc</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1014,6 +1014,7 @@
                                     <th>Details (If Any)</th>
                                     <th>Upload Document</th>
                                     <th>Delete</th>
+                                    <th>DiseaseDoc</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1087,6 +1088,7 @@
                                     <th>Details (If Any)</th>
                                     <th>Upload Document</th>
                                     <th>Delete</th>
+                                    <th>DiseaseDoc</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1101,7 +1103,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>              
     <div class="modal fade medicalUnderWT" id="medicalUnderWT5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -1154,6 +1156,7 @@
                                     <th>Details (If Any)</th>
                                     <th>Upload Document</th>
                                     <th>Delete</th>
+                                    <th>DiseaseDoc</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -84,7 +84,49 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
         datatype: 'jsonp',
         success: function (result) {
             if ((sessionStorage.getItem("PayCheck") == "RenewalPay" || sessionStorage.getItem("PayCheck") == "TopupPay") && sessionStorage.getItem("Policy_NoF") != null) {
-                console.log(result)
+                $(result).each(function () {
+                    let NEW_POL_NO = this.NEW_POL_NO
+                    let message = this.APP_ALTMSG;
+                    if (this.APP_STS == "Y") {
+                        let DOCUMENT_ID = Number(sessionStorage.getItem("DOCUMENT_ID"));
+                        let SERIAL_NO = Number(sessionStorage.getItem("SERIAL_NO"));
+                        let TOPUP_CONTRIB = Number(sessionStorage.getItem("TOPUP_CONTRIB"));
+                        let PRMFND_ID = Number(sessionStorage.getItem("PRMFND_ID"));
+                        let DISTRIBURATE = Number(sessionStorage.getItem("DISTRIBURATE"));
+                        let CURRENCY_CODE = 1;
+                        let GLVOUCHR_NO = NEW_POL_NO;
+                        let STATUS = "Y";
+                        $.ajax({
+                            "crossDomain": true,
+                            url: "" + Result_API + "/API/TOPUP/SAVEorUPDATE_TOPUP_DETAILS?DOCUMENT_ID=" + DOCUMENT_ID + "&SERIAL_NO=" + SERIAL_NO + "&TOPUP_CONTRIB=" + TOPUP_CONTRIB + "&PRMFND_ID=" + PRMFND_ID + "&DISTRIBURATE=" + DISTRIBURATE + "&CURRENCY_CODE=" + CURRENCY_CODE + "&GLVOUCHR_NO=" + GLVOUCHR_NO + "&STATUS=" + STATUS,
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'Access-Control-Allow-Origin': Result_API,
+                                'Access-Control-Allow-Methods': 'POST, GET',
+                                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                                'Authorization': 'Bearer ' + getsession
+                            },
+                            datatype: 'jsonp',
+                            success: function (result) {
+                                $(result).each(function () {
+                                    window.location.href = "/ContributionPayment"
+                                })
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                if (jqXHR.status === 401) {
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        $("#policyfailed").removeAttr("hidden", true);
+                        $("#policyText").attr("hidden", true);
+                        let policyFailure = document.getElementById("policyfailed");
+                        policyFailure.innerHTML = 'Please check your email for policy attachments or respond to sms sent to your provided contact Number';
+                    }
+                });
             }
             if (sessionStorage.getItem("PayCheck") == "ProposalPay" && sessionStorage.getItem("Prpsl_No") != null){
                 $(result).each(function () {
@@ -143,7 +185,7 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
                                             let msgEmail = "M";
                                             $.ajax({
                                                 "crossDomain": true,
-                                                url: "" + Result_API + "/api/EMAIL/POST_SendEmailNotification/" + email + "/" + FPDM_PROPOSAL_NO + "/" + doc_code + "/" + subject + "/" + cust_name + "/" + msgEmail,
+                                                url: "" + Result_API + "/api/EMAIL/POST_SendEmailNotification/" + email + "/" + FPDM_PROPOSAL_NO + "/" + doc_code + "/" + subject + "/" + cust_name + "/" + msgEmail + "/" + CLLCT_AMOUNT,
                                                 type: "POST",
                                                 headers: {
                                                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -224,7 +266,7 @@ function Receipting(FPDM_PROPOSAL_NO, FPDM_APPROVED, CURR_CODE, CLLCT_AMOUNT, GW
                                             let msgEmail = "M";
                                             $.ajax({
                                                 "crossDomain": true,
-                                                url: "" + Result_API + "/api/EMAIL/POST_SendEmailNotification/" + email + "/" + FPDM_PROPOSAL_NO + "/" + doc_code + "/" + subject + "/" + cust_name + "/" + msgEmail,
+                                                url: "" + Result_API + "/api/EMAIL/POST_SendEmailNotification/" + email + "/" + FPDM_PROPOSAL_NO + "/" + doc_code + "/" + subject + "/" + cust_name + "/" + msgEmail + "/" + CLLCT_AMOUNT,
                                                 type: "POST",
                                                 headers: {
                                                     'Content-Type': 'application/x-www-form-urlencoded',

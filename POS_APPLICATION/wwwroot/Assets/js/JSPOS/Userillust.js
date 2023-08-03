@@ -7,21 +7,6 @@
             sessionStorage.getItem("DocCODE");
         }
 
-        //if (sessionStorage.getItem("User") != null) {
-        //    $("#btnAgreeTermsCond").removeAttr("type", true);
-        //    $("#btnAgreeTermsCond").attr("type", "button");
-        //    $("#btnAgreeTermsCond").click(function () {
-        //        window.location.href = "/Onboarding"
-        //    })
-        //}
-
-        //if (sessionStorage.getItem("tokenIndex") != null && sessionStorage.getItem("tokenIndex") != "" && sessionStorage.getItem("User") == null) {
-        //    $("#btnAgreeTermsCond").attr("type", "button");
-        //    $("#btnAgreeTermsCond").click(function () {
-        //        window.location.href = "/Onboarding"
-        //    })
-        //}
-
         if (sessionStorage.getItem("tokenIndex") == null && sessionStorage.getItem("token") != "" && localStorage.getItem("token1") == null && localStorage.getItem("token3") == null) {
             localStorage.setItem("token3", sessionStorage.getItem("token"));
         }
@@ -135,6 +120,13 @@
                     else {
                         $("#p_GENDER").val("Male")
                     }
+                    //if (this.EM_TXT_VALUE == 'Y') {
+                    //    $("#extraMortality").val("Applicable")
+                    //}
+                    //else {
+                    //    $("#extraMortality").val("N/A")
+                    //}
+                    $("#extraMortality").val(this.EM_TXT_VALUE)
                     $("#p_DOB").val(birth_date);
                     $("#p_CONTRIBUTION_FREQUENCY").val(this.CONTRIBUTION_FREQENCY);
                     let BASIC_CONTRIBUTION = this.BASIC_CONTRIBUTION;
@@ -216,7 +208,7 @@
             "async": false,
             "crossDomain": true,
             type: "GET",
-            url: "" + Result_API + "/api/GET_PROILLUSTRATION/" + document_code + "/9",
+            url: "" + Result_API + "/api/GET_PROILLUSTRATION/" + document_code + "/6",
             contentType: "application/json; charset=utf-8",
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -245,7 +237,7 @@
                     "async": false,
                     "crossDomain": true,
                     type: "GET",
-                    url: "" + Result_API + "/api/GET_PROILLUSTRATION/" + document_code + "/11",
+                    url: "" + Result_API + "/api/GET_PROILLUSTRATION/" + document_code + "/9",
                     contentType: "application/json; charset=utf-8",
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -270,7 +262,7 @@
                             "async": false,
                             "crossDomain": true,
                             type: "GET",
-                            url: "" + Result_API + "/api/GET_PROILLUSTRATION/" + document_code + "/13",
+                            url: "" + Result_API + "/api/GET_PROILLUSTRATION/" + document_code + "/11",
                             contentType: "application/json; charset=utf-8",
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded',

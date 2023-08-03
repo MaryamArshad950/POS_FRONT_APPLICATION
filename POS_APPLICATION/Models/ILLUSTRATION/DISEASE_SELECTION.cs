@@ -16,6 +16,7 @@ namespace POS_APPLICATION.Models.ILLUSTRATION
         public string FCDS_STATUS { get; set; }
         public int FCDS_CRUSER { get; set; }
         public DateTime FCDS_CRDATE { get; set; }
+        public int FPDD_DMSDTL_ID { get; set; }
 
     }
 }

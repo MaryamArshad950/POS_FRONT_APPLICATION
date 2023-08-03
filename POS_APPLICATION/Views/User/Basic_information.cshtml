@@ -36,7 +36,7 @@
                     <button disabled class="nav-link fw-bold bg-transparent border-0" id="policyConfirm-tab" data-toggle="tab" data-target="#policyConfirm" type="button" role="tab" aria-controls="policyConfirm" aria-selected="false"><img src="~/Assets/images/number5.png" class="icon_gif mr-2" />Confirmation</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link fw-bold bg-transparent border-0" id="paymentMode-tab" data-toggle="tab" data-target="#paymentMode" type="button" role="tab" aria-controls="paymentMode" aria-selected="false"><img src="~/Assets/images/number6.png" class="icon_gif mr-2" />Payment Details</button>
+                    <button disabled class="nav-link fw-bold bg-transparent border-0" id="paymentMode-tab" data-toggle="tab" data-target="#paymentMode" type="button" role="tab" aria-controls="paymentMode" aria-selected="false"><img src="~/Assets/images/number6.png" class="icon_gif mr-2" />Payment Details</button>
                 </li>
             </ul>
             <div class="tab-content border-0">
@@ -108,8 +108,8 @@
                                 </div>
                                 <div class="col-md-3 mb-3">
 
-                                    <label for="" class="mr-5 text-success">Net Savings</label>
-                                    <input class="form-control mb-2" placeholder="Annual Income" type="number" name="FSCU_CUST_ANNUAL_INCOME" id="FSCU_CUST_ANNUAL_INCOME" min="1" />
+                                    <label for="" class="mr-5 text-success">Annual Income</label>
+                                    <input class="form-control mb-2" placeholder="Annual Income" type="text" name="FSCU_CUST_ANNUAL_INCOME" id="FSCU_CUST_ANNUAL_INCOME" />
                                 </div>
                             </div>
                             <div class="row mt-5 mb-6 justify-content-center">
@@ -395,8 +395,11 @@
                                 <div class="mt-3">
                                     <h4 class="text-white mr-5">Politically-Exposed-Persons' (PEPs)</h4>
                                     <p class="text-white">
-                                        Also, I confirm that me or any of my associate (immediate family member) is not affiliated with any Political Party, or works for the Judiciary, Armed Forces, Law Enforcement Agency, or Bureaucracy in any possible way.
-                                        Furthermore, I declare that no criminal record or any criminal proceedings pending against me before any adjudicating forum(s) OR associated/linked with any Proscribed Organization/Individual referred in Schedule IV of the Anti-Terrorism Act 1997 or as per any other prevailing law of the land.
+                                        Also, I confirm that me or any of my associate (immediate family member) is not affiliated with
+                                        any Political Party, or works for the Judiciary, Armed Forces, Law Enforcement Agency, or
+                                        Bureaucracy in any possible way.
+                                        Furthermore, I declare that no criminal record or any criminal proceedings pending against me
+                                        before any adjudicating forum(s) OR associated/linked with any Proscribed Organization/Individual referred in    Schedule IV of the Anti-Terrorism Act 1997 or as per any other prevailing law of the land.
                                     </p>
                                     <input class="form-control" id="QUES_PEP_YN" hidden />
                                     <div class="form-check form-check-success">
@@ -644,15 +647,30 @@
                 </div>
                 <h3 class="title">Terms &amp; Conditions</h3>
                 <h5 class="card-title mb-4 mt-3">
-                    I, <span class="customer-name"></span>, understand and acknowledge that this proposal form, along with any additional documents or information submitted in connection with this application, shall form the basis of the takaful contract between me and Salaam Family Takaful Limited<br />
-                    I hereby declare and confirm, under the principles of utmost good faith, that all the information provided in this proposal form and the accompanying documents is true, accurate, and complete to the best of my knowledge and belief. I understand that any false statement or misrepresentation, whether intentional or unintentional, may result in the rejection of my takaful application, cancellation of my policy, or denial of any future claims <br />
-                    By signing this declaration, I also authorize Salaam Family Takaful to obtain relevant information from any necessary sources, including Government Authorities like NADRA, CDC etc. to verify the accuracy and completeness of the information provided in this proposal form.<br />
-                    For the underwriting and claim process, I give my permission to any physician or other medical practitioner, hospital, clinic, other medical or medically related facility, takaful/insurance company, or employer to give Salaam Family Takaful Limited or its authorized representative "ALL INFORMATION" on my behalf including copies of records with reference to any sickness, accidental disability, treatment, examination medical investigation, advice or hospitalization underwent. I hereby apply for the Family Takaful coverage under the terms and conditions of the Participant Membership Document (PMD).
+                    I, <span class="customer-name"></span>, that this proposal form, along with any additional documents or
+                    information submitted in connection with this application, shall form the basis of the takaful contract
+                    between me and Salaam Family Takaful Limited.<br />
+                    I hereby declare and confirm, under the principles of utmost good faith, that all the information
+                    provided in this proposal form and the accompanying documents is true, accurate, and complete to
+                    the best of my knowledge and belief. I understand that any false statement or misrepresentation,
+                    whether  intentional  or  unintentional,  may  result  in  the  rejection  of  my  takaful  application,
+                    cancellation of my policy, or denial of any future claims. <br />
+                    By signing this declaration, I also authorize Salaam Family Takaful to obtain relevant information
+                    from any necessary sources, including Government Authorities like NADRA, CDC etc. to verify the
+                    accuracy and completeness of the information provided in this proposal form.<br />
+                    For the underwriting and claim process, I give my permission to any physician or other medical
+                    practitioner, hospital, clinic, other medical or medically related facility, takaful/insurance company,
+                    or   employer   to   give   Salaam   Family   Takaful   Limited   or   its  authorized  representative   "ALL
+                    INFORMATION" on my behalf including copies of records with reference to any sickness, accidental
+                    disability, treatment, examination medical investigation, advice or hospitalization underwent. I
+                    hereby apply for the Family Takaful coverage under the terms and conditions of the Participant
+                    Membership Document (PMD).
                 </h5>
                 <h4 class="card-title">Disclaimer:</h4>
                 <h5 class="card-tile mb-3">
-                    The Participant can cancel the Membership within fourteen (14) days of the receipt of the Participant's Membership Document (PMD) by the Participant. 
-                    In case of cancellation during this free look period (subject to Terms and Conditions), the paid contribution is refundable.
+                    The Participant can cancel the Membership within fourteen (14) days of the receipt of the
+                    Participant's Membership Document (PMD) by the Participant. In case of cancellation during this free
+                    look period (subject to Terms and Conditions), the paid contribution is refundable.
                 </h5>
                 <div class="row">
                     <button class="btn btn-rounded btn-danger mr-3 mb-1" type="button" id="btnDisAgreeTerms">Disagree</button>

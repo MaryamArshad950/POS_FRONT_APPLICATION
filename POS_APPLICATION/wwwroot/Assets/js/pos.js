@@ -1,5 +1,9 @@
 ﻿!function () {
     $("#spinner").hide();
+    $('#contact').val("+92");
+    let contact_no = document.querySelector("#contact");
+    window.intlTelInput(contact_no);
+    $(".iti--allow-dropdown").addClass("w-100",true);
     $("#btnUserLogin").click(function () {
         if ($("#SUM_SYS_USER_CODE").val() != "" && $("#SUM_USER_PASSWORD").val() != "") {
             sessionStorage.setItem("cnic.", $("#SUM_SYS_USER_CODE").val());
@@ -24,11 +28,33 @@
     $('.form-horizontal').submit(function () {
         $("#spinner").show();
     });
+    $("#forgetAcc").click(function () {
+        $("#recoverySetup-tab").click();
+    })
+    $("#backToLogin").click(function () {
+        $("#signIn-tab").click();
+    })
+    $("#btnUpdatePassword").click(function () {
+        let passwdToChange = $("#newpass").val();
+        let passwdConfirm = $("#confirmpaswd").val();
+        if (passwdToChange === passwdConfirm) {
+            return true;
+        } else
+            return false;
+    })
 }();
 
-$('.form-horizontal').submit(function () {
-    $("#spinner").show();
-});
+function formatNumber(input) {
+    // Remove any existing commas and non-digit characters from the input value
+    let rawValue = input.value.replace(/,/g, '').replace(/\D/g, '');
+
+    // Convert the raw value to a number
+    let number = parseInt(rawValue, 10);
+
+    // Add commas back to the number
+    input.value = number.toLocaleString();
+}
+
 function togglePasswordVisibility() {
     var passwordInput = document.getElementById("SUM_USER_PASSWORD");
     var icon = document.querySelector(".password-toggle i");
@@ -121,10 +147,10 @@ let objDmsHdr = {
     FPDH_APPROVED_YN: 'Y',
     FPDH_STATUS: 'Y'
 }
-//console.log(selectedOption)
 if (sessionStorage.getItem("cnic.") != null) {
     objDmsHdr.FPDH_DMSCUS_CNIC = sessionStorage.getItem("cnic.");
 } else {
+    if (sessionStorage.getItem("DocCNIC") != null)
     objDmsHdr.FPDH_DMSCUS_CNIC = sessionStorage.getItem("DocCNIC").replaceAll("-", "");
 }
 
@@ -151,31 +177,6 @@ function PaymentByCash(PolicyNum) {
         }
     }
     objDmsHdr = JSON.stringify(objDmsHdr);
-    console.log(objDmsHdr)
-    //const select = document.createElement('select');
-    //select.className = 'swal2-input'
-    //const optionselect = document.createElement('option');
-    //optionselect.textContent = 'Select';
-    //optionselect.value = '';
-    //select.appendChild(optionselect);
-    //if (sessionStorage.getItem("proposalResult") != null) {
-    //    let ProposalNumbers = sessionStorage.getItem("proposalResult").split(",");
-    //    ProposalNumbers.forEach((proposalNo) => {
-    //        const option = document.createElement('option');
-    //        option.textContent = proposalNo;
-    //        option.value = proposalNo;
-    //        select.appendChild(option);
-    //    });
-    //}
-    //if (sessionStorage.getItem("policyResult") != null) {
-    //    let PolicyNumbers = sessionStorage.getItem("policyResult").split(",");
-    //    PolicyNumbers.forEach((policyNo) => {
-    //        const option = document.createElement('option');
-    //        option.textContent = policyNo;
-    //        option.value = policyNo;
-    //        select.appendChild(option);
-    //    });
-    //}
 
     Swal.fire({
         title: 'Cash/ Cheque',
@@ -224,7 +225,6 @@ function PaymentByCash(PolicyNum) {
                 datatype: JSON,
                 data: objDmsHdr,
                 success: function (result) {
-                    console.log(result);
                     let dmsHdrId = result[0].NEW_DMSHDR_ID;
                     $.ajax({
                         url: '/User/uploadFile',
@@ -233,7 +233,6 @@ function PaymentByCash(PolicyNum) {
                         processData: false,
                         contentType: false,
                         success: function (result) {
-                            console.log(result);
                             let objDmsDtls = {
                                 FPDH_DMSHDR_ID: dmsHdrId,
                                 FPDD_PATH: result,
@@ -254,7 +253,6 @@ function PaymentByCash(PolicyNum) {
                                 datatype: JSON,
                                 data: objDmsDtls,
                                 success: function (result) {
-                                    console.log(result);
                                     if (result[0].NEW_DMSDTL_ID != null) {
                                         Swal.fire({
                                             text: 'Thanks for paying the contribution',
@@ -284,7 +282,6 @@ function PaymentByCash(PolicyNum) {
 }
 function PolicyNumberSelection() {
     let thisCustCNIC = sessionStorage.getItem("cnic.");
-
     if (thisCustCNIC[5] != "-" && thisCustCNIC[13] != "-") {
         let n1 = thisCustCNIC.substring(0, 5);
         let n2 = thisCustCNIC.substring(5, 12);
@@ -344,7 +341,7 @@ function PolicyNumberSelection() {
                 success: function (result) {
                     $(result).each(function () {
                         if (this.FPDM_POLICY_NO == selectedPolicy) {
-                            ProposalCashValues(this.FPDM_PROPOSAL_NO, this.FPDM_APPROVED);
+                            ProposalCashValues(this.FPDM_PROPOSAL_NO, this.FPDM_APPROVED, this.FCDM_PLAN_CONTRIB);
                         }
                     })
                 },
@@ -360,7 +357,7 @@ function PolicyNumberSelection() {
     });
 }
 
-function ProposalCashValues(selectdProposalNo, status) {
+function ProposalCashValues(selectdProposalNo, status, contribAmount) {
     $("#FPDM_PROPOSAL_NO").val(selectdProposalNo);
     let thisCustCNIC = sessionStorage.getItem("cnic.");
     thisCustCNIC = thisCustCNIC.replace(/^(\d{5})(\d{7})(\d)$/, "$1-$2-$3");
@@ -384,7 +381,16 @@ function ProposalCashValues(selectdProposalNo, status) {
         },
         datatype: 'jsonp',
         success: function (result) {
+            $(".refund_amount").html(nf.format(contribAmount));
+            $(".contrib_paid").html("<p class='text-center'>Total Takaful Contribution Paid</p><p class='text-center'>PKR " + nf.format(contribAmount) + "</p>");
+            $("#FSSH_SRNDR_AMT").val(contribAmount);
+            $("#FSSH_FREELOOK_AMT").val(contribAmount);
+
             $(result).each(function () {
+                let cashValue = this.FPDF_CASHVALUE_BC;
+                if (cashValue == null) {
+                    cashValue = contribAmount;
+                }
                 let units = this.FPDF_UNITS_END;
                 if (units == null) {
                     units = "N/A";
@@ -395,10 +401,10 @@ function ProposalCashValues(selectdProposalNo, status) {
                     bidPrice = "N/A";
                     $(".text-cash").removeAttr("hidden", true);
                 }
-                let residualVal = (10 / 100) * (this.FPDF_CASHVALUE_BC);
-                $(".currentCashValue").html("<p class='text-center'>Current Cash Value</p><p class='text-center'>PKR " + nf.format(this.FPDF_CASHVALUE_BC) + "</p>");
+                let residualVal = (10 / 100) * (cashValue);
+                $(".currentCashValue").html("<p class='text-center'>Current Cash Value</p><p class='text-center'>PKR " + nf.format(cashValue) + "</p>");
                 $(".residual_val").html("<p class='text-center'>Residual Value (10%)</p><p class='text-center'>PKR " + nf.format(residualVal) + "</p>")
-                let withdrwlAmount = this.FPDF_CASHVALUE_BC - residualVal;
+                let withdrwlAmount = cashValue - residualVal;
                 sessionStorage.setItem("withdrwlAmount", withdrwlAmount);
                 $(".withdrwlAmount").html(nf.format(withdrwlAmount) + " only");
                 $(".withdrwlText").removeAttr("hidden", true);
@@ -410,31 +416,32 @@ function ProposalCashValues(selectdProposalNo, status) {
             }
         }
     });
-    $.ajax({
-        "crossDomain": true,
-        url: Result_API + "/api/DcmntNominee/GetPrpslDetails/" + selectdProposalNo + "/Y",
-        type: "GET",
-        contentType: "application/json; charset=utf-8",
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': Result_API,
-            'Access-Control-Allow-Methods': 'POST, GET',
-            'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
-            'Authorization': 'Bearer ' + getsession
-        },
-        datatype: 'jsonp',
-        success: function (result) {
-            $(result).each(function () {
-                $(".refund_amount").html(nf.format(this.CONTRIB_AMOUNT));
-                $(".contrib_paid").html("<p class='text-center'>Total Takaful Contribution Paid</p><p class='text-center'>PKR " + nf.format(this.CONTRIB_AMOUNT) + "</p>");
-                $("#FSSH_SRNDR_AMT").val(this.CONTRIB_AMOUNT);
-            })
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            if (jqXHR.status === 401) {
-            }
-        }
-    });
+    //$.ajax({
+    //    "crossDomain": true,
+    //    url: Result_API + "/api/DcmntNominee/GetPrpslDetails/" + selectdProposalNo + "/Y",
+    //    type: "GET",
+    //    contentType: "application/json; charset=utf-8",
+    //    headers: {
+    //        'Content-Type': 'application/x-www-form-urlencoded',
+    //        'Access-Control-Allow-Origin': Result_API,
+    //        'Access-Control-Allow-Methods': 'POST, GET',
+    //        'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+    //        'Authorization': 'Bearer ' + getsession
+    //    },
+    //    datatype: 'jsonp',
+    //    success: function (result) {
+    //        $(result).each(function () {
+    //            $(".refund_amount").html(nf.format(this.CONTRIB_AMOUNT));
+    //            $(".contrib_paid").html("<p class='text-center'>Total Takaful Contribution Paid</p><p class='text-center'>PKR " + nf.format(this.CONTRIB_AMOUNT) + "</p>");
+    //            $("#FSSH_SRNDR_AMT").val(this.CONTRIB_AMOUNT);
+    //            $("#FSSH_FREELOOK_AMT").val(this.CONTRIB_AMOUNT);
+    //        })
+    //    },
+    //    error: function (jqXHR, textStatus, errorThrown) {
+    //        if (jqXHR.status === 401) {
+    //        }
+    //    }
+    //});
     $.ajax({
         "crossDomain": true,
         url: "" + Result_API + "/api/PosUser/GetUserByUserCd/" + sessionStorage.getItem("cnic."),
@@ -529,7 +536,6 @@ function ProposalCashValues(selectdProposalNo, status) {
     })
     $("#btnProceedFreeLook").click(function () {
         if ($("#SUM_CUST_CONTPHONE").val() != null && $("#FSSH_POL_CODE").val() != null) {
-            //$("#AgreementModal").modal("show");
             Swal.fire({
                 title: 'Please Confirm',
                 confirmButtonText: 'I want to proceed',
@@ -543,12 +549,6 @@ function ProposalCashValues(selectdProposalNo, status) {
             });
         }
     })
-    //$("#btnAgreeTermsCond").click(function () {
-
-    //});
-    //$("#btnDisAgreeTerms").click(function () {
-    //    $("#AgreementModal").modal("hide");
-    //});
 
     $("#verifyOTP").click(function () {
         let digitsArray = [];
@@ -572,10 +572,6 @@ function ProposalCashValues(selectdProposalNo, status) {
         sessionStorage.removeItem("code");
         $("#custBankDtls").modal("hide");
     })
-    //$(".closeRequestSuccess").click(function () {
-    //    sessionStorage.removeItem("code");
-    //    $("#successRequest").modal("hide");
-    //})
 }
 
 function sendCode(transactionID, cust_number, cust_name, cust_email) {
@@ -643,4 +639,124 @@ function AgreeFinService() {
         sessionStorage.setItem("code", (transactionID2).slice(0, 6));
         sendCode(transactionID2, cust_number, cust_name, cust_email);
     })
+}
+const VerifyContact = () => {
+    setTimeout(function () {
+        $(".validation-alert").fadeTo(500, 0).slideUp(500, function () {
+            $(this).remove();
+        });
+    }, 3000);
+    let userID = document.getElementById("usercode").value;
+    let contactNo = document.getElementById("contact").value;
+    if (userID == "") {
+        $("#recoverySetup").after("<div class='row validation-alert mt-3 mb-3'><div class='col-md-12 pb-5'><div class='alert alert-danger alert-dismissible fade show p-3 mt-2' role='alert'>Please enter your user ID</div></div></div>")
+    }
+    else if (contactNo == "" || contactNo.length != 13) {
+        $("#recoverySetup").after("<div class='row validation-alert mt-3 mb-3'><div class='col-md-12 pb-5'><div class='alert alert-danger alert-dismissible fade show p-3 mt-2' role='alert'>Please enter your phone number in +92 XXXXXXXXXX format</div></div></div>")
+    }
+    else if (userID != "" && contactNo != "" && contactNo.length == 13) {
+        $("#spinner").show();
+        $.post("/User/authorizePOSAcc", function (token) {
+            $.ajax({
+                "crossDomain": true,
+                url: Result_API + "/api/PosUser/GetUserByUserCd/" + userID,
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Access-Control-Allow-Origin': Result_API,
+                    'Access-Control-Allow-Methods': 'POST, GET',
+                    'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                    'Authorization': 'Bearer ' + token
+                },
+                datatype: 'jsonp',
+                success: function (result) {
+                    const min = 100000;
+                    const max = 999999;
+                    const DigitCode = Math.floor(Math.random() * (max - min + 1)) + min;
+                    $(result).each(function () {
+                        let email = this.SUM_USER_EMAIL_ADDR;
+                        if (this.SUM_CUST_CONTPHONE == contactNo) {
+                            $.ajax({
+                                type: "POST",
+                                url: "/User/SendSMS",
+                                data: {
+                                    username: "customer", Txtmessage: ", your OTP verification Code for SFTL application is " + DigitCode, phoneNumber: contactNo
+                                }
+                            }).done(function (msg) {
+                            });
+                            $.ajax({
+                                type: "POST",
+                                url: "/User/SendEmail",
+                                data: { username: "customer", messageEmail: "<p>Your OTP verification Code for SFTL application is " + DigitCode + "</p>", emailAddress: email, subject: "OTP" }
+                            }).done(function (msg) {
+                            });
+                            $("#spinner").hide();
+                            Swal.fire({
+                                title: 'Enter the verification code sent to your contact number or email address',
+                                html: `<ul class="code-number">
+                                <li><input id="firstDigit" class="border-0 bg-transparent w-50" placeholder="1" maxlength="1" /></li>
+                                <li><input id="secondDigit" class="border-0 bg-transparent w-50" placeholder="0" maxlength="1" /></li>
+                                <li><input id="thirdDigit" class="border-0 bg-transparent w-50" placeholder="5" maxlength="1" /></li>
+                                <li><input id="fourthDigit" class="border-0 bg-transparent w-50" placeholder="3" maxlength="1" /></li>
+                                <li><input id="fifthDigit" class="border-0 bg-transparent w-50" placeholder="9" maxlength="1" /></li>
+                                <li><input id="sixthDigit" class="border-0 bg-transparent w-50" placeholder="2" maxlength="1" /></li>
+                            </ul>`,
+                                confirmButtonText: 'Submit',
+                                showCancelButton: true,
+                                preConfirm: () => {
+                                    const digit1 = document.getElementById('firstDigit').value
+                                    const digit2 = document.getElementById('secondDigit').value
+                                    const digit3 = document.getElementById('thirdDigit').value
+                                    const digit4 = document.getElementById('fourthDigit').value
+                                    const digit5 = document.getElementById('fifthDigit').value
+                                    const digit6 = document.getElementById('sixthDigit').value
+                                    if (digit1 === '') {
+                                        Swal.showValidationMessage('Please enter the code');
+                                    }
+                                    if (digit2 === '') {
+                                        Swal.showValidationMessage('Please enter the code');
+                                    }
+                                    if (digit3 === '') {
+                                        Swal.showValidationMessage('Please enter the code');
+                                    }
+                                    if (digit4 === '') {
+                                        Swal.showValidationMessage('Please enter the code');
+                                    }
+                                    if (digit5 === '') {
+                                        Swal.showValidationMessage('Please enter the code');
+                                    }
+                                    if (digit6 === '') {
+                                        Swal.showValidationMessage('Please enter the code');
+                                    } else {
+                                        code = digit1 + digit2 + digit3 + digit4 + digit5 + digit6
+                                        if (code == DigitCode) {
+                                            return code;
+                                        } else
+                                            Swal.showValidationMessage('Please enter correct code');
+                                    }
+                                },
+                                allowOutsideClick: () => false
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $("#userCode").val(userID);
+                                    $("#SUM_USER_EMAIL_ADDR").val(email);
+                                    $("#confirmRecovery-tab").click();
+                                }
+                            });
+                        } else
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Please enter your registered contact number',
+                            }).then((result) => {
+                            });
+                    })
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.status === 401) {
+                    }
+                }
+            });
+        });
+    }
 }

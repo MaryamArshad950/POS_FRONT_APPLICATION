@@ -16,7 +16,7 @@ namespace POS_APPLICATION.Models.ILLUSTRATION
         public int FCDM_OW_GENDR_FSCD_ID { get; set; }
         public int FCDM_OW_TITLE_FSCD_DID { get; set; }
         public DateTime FCDM_OWCUST_DOB { get; set; }
-        public float FCDM_OWCUST_HEITACT { get; set; }
+        public decimal FCDM_OWCUST_HEITACT { get; set; }
         public int FCDM_OWCUST_HEITUNT { get; set; }
         public int FCDM_OWCUST_WEITACT { get; set; }
         public int FCDM_OWCUST_WEITUNT { get; set; }

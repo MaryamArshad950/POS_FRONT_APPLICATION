@@ -165,6 +165,9 @@ namespace POS_APPLICATION
                 endpoints.MapControllerRoute(
                   name: "CheckEmail",
                   pattern: "CheckEmail/{controller=Services}/{action=CheckEmail}");
+                endpoints.MapControllerRoute(
+                  name: "RecoverPassword",
+                  pattern: "RecoverPassword/{controller=User}/{action=RecoverPassword}");
             });
         }
     }

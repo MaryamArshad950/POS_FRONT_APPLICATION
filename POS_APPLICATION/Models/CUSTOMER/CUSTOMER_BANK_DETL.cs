@@ -12,6 +12,7 @@ namespace POS_APPLICATION.Models.CUSTOMER
         public string FPDM_PROPOSAL_NO { get; set; }
         public int FSSH_PW_AMT { get; set; }
         public int FSSH_SRNDR_AMT { get; set; }
+        public int FSSH_FREELOOK_AMT { get; set; }
         public string FSBK_BANK_NAME { get; set; }
         public string FSCB_BRANCH_NAME { get; set; }
         public string FSCB_ACCOUNT_TITLE { get; set; }
