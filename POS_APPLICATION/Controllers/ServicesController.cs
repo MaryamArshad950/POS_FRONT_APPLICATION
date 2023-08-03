@@ -52,51 +52,250 @@ namespace POS_APPLICATION.Controllers
 
         public IActionResult MyProfile()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult Funds()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult AlterAddress()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult AlterContact()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult AlterEmail()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult CheckEmail()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult PartialWithdrawal()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
+
         public IActionResult ClaimIntimation()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index","User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
+
+
+        //public IActionResult ClaimIntimation()
+        //{
+        //    try
+        //    {
+        //        var strToken = HttpContext.Session.GetString("JwTokenPos");
+        //        if (strToken != null)
+        //        {
+        //            return View();
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        return RedirectToAction("AlterContact");
+        //    }
+        //}
         public IActionResult Documents()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult FreeLook()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult PolicySurrender()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult ContributionPayment()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         ///general email sending
         public async Task<ActionResult> SendEmail(string username, string messageEmail, string emailAddress, string subject)

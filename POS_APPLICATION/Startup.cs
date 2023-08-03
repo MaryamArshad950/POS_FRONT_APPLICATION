@@ -87,6 +87,20 @@ namespace POS_APPLICATION
             app.UseRouting();
             app.UseSession();
             app.UseAuthorization();
+            //app.UseHsts();
+            app.UseHsts();
+            //it is use for X-Frame-Option header for VAPT's according document
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+                await next();
+            });
+            // it is use X-XSS-Protection header middleware
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+                await next();
+            });
             app.UseDeveloperExceptionPage();
             app.UseDefaultFiles();
             app.UseStaticFiles();

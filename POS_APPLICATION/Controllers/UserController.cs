@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Hosting;
 using POS_APPLICATION.Models.CUSTOMER;
 using System.Net.Http.Headers;
 using RDL_TestProject.RS_Services.RS_Interface;
+//using System.Web.Mvc;
 
 namespace POS_APPLICATION.Controllers
 {
@@ -264,23 +265,98 @@ namespace POS_APPLICATION.Controllers
 
         public IActionResult Onboarding()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult Illustration()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult Basic_information()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult Policy_issuance()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult Proposal_summary()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
 
         [HttpPost]
@@ -789,6 +865,7 @@ namespace POS_APPLICATION.Controllers
 
 
         [HttpPost]
+        //[ValidateInput(true)]
         public async Task<ActionResult> POS_USER_LOGIN(string SUM_SYS_USER_CODE, string SUM_USER_PASSWORD)
         {
             userMaster user_master = new userMaster();
