@@ -68,6 +68,7 @@ namespace POS_APPLICATION
             {
                 options.Cookie.Name = "Session";
                 options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.Cookie.MaxAge = TimeSpan.FromMinutes(20);
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.HttpOnly = true;

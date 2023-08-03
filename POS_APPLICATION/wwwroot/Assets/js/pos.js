@@ -132,9 +132,10 @@ let objDmsHdr = {
 }
 if (sessionStorage.getItem("cnic.") != null) {
     objDmsHdr.FPDH_DMSCUS_CNIC = sessionStorage.getItem("cnic.");
-} else {
-    objDmsHdr.FPDH_DMSCUS_CNIC = sessionStorage.getItem("DocCNIC").replaceAll("-", "");
 }
+//else {
+//    objDmsHdr.FPDH_DMSCUS_CNIC = sessionStorage.getItem("DocCNIC").replaceAll("-", "");
+//}
 
 function PaymentByCash(PolicyNum) {
     //objDmsHdr = JSON.parse(objDmsHdr)
