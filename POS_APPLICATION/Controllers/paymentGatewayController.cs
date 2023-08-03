@@ -85,7 +85,8 @@ namespace POS_APPLICATION.Controllers
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Failed to user Authentication" + ex.Message);
+                    return View("~/Views/User/Basic_information.cshtml");
+                    //throw new Exception("Failed to user Authentication" + ex.Message);
                 }
                 string paymentAmount = Convert.ToString(FIPR_COLL_AMOUNT * 100);
                 if (PaymentType == "CC")

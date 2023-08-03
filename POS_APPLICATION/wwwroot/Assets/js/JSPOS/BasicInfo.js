@@ -181,6 +181,7 @@
         $(".sidebar-offcanvas").attr("hidden", true);
         let thisCustCNIC = sessionStorage.getItem("thisCustCNIC");
 
+
         if (thisCustCNIC != null) {
             $("#FSCU_IDENTIFICATION_NO").val(thisCustCNIC);
             $(".welcome-div").removeAttr("hidden", true);
@@ -327,10 +328,16 @@
         }
 
         $(".sign_out").click(function () {
-            window.location.href = "/";
+            // Clear session and local storage
             sessionStorage.clear();
             localStorage.clear();
-        })
+
+            // Destroy the "Session" cookie by setting its expiration to a past date and add the secure flag
+            document.cookie = "Session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; secure;";
+
+            // Redirect to the home page
+            window.location.href = "/";
+        });
         $("#btnPrev").click(function () {
             window.location.href = "/Onboarding";
         })
