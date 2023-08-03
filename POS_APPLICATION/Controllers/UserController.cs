@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Hosting;
 using POS_APPLICATION.Models.CUSTOMER;
 using System.Net.Http.Headers;
 using RDL_TestProject.RS_Services.RS_Interface;
+//using System.Web.Mvc;
 
 namespace POS_APPLICATION.Controllers
 {
@@ -59,6 +60,7 @@ namespace POS_APPLICATION.Controllers
         private readonly string Add_DMS_DETAILS = "" + Result_API + "/API/DMS/POST_DMS_DETAILS";
         private readonly string Add_Rider_Dtls = "" + Result_API + "/api/Participant/PostRiderDetails";
         private readonly string Add_familyhistory = "" + Result_API + "/API/CUSTOMER_FAMILY_HISTRY/";
+        private readonly string updateUserPswd = "" + Result_API + "/api/PosUser/UpdatePasswd";
         public string GetIPHostAPI()
         {
             IP_Address = Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value;
@@ -81,11 +83,14 @@ namespace POS_APPLICATION.Controllers
         {
             return View();
         }
+        public IActionResult RecoverPassword()
+        {
+            return View();
+        }
         [HttpPost]
         public IActionResult GetSessionValue(string key)
         {
             return Ok(HttpContext.Session.GetString(key));
-            //return Ok();
         }
         [HttpPost]
         public IActionResult SetSessionValue(string key, string value)
@@ -112,6 +117,7 @@ namespace POS_APPLICATION.Controllers
             user.SUM_USER_PASSWORD = DefaultPosUser;
             user.SUM_CRUSER = 1;
             user.SUM_CRDATE = DateTime.Today;
+            //HttpContext.Session.Clear();
             using (var handler = new HttpClientHandler())
             {
                 // allow the bad certificate
@@ -180,7 +186,61 @@ namespace POS_APPLICATION.Controllers
             }
             return Ok(JWTToken.ToString());
         }
+        [HttpPost]
+        public async Task<IActionResult> authorizePOSAcc()
+        {
+            userMaster user_master = new userMaster();
+            string JWTToken = null;
+            user_master.UserName = "POSUSER";
+            user_master.Password = "POSUSER";
+            HttpContext.Session.Clear();
+            using (var handler = new HttpClientHandler())
+            {
+                // allow the bad certificate
+                handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
 
+                using (var client = new HttpClient(handler))
+                {
+                    SendRequest = null;
+                    try
+                    {
+                        //Token authenticate
+                        SendRequest = new StringContent(JsonConvert.SerializeObject(user_master), Encoding.UTF8, "application/json");
+                        using (var response = await client.PostAsync(checkUserValidate, SendRequest))
+                        {
+                            string apiResponse = await response.Content.ReadAsStringAsync();
+                            if (apiResponse == "\"Invalid user\"" ||
+                                apiResponse == "\"Database Connection fail\"" ||
+                                apiResponse == "\"Token Exception!" ||
+                                apiResponse == "\"Incorrect credentials. Please try again!\"" ||
+                                apiResponse == "\"User account Locked, Please contact System Administrator!\"" ||
+                                apiResponse == "\"You have entered an Invalid credentials 3 times User has been Locked\"")
+                            {
+                                TempData["WrongStatus"] = apiResponse.ToString().Trim('"');
+                            }
+                            else
+                            {
+                                var reg = new Regex("\".*?\"");
+                                var matches = reg.Matches((string)apiResponse);
+                                for (int i = 1; i < 3; i++)
+                                {
+                                    if (i == 2)
+                                    {
+                                        JWTToken = (string)matches[1].ToString().Trim('"');
+                                        HttpContext.Session.SetString("JwTokenUser", JWTToken);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["successUSER"] = ex.ToString();
+                    }
+                }
+            }
+            return Ok(JWTToken.ToString());
+        }
         public string PosReport(string P_DOCUMENT_CODE)
         {
             var reportServerUrl = Configuration.GetSection("ReportServer").GetSection("ServerName").Value;
@@ -265,22 +325,99 @@ namespace POS_APPLICATION.Controllers
         public IActionResult Onboarding()
         {
             return View();
+
+            //try
+            //{
+            //    var strToken = HttpContext.Session.GetString("JwTokenPos");
+            //    if (strToken != null)
+            //    {
+            //        return View();
+            //    }
+            //    else
+            //    {
+            //        return RedirectToAction("Index", "User");
+            //    }
+            //}
+            //catch (Exception)
+            //{
+            //    return RedirectToAction("Index", "User");
+            //}
         }
         public IActionResult Illustration()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult Basic_information()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult Policy_issuance()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult Proposal_summary()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
 
         [HttpPost]
@@ -298,7 +435,7 @@ namespace POS_APPLICATION.Controllers
                                        string FCFA_EXPENSES_LASTYR, string FCFA_EXPENSES_CURRENTYR, string FCFA_NET_SAVINGS, string FCFA_ADDTNL_DTLS,
                                                                   int[] FSFP_FINQUEST_FSCD_ID, int[] FSFP_FINQUEST_TYPE, int[] FCFN_FINQUEST_PRIORITYNO,
                                                                   int[] FSDI_DISEASE_ID, string[] FCDS_DISEASE_DURATION, string[] FCDS_DISEASE_DETAILS, int CHECK_RIDER, int[] FCDR_DOC_RDR_ID, int[] FSPM_PRODRDR_ID, int[] FCDR_PAYING_TERM, int[] FCDR_FACE_VALUE, IFormFile[] FPDD_PATH,
-                               int[] FSCU_RELTN_FSCD_DID, int[] FSCF_AGE, string[] FSCF_STATOFHLTH, string[] FSCF_YEAROFDTH, int[] FSCF_AGEOFDTH, string[] FSCF_CAUSOFDTH)
+                               int[] FSCU_RELTN_FSCD_DID, int[] FSCF_AGE, string[] FSCF_STATOFHLTH, string[] FSCF_YEAROFDTH, int[] FSCF_AGEOFDTH, string[] FSCF_CAUSOFDTH, string[] DiseaseDoc)
         {
             PARTICIPANT participant = new PARTICIPANT();
             Rider rider = new Rider();
@@ -311,6 +448,7 @@ namespace POS_APPLICATION.Controllers
             DMSDTLS dms_dtls = new DMSDTLS();
             CUSTOMER_FAMILY_HISTRY family = new CUSTOMER_FAMILY_HISTRY();
             int questionsLength;
+            int DMSDtlID = 0;
 
             participant.FCDM_DOCUMENT_ID = FCDM_DOCUMENT_ID;
             participant.FCDM_DOCUMENT_CODE = FCDM_DOCUMENT_CODE;
@@ -350,6 +488,8 @@ namespace POS_APPLICATION.Controllers
             string DocumentCodeValue = "";
             string CustomerCodeValue = "";
             string customerCNIC = "";
+            int count;
+            List<string> DMSIDList = new List<string>();
             using (var handler = new HttpClientHandler())
             {
                 // allow the bad certificate
@@ -417,6 +557,7 @@ namespace POS_APPLICATION.Controllers
                         {
                             questionsLength = FSPQS_QSTNR_FSCD_ID.Length - 5;
                         }
+
                         //medical info insert
                         for (int i = 0; i <= questionsLength - 1; i++)
                         {
@@ -438,103 +579,110 @@ namespace POS_APPLICATION.Controllers
                                 TempData["successDocument"] = ex.ToString();
                             }
                         }
-                        if (FSPQS_QSTNR_FSCD_ID[0] == 3541 || FSPQS_QSTNR_FSCD_ID[1] == 3542 || FSPQS_QSTNR_FSCD_ID[3] == 3641 || FSPQS_QSTNR_FSCD_ID[4] == 3642 || FSPQS_QSTNR_FSCD_ID[7] == 3645 && FCUQ_ANSR_YN[0] == "Y" || FCUQ_ANSR_YN[1] == "Y" || FCUQ_ANSR_YN[3] == "Y" || FCUQ_ANSR_YN[4] == "Y" || FCUQ_ANSR_YN[7] == "Y")  //CORRECT THIS CONDITION
-                        {
-                            //Diseases info insert if any
-                            for (int i = 0; i <= FSDI_DISEASE_ID.Length - 1; i++)
-                            {
-                                if (FSDI_DISEASE_ID[i] <= 26)
-                                {
-                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
-                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
-                                    diseases.FSPQS_QSTNR_FSCD_ID = 3541;
-                                    diseases.FCDS_DISEASE_DURATION = FCDS_DISEASE_DURATION[i];
-                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
-                                    diseases.FCDS_STATUS = "Y";
-                                    diseases.FCDS_CRUSER = 1;
-                                    diseases.FCDS_CRDATE = DateTime.Today;
-                                }
-                                if (FSDI_DISEASE_ID[i] >= 27 && FSDI_DISEASE_ID[i] <= 33)
-                                {
-                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
-                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
-                                    diseases.FSPQS_QSTNR_FSCD_ID = 3542;
-                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
-                                    diseases.FCDS_STATUS = "Y";
-                                    diseases.FCDS_CRUSER = 1;
-                                    diseases.FCDS_CRDATE = DateTime.Today;
-                                }
-                                if (FSDI_DISEASE_ID[i] >= 34 && FSDI_DISEASE_ID[i] <= 36)
-                                {
-                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
-                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
-                                    diseases.FSPQS_QSTNR_FSCD_ID = 3641;
-                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
-                                    diseases.FCDS_STATUS = "Y";
-                                    diseases.FCDS_CRUSER = 1;
-                                    diseases.FCDS_CRDATE = DateTime.Today;
-                                }
-                                if (FSDI_DISEASE_ID[i] >= 37 && FSDI_DISEASE_ID[i] <= 40)
-                                {
-                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
-                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
-                                    diseases.FSPQS_QSTNR_FSCD_ID = 3642;
-                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
-                                    diseases.FCDS_STATUS = "Y";
-                                    diseases.FCDS_CRUSER = 1;
-                                    diseases.FCDS_CRDATE = DateTime.Today;
-                                }
-                                if (FSDI_DISEASE_ID[i] >= 41)
-                                {
-                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
-                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
-                                    diseases.FSPQS_QSTNR_FSCD_ID = 3645;
-                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
-                                    diseases.FCDS_STATUS = "Y";
-                                    diseases.FCDS_CRUSER = 1;
-                                    diseases.FCDS_CRDATE = DateTime.Today;
-                                }
-                                try
-                                {
-                                    SendRequest = new StringContent(JsonConvert.SerializeObject(diseases), Encoding.UTF8, "application/json");
-                                    using (var response = await client.PostAsync(Add_DiseasesInfo, SendRequest))
-                                    {
-                                        string apiResponse = await response.Content.ReadAsStringAsync();
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    TempData["successDocument"] = ex.ToString();
-                                }
-                            }
-                        }
-                        if(FSPQS_QSTNR_FSCD_ID[5] == 3643 && FCUQ_ANSR_YN[5] == "Y")
-                        {
-                            for(int i = 0; i <= FSCU_RELTN_FSCD_DID.Length - 1; i++)
-                            {
-                                family.FSCU_CUSTOMER_CODE = int.Parse(CustomerCodeValue);
-                                family.FSCU_RELTN_FSCD_DID = FSCU_RELTN_FSCD_DID[i];
-                                family.FSCF_AGE = FSCF_AGE[i];
-                                family.FSCF_STATOFHLTH = FSCF_STATOFHLTH[i];
-                                family.FSCF_AGEOFDTH = FSCF_AGEOFDTH[i];
-                                family.FSCF_YEAROFDTH = FSCF_YEAROFDTH[i];
-                                family.FSCF_CAUSOFDTH = FSCF_CAUSOFDTH[i];
-                                family.FSCF_CRUSER = 1;
-                                family.FSCF_CRDATE = DateTime.Now;
-                                try
-                                {
-                                    SendRequest = new StringContent(JsonConvert.SerializeObject(family), Encoding.UTF8, "application/json");
-                                    using (var response = await client.PostAsync(Add_familyhistory, SendRequest))
-                                    {
-                                        string apiResponse = await response.Content.ReadAsStringAsync();
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    TempData["successDocument"] = ex.ToString();
-                                }
-                            }
-                        }
+
+
+
+                        //if (FSPQS_QSTNR_FSCD_ID[0] == 3541 || FSPQS_QSTNR_FSCD_ID[1] == 3542 || FSPQS_QSTNR_FSCD_ID[3] == 3641 || FSPQS_QSTNR_FSCD_ID[4] == 3642 || FSPQS_QSTNR_FSCD_ID[7] == 3645 && FCUQ_ANSR_YN[0] == "Y" || FCUQ_ANSR_YN[1] == "Y" || FCUQ_ANSR_YN[3] == "Y" || FCUQ_ANSR_YN[4] == "Y" || FCUQ_ANSR_YN[7] == "Y")  //CORRECT THIS CONDITION
+                        //{
+                        //    //Diseases info insert if any
+                        //    for (int i = 0; i <= FSDI_DISEASE_ID.Length - 1; i++)
+                        //    {
+                        //        if (FSDI_DISEASE_ID[i] <= 26)
+                        //        {
+                        //            diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
+                        //            diseases.FCDM_DOCUMENT_ID = Document_ID;
+                        //            diseases.FSPQS_QSTNR_FSCD_ID = 3541;
+                        //            diseases.FCDS_DISEASE_DURATION = FCDS_DISEASE_DURATION[i];
+                        //            diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
+                        //            diseases.FCDS_STATUS = "Y";
+                        //            diseases.FCDS_CRUSER = 1;
+                        //            diseases.FCDS_CRDATE = DateTime.Today;
+                        //        }
+                        //        if (FSDI_DISEASE_ID[i] >= 27 && FSDI_DISEASE_ID[i] <= 33)
+                        //        {
+                        //            diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
+                        //            diseases.FCDM_DOCUMENT_ID = Document_ID;
+                        //            diseases.FSPQS_QSTNR_FSCD_ID = 3542;
+                        //            diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
+                        //            diseases.FCDS_STATUS = "Y";
+                        //            diseases.FCDS_CRUSER = 1;
+                        //            diseases.FCDS_CRDATE = DateTime.Today;
+                        //        }
+                        //        if (FSDI_DISEASE_ID[i] >= 34 && FSDI_DISEASE_ID[i] <= 36)
+                        //        {
+                        //            diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
+                        //            diseases.FCDM_DOCUMENT_ID = Document_ID;
+                        //            diseases.FSPQS_QSTNR_FSCD_ID = 3641;
+                        //            diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
+                        //            diseases.FCDS_STATUS = "Y";
+                        //            diseases.FCDS_CRUSER = 1;
+                        //            diseases.FCDS_CRDATE = DateTime.Today;
+                        //        }
+                        //        if (FSDI_DISEASE_ID[i] >= 37 && FSDI_DISEASE_ID[i] <= 40)
+                        //        {
+                        //            diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
+                        //            diseases.FCDM_DOCUMENT_ID = Document_ID;
+                        //            diseases.FSPQS_QSTNR_FSCD_ID = 3642;
+                        //            diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
+                        //            diseases.FCDS_STATUS = "Y";
+                        //            diseases.FCDS_CRUSER = 1;
+                        //            diseases.FCDS_CRDATE = DateTime.Today;
+                        //        }
+                        //        if (FSDI_DISEASE_ID[i] >= 41)
+                        //        {
+                        //            diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
+                        //            diseases.FCDM_DOCUMENT_ID = Document_ID;
+                        //            diseases.FSPQS_QSTNR_FSCD_ID = 3645;
+                        //            diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
+                        //            diseases.FCDS_STATUS = "Y";
+                        //            diseases.FCDS_CRUSER = 1;
+                        //            diseases.FCDS_CRDATE = DateTime.Today;
+                        //        }
+                        //        try
+                        //        {
+                        //            SendRequest = new StringContent(JsonConvert.SerializeObject(diseases), Encoding.UTF8, "application/json");
+                        //            using (var response = await client.PostAsync(Add_DiseasesInfo, SendRequest))
+                        //            {
+                        //                string apiResponse = await response.Content.ReadAsStringAsync();
+                        //            }
+                        //        }
+                        //        catch (Exception ex)
+                        //        {
+                        //            TempData["successDocument"] = ex.ToString();
+                        //        }
+                        //    }
+                        //}
+                        //if(FSPQS_QSTNR_FSCD_ID[5] == 3643 && FCUQ_ANSR_YN[5] == "Y")
+                        //{
+                        //    for(int i = 0; i <= FSCU_RELTN_FSCD_DID.Length - 1; i++)
+                        //    {
+                        //        family.FSCU_CUSTOMER_CODE = int.Parse(CustomerCodeValue);
+                        //        family.FSCU_RELTN_FSCD_DID = FSCU_RELTN_FSCD_DID[i];
+                        //        family.FSCF_AGE = FSCF_AGE[i];
+                        //        family.FSCF_STATOFHLTH = FSCF_STATOFHLTH[i];
+                        //        family.FSCF_AGEOFDTH = FSCF_AGEOFDTH[i];
+                        //        family.FSCF_YEAROFDTH = FSCF_YEAROFDTH[i];
+                        //        family.FSCF_CAUSOFDTH = FSCF_CAUSOFDTH[i];
+                        //        family.FSCF_CRUSER = 1;
+                        //        family.FSCF_CRDATE = DateTime.Now;
+                        //        try
+                        //        {
+                        //            SendRequest = new StringContent(JsonConvert.SerializeObject(family), Encoding.UTF8, "application/json");
+                        //            using (var response = await client.PostAsync(Add_familyhistory, SendRequest))
+                        //            {
+                        //                string apiResponse = await response.Content.ReadAsStringAsync();
+                        //            }
+                        //        }
+                        //        catch (Exception ex)
+                        //        {
+                        //            TempData["successDocument"] = ex.ToString();
+                        //        }
+                        //    }
+                        //}
+
+
+
+                        //MEDICAL DOCUMENTS UPLOAD 
                         dms_hdr.FPDH_DMSCUS_CNIC = FCDM_OWCUST_CNIC.Replace("-", "");
                         dms_hdr.FPDH_DESCRIPTION = "Medical documents";
                         dms_hdr.FPDH_SHORT_DESCR = "Medical documents";
@@ -559,26 +707,249 @@ namespace POS_APPLICATION.Controllers
                         {
                             TempData["successDocument"] = ex.ToString();
                         }
-                        for (int i = 0; i < FPDD_PATH.Length; i++)
-                        {
-                            var img = await uploadFile(FPDD_PATH[i]);
-                            dms_dtls.FPDH_DMSHDR_ID = dms_hdr.FPDH_DMSHDR_ID;
-                            dms_dtls.FPDD_PATH = img;
-                            dms_dtls.FPDD_DESC = "Diseases";
-                            SendRequest = new StringContent(JsonConvert.SerializeObject(dms_dtls), Encoding.UTF8, "application/json");
 
-                            using (var response = await client.PostAsync(Add_DMS_DETAILS, SendRequest))
+                        if (FSPQS_QSTNR_FSCD_ID[0] == 3541 || FSPQS_QSTNR_FSCD_ID[1] == 3542 || FSPQS_QSTNR_FSCD_ID[3] == 3641 || FSPQS_QSTNR_FSCD_ID[4] == 3642 || FSPQS_QSTNR_FSCD_ID[7] == 3645 && FCUQ_ANSR_YN[0] == "Y" || FCUQ_ANSR_YN[1] == "Y" || FCUQ_ANSR_YN[3] == "Y" || FCUQ_ANSR_YN[4] == "Y" || FCUQ_ANSR_YN[7] == "Y")  //CORRECT THIS CONDITION
+                        {
+                            //Diseases info insert if any
+                            for (int i = 0; i <= FSDI_DISEASE_ID.Length - 1; i++)
                             {
-                                string apiResponse = await response.Content.ReadAsStringAsync();
+                                if (FSDI_DISEASE_ID[i] <= 26)
+                                {
+                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
+                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
+                                    diseases.FSPQS_QSTNR_FSCD_ID = 3541;
+                                    diseases.FCDS_DISEASE_DURATION = FCDS_DISEASE_DURATION[i];
+                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
+                                    diseases.FCDS_STATUS = "Y";
+                                    diseases.FCDS_CRUSER = 1;
+                                    diseases.FCDS_CRDATE = DateTime.Today;
+                                    if(DiseaseDoc[i] != "none")
+                                    {
+                                        count = DMSIDList.Count();
+                                        var img = await uploadFile(FPDD_PATH[count]);
+                                        dms_dtls.FPDH_DMSHDR_ID = dms_hdr.FPDH_DMSHDR_ID;
+                                        dms_dtls.FPDD_PATH = img;
+                                        dms_dtls.FPDD_DESC = "Diseases ID " + diseases.FSDI_DISEASE_ID;
+                                        SendRequest = new StringContent(JsonConvert.SerializeObject(dms_dtls), Encoding.UTF8, "application/json");
+
+                                        using (var response = await client.PostAsync(Add_DMS_DETAILS, SendRequest))
+                                        {
+                                            string apiResponse = await response.Content.ReadAsStringAsync();
+                                            var dict2 = JArray.Parse(apiResponse);
+                                            foreach (JObject DMSDtl in dict2.Children<JObject>())
+                                            {
+                                                DMSDtlID = int.Parse(DMSDtl["NEW_DMSDTL_ID"].ToString());
+                                                DMSIDList.Add(DMSDtlID + "");
+                                            }
+                                        }
+                                    }
+                                    diseases.FPDD_DMSDTL_ID = DMSDtlID;
+                                }
+                                if (FSDI_DISEASE_ID[i] >= 27 && FSDI_DISEASE_ID[i] <= 33)
+                                {
+                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
+                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
+                                    diseases.FSPQS_QSTNR_FSCD_ID = 3542;
+                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
+                                    diseases.FCDS_STATUS = "Y";
+                                    diseases.FCDS_CRUSER = 1;
+                                    diseases.FCDS_CRDATE = DateTime.Today;
+                                    if (DiseaseDoc[i] != "none")
+                                    {
+                                        count = DMSIDList.Count();
+                                        var img = await uploadFile(FPDD_PATH[count]);
+                                        dms_dtls.FPDH_DMSHDR_ID = dms_hdr.FPDH_DMSHDR_ID;
+                                        dms_dtls.FPDD_PATH = img;
+                                        dms_dtls.FPDD_DESC = "Diseases ID " + diseases.FSDI_DISEASE_ID;
+                                        SendRequest = new StringContent(JsonConvert.SerializeObject(dms_dtls), Encoding.UTF8, "application/json");
+
+                                        using (var response = await client.PostAsync(Add_DMS_DETAILS, SendRequest))
+                                        {
+                                            string apiResponse = await response.Content.ReadAsStringAsync();
+                                            var dict2 = JArray.Parse(apiResponse);
+                                            foreach (JObject DMSDtl in dict2.Children<JObject>())
+                                            {
+                                                DMSDtlID = int.Parse(DMSDtl["NEW_DMSDTL_ID"].ToString());
+                                                DMSIDList.Add(DMSDtlID + "");
+                                            }
+                                        }
+                                    }
+                                    diseases.FPDD_DMSDTL_ID = DMSDtlID;
+                                }
+                                if (FSDI_DISEASE_ID[i] >= 34 && FSDI_DISEASE_ID[i] <= 36)
+                                {
+                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
+                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
+                                    diseases.FSPQS_QSTNR_FSCD_ID = 3641;
+                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
+                                    diseases.FCDS_STATUS = "Y";
+                                    diseases.FCDS_CRUSER = 1;
+                                    diseases.FCDS_CRDATE = DateTime.Today;
+                                    if (DiseaseDoc[i] != "none")
+                                    {
+                                        count = DMSIDList.Count();
+                                        var img = await uploadFile(FPDD_PATH[count]);
+                                        dms_dtls.FPDH_DMSHDR_ID = dms_hdr.FPDH_DMSHDR_ID;
+                                        dms_dtls.FPDD_PATH = img;
+                                        dms_dtls.FPDD_DESC = "Diseases ID " + diseases.FSDI_DISEASE_ID;
+                                        SendRequest = new StringContent(JsonConvert.SerializeObject(dms_dtls), Encoding.UTF8, "application/json");
+
+                                        using (var response = await client.PostAsync(Add_DMS_DETAILS, SendRequest))
+                                        {
+                                            string apiResponse = await response.Content.ReadAsStringAsync();
+                                            var dict2 = JArray.Parse(apiResponse);
+                                            foreach (JObject DMSDtl in dict2.Children<JObject>())
+                                            {
+                                                DMSDtlID = int.Parse(DMSDtl["NEW_DMSDTL_ID"].ToString());
+                                                DMSIDList.Add(DMSDtlID + "");
+                                            }
+                                        }
+                                    }
+                                    diseases.FPDD_DMSDTL_ID = DMSDtlID;
+                                }
+                                if (FSDI_DISEASE_ID[i] >= 37 && FSDI_DISEASE_ID[i] <= 40)
+                                {
+                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
+                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
+                                    diseases.FSPQS_QSTNR_FSCD_ID = 3642;
+                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
+                                    diseases.FCDS_STATUS = "Y";
+                                    diseases.FCDS_CRUSER = 1;
+                                    diseases.FCDS_CRDATE = DateTime.Today;
+                                    if (DiseaseDoc[i] != "none")
+                                    {
+                                        count = DMSIDList.Count();
+                                        var img = await uploadFile(FPDD_PATH[count]);
+                                        dms_dtls.FPDH_DMSHDR_ID = dms_hdr.FPDH_DMSHDR_ID;
+                                        dms_dtls.FPDD_PATH = img;
+                                        dms_dtls.FPDD_DESC = "Diseases ID " + diseases.FSDI_DISEASE_ID;
+                                        SendRequest = new StringContent(JsonConvert.SerializeObject(dms_dtls), Encoding.UTF8, "application/json");
+
+                                        using (var response = await client.PostAsync(Add_DMS_DETAILS, SendRequest))
+                                        {
+                                            string apiResponse = await response.Content.ReadAsStringAsync();
+                                            var dict2 = JArray.Parse(apiResponse);
+                                            foreach (JObject DMSDtl in dict2.Children<JObject>())
+                                            {
+                                                DMSDtlID = int.Parse(DMSDtl["NEW_DMSDTL_ID"].ToString());
+                                                DMSIDList.Add(DMSDtlID + "");
+                                            }
+                                        }
+                                    }
+                                    diseases.FPDD_DMSDTL_ID = DMSDtlID;
+                                }
+                                if (FSDI_DISEASE_ID[i] >= 41)
+                                {
+                                    diseases.FSDI_DISEASE_ID = FSDI_DISEASE_ID[i];
+                                    diseases.FCDM_DOCUMENT_ID = Document_ID;
+                                    diseases.FSPQS_QSTNR_FSCD_ID = 3645;
+                                    diseases.FCDS_DISEASE_DETAILS = FCDS_DISEASE_DETAILS[i];
+                                    diseases.FCDS_STATUS = "Y";
+                                    diseases.FCDS_CRUSER = 1;
+                                    diseases.FCDS_CRDATE = DateTime.Today;
+                                    if (DiseaseDoc[i] != "none")
+                                    {
+                                        count = DMSIDList.Count();
+                                        var img = await uploadFile(FPDD_PATH[count]);
+                                        dms_dtls.FPDH_DMSHDR_ID = dms_hdr.FPDH_DMSHDR_ID;
+                                        dms_dtls.FPDD_PATH = img;
+                                        dms_dtls.FPDD_DESC = "Diseases ID " + diseases.FSDI_DISEASE_ID;
+                                        SendRequest = new StringContent(JsonConvert.SerializeObject(dms_dtls), Encoding.UTF8, "application/json");
+
+                                        using (var response = await client.PostAsync(Add_DMS_DETAILS, SendRequest))
+                                        {
+                                            string apiResponse = await response.Content.ReadAsStringAsync();
+                                            var dict2 = JArray.Parse(apiResponse);
+                                            foreach (JObject DMSDtl in dict2.Children<JObject>())
+                                            {
+                                                DMSDtlID = int.Parse(DMSDtl["NEW_DMSDTL_ID"].ToString());
+                                                DMSIDList.Add(DMSDtlID + "");
+                                            }
+                                        }
+                                    }
+                                    diseases.FPDD_DMSDTL_ID = DMSDtlID;
+                                }
+
+                                try
+                                {
+                                    SendRequest = new StringContent(JsonConvert.SerializeObject(diseases), Encoding.UTF8, "application/json");
+                                    using (var response = await client.PostAsync(Add_DiseasesInfo, SendRequest))
+                                    {
+                                        string apiResponse = await response.Content.ReadAsStringAsync();
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    TempData["successDocument"] = ex.ToString();
+                                }
                             }
                         }
+                        if (FSPQS_QSTNR_FSCD_ID[5] == 3643 && FCUQ_ANSR_YN[5] == "Y")
+                        {
+                            for (int i = 0; i <= FSCU_RELTN_FSCD_DID.Length - 1; i++)
+                            {
+                                family.FSCU_CUSTOMER_CODE = int.Parse(CustomerCodeValue);
+                                family.FSCU_RELTN_FSCD_DID = FSCU_RELTN_FSCD_DID[i];
+                                family.FSCF_AGE = FSCF_AGE[i];
+                                family.FSCF_STATOFHLTH = FSCF_STATOFHLTH[i];
+                                family.FSCF_AGEOFDTH = FSCF_AGEOFDTH[i];
+                                family.FSCF_YEAROFDTH = FSCF_YEAROFDTH[i];
+                                family.FSCF_CAUSOFDTH = FSCF_CAUSOFDTH[i];
+                                family.FSCF_CRUSER = 1;
+                                family.FSCF_CRDATE = DateTime.Now;
+                                try
+                                {
+                                    SendRequest = new StringContent(JsonConvert.SerializeObject(family), Encoding.UTF8, "application/json");
+                                    using (var response = await client.PostAsync(Add_familyhistory, SendRequest))
+                                    {
+                                        string apiResponse = await response.Content.ReadAsStringAsync();
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    TempData["successDocument"] = ex.ToString();
+                                }
+                            }
+                        }
+
+                        //for (int i = 0; i < FPDD_PATH.Length; i++)
+                        //{
+                        //    var img = await uploadFile(FPDD_PATH[i]);
+                        //    dms_dtls.FPDH_DMSHDR_ID = dms_hdr.FPDH_DMSHDR_ID;
+                        //    dms_dtls.FPDD_PATH = img;
+                        //    dms_dtls.FPDD_DESC = "Diseases";
+                        //    SendRequest = new StringContent(JsonConvert.SerializeObject(dms_dtls), Encoding.UTF8, "application/json");
+
+                        //    using (var response = await client.PostAsync(Add_DMS_DETAILS, SendRequest))
+                        //    {
+                        //        string apiResponse = await response.Content.ReadAsStringAsync();
+                        //        var dict2 = JArray.Parse(apiResponse);
+                        //        foreach (JObject DMSDtl in dict2.Children<JObject>())
+                        //        {
+                        //            DMSDtlID = int.Parse(DMSDtl["NEW_DMSDTL_ID"].ToString());
+                        //            DMSIDs.Add(DMSDtlID + "");
+                        //        }
+                        //    }
+                        //}
+
+                        //Console.WriteLine(DMSIDs);
                         //***************need analysis form data*******************//
                         customerCNIC = FCDM_OWCUST_CNIC.Replace("-", "");
+
                         //Takaful History
                         if (FCIH_INSUREREXIST_YN == "N")
                         {
                             takaful_hist.SUM_SYS_USER_CODE = customerCNIC;
+                            takaful_hist.FCIH_INSUREREXIST_ID = FCIH_INSUREREXIST_ID[0];
                             takaful_hist.FCIH_INSUREREXIST_YN = FCIH_INSUREREXIST_YN;
+                            takaful_hist.FCIH_POLICY_NO = "";
+                            takaful_hist.FCIH_SA_AMOUNT = 0;
+                            takaful_hist.FCIH_CONTRIB_AMT = 0;
+                            //takaful_hist.FCIH_START_DATE = ;
+                            //takaful_hist.FCIH_MATURITY_DATE = ""
+                            takaful_hist.FCIH_INSURER_PURPOSE = "";
+                            takaful_hist.FCIH_INSURER_NM = "";
+                            takaful_hist.FCIH_COND_ACCPTNCE = "";
                             takaful_hist.FCIH_CRDATE = DateTime.Today;
                             try
                             {
@@ -793,6 +1164,7 @@ namespace POS_APPLICATION.Controllers
 
 
         [HttpPost]
+        //[ValidateInput(true)]
         public async Task<ActionResult> POS_USER_LOGIN(string SUM_SYS_USER_CODE, string SUM_USER_PASSWORD)
         {
             userMaster user_master = new userMaster();
@@ -890,6 +1262,42 @@ namespace POS_APPLICATION.Controllers
                     {
                         TempData["successUSER"] = ex.ToString();
                     }
+                    return RedirectToAction("Index");
+                }
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UPDATE_USER_PASSWD(string SUM_SYS_USER_CODE, string SUM_USER_PASSWORD, string SUM_USER_EMAIL_ADDR)
+        {
+            POS_USER user = new POS_USER();
+            user.SUM_SYS_USER_CODE = SUM_SYS_USER_CODE;
+            var key = Configuration.GetSection("Credentials").GetSection("SymKey").Value;
+            user.SUM_USER_PASSWORD = EncryptString(key, SUM_USER_PASSWORD);
+            var strToken = HttpContext.Session.GetString("JwTokenUser");
+            using (var handler = new HttpClientHandler())
+            {
+                handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
+
+                using (var client = new HttpClient(handler))
+                {
+                    SendRequest = null;
+                    try
+                    {
+                        SendRequest = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+                        using (var response = await client.PostAsync(updateUserPswd, SendRequest))
+                        {
+                            string apiResponse = await response.Content.ReadAsStringAsync();
+                            TempData["WrongStatus"] = "Password Changed Successfully";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["WrongStatus"] = ex.ToString();
+                    }
+                    string msgText = "<p>Your password for Salam Family Takaful Customer Portal has been changed successfully</p><p>If you have not done this transaction please reach out to us</p>";
+                    await this.SendEmail("customer", msgText, SUM_USER_EMAIL_ADDR, "Password Changed");
+                    HttpContext.Session.Clear();
                     return RedirectToAction("Index");
                 }
             }
