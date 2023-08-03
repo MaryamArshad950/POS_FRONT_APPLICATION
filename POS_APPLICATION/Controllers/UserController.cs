@@ -324,22 +324,24 @@ namespace POS_APPLICATION.Controllers
 
         public IActionResult Onboarding()
         {
-            try
-            {
-                var strToken = HttpContext.Session.GetString("JwTokenPos");
-                if (strToken != null)
-                {
-                    return View();
-                }
-                else
-                {
-                    return RedirectToAction("Index", "User");
-                }
-            }
-            catch (Exception)
-            {
-                return RedirectToAction("Index", "User");
-            }
+            return View();
+
+            //try
+            //{
+            //    var strToken = HttpContext.Session.GetString("JwTokenPos");
+            //    if (strToken != null)
+            //    {
+            //        return View();
+            //    }
+            //    else
+            //    {
+            //        return RedirectToAction("Index", "User");
+            //    }
+            //}
+            //catch (Exception)
+            //{
+            //    return RedirectToAction("Index", "User");
+            //}
         }
         public IActionResult Illustration()
         {
