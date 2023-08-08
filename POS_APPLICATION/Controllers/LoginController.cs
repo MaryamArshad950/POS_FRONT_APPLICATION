@@ -33,9 +33,9 @@ namespace POS_APPLICATION.Controllers
             ViewData["GetIPHostAPI"] = Result_API;
             checkUserValidate = "https://" + Result_API + "/API/AUTH_CONTROLLER/AUTHENTICATE";
             DE_ACTIVEJWTTOKEN = "https://" + Result_API + "/API/AUTH_CONTROLLER/DE_ACTIVEJWTTOKEN";
+
             return Result_API;
         }
-
         public IActionResult Index()
         {
             return View();

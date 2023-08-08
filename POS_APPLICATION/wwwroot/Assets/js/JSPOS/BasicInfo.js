@@ -326,18 +326,24 @@
                 }
             });
         }
+        //function deleteCookie(cookieName) {
+        //    debugger
+        //    document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        //    // Also, clear the cookie for the current domain and path
+        //    document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + window.location.hostname;
+        //}
 
-        $(".sign_out").click(function () {
-            // Clear session and local storage
-            document.cookie = "Session=; expires=1997-08-03T12:40:43.671Z; path=/; secure;";
 
-            // Redirect to the home pages
-            window.location.href = "/";
-            sessionStorage.clear();
-            localStorage.clear();
 
-            // Destroy the "Session" cookie by setting its expiration to a past date and add the secure flag
-        });
+        //$(".sign_out").click(function () {
+        //    debugger
+        //    deleteCookie("Session");
+        //    sessionStorage.clear();
+        //    localStorage.clear();
+        //    window.location.href = "/";
+
+        //    // Destroy the "Session" cookie by setting its expiration to a past date and add the secure flag
+        //});
         $("#btnPrev").click(function () {
             window.location.href = "/Onboarding";
         })

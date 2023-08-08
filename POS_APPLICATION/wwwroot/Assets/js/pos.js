@@ -20,11 +20,6 @@
         localStorage.clear();
     })
     $("#settings-trigger").attr("hidden", true);
-    $(".sign_out").click(function () {
-        window.location.href = "/";
-        sessionStorage.clear();
-        localStorage.clear();
-    })
     $('.form-horizontal').submit(function () {
         $("#spinner").show();
     });
@@ -83,6 +78,22 @@ function togglePasswordVisibility() {
 //        }
 //    });
 //}
+//document.addEventListener("DOMContentLoaded", function () {
+//    function deleteCookie(cookieName) {
+//        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+//        // Also, clear the cookie for the current domain and path
+//        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + window.location.hostname;
+//    }
+
+//    document.querySelector(".sign_out").addEventListener('click', function () {
+//        var cookieName = "Session"; // Replace "your_cookie_name" with the actual name of the cookie
+//        deleteCookie(cookieName);
+//        window.location.href = "/";
+//        sessionStorage.clear();
+//        localStorage.clear();
+//    });
+//});
+
 function readURLFront(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
