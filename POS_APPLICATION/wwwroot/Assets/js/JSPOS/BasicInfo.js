@@ -181,6 +181,7 @@
         $(".sidebar-offcanvas").attr("hidden", true);
         let thisCustCNIC = sessionStorage.getItem("thisCustCNIC");
 
+
         if (thisCustCNIC != null) {
             $("#FSCU_IDENTIFICATION_NO").val(thisCustCNIC);
             $(".welcome-div").removeAttr("hidden", true);
@@ -325,12 +326,24 @@
                 }
             });
         }
+        //function deleteCookie(cookieName) {
+        //    debugger
+        //    document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        //    // Also, clear the cookie for the current domain and path
+        //    document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + window.location.hostname;
+        //}
 
-        $(".sign_out").click(function () {
-            window.location.href = "/";
-            sessionStorage.clear();
-            localStorage.clear();
-        })
+
+
+        //$(".sign_out").click(function () {
+        //    debugger
+        //    deleteCookie("Session");
+        //    sessionStorage.clear();
+        //    localStorage.clear();
+        //    window.location.href = "/";
+
+        //    // Destroy the "Session" cookie by setting its expiration to a past date and add the secure flag
+        //});
         $("#btnPrev").click(function () {
             window.location.href = "/Onboarding";
         })

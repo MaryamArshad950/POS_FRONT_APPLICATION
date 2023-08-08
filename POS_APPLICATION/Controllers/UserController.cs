@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Hosting;
 using POS_APPLICATION.Models.CUSTOMER;
 using System.Net.Http.Headers;
 using RDL_TestProject.RS_Services.RS_Interface;
+//using System.Web.Mvc;
 
 namespace POS_APPLICATION.Controllers
 {
@@ -60,6 +61,7 @@ namespace POS_APPLICATION.Controllers
         private readonly string Add_Rider_Dtls = "" + Result_API + "/api/Participant/PostRiderDetails";
         private readonly string Add_familyhistory = "" + Result_API + "/API/CUSTOMER_FAMILY_HISTRY/";
         private readonly string updateUserPswd = "" + Result_API + "/api/PosUser/UpdatePasswd";
+        private readonly string logoutSession = "" + Result_API + "/API/AUTH_CONTROLLER/LOGOUT";
         public string GetIPHostAPI()
         {
             IP_Address = Configuration.GetSection("Endpoint").GetSection("POS_API_IP").Value;
@@ -77,6 +79,33 @@ namespace POS_APPLICATION.Controllers
         {
             Global_API = Configuration.GetSection("Endpoint").GetSection("GLOBAL_API_IP").Value;
             return Global_API;
+        }
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(logoutSession);
+
+                var responseTask = await client.GetAsync(logoutSession);
+                if (responseTask.IsSuccessStatusCode)
+                {
+                    HttpContext.Session.Remove("Session");
+                    Response.Cookies.Delete("Session");
+                    HttpContext.Session.Clear(); // Clear the session data
+                                                 // Other logout actions...
+                    return RedirectToAction("Index", "User");
+                }
+                else
+                {
+                    HttpContext.Session.Remove("Session");
+                    Response.Cookies.Delete("Session");
+                    HttpContext.Session.Clear(); // Clear the session data
+                                                 // Other logout actions...
+                    return RedirectToAction("Index", "User");
+                }
+            }
+               
         }
         public IActionResult Index()
         {
@@ -324,22 +353,99 @@ namespace POS_APPLICATION.Controllers
         public IActionResult Onboarding()
         {
             return View();
+
+            //try
+            //{
+            //    var strToken = HttpContext.Session.GetString("JwTokenPos");
+            //    if (strToken != null)
+            //    {
+            //        return View();
+            //    }
+            //    else
+            //    {
+            //        return RedirectToAction("Index", "User");
+            //    }
+            //}
+            //catch (Exception)
+            //{
+            //    return RedirectToAction("Index", "User");
+            //}
         }
         public IActionResult Illustration()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult Basic_information()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult Policy_issuance()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
         public IActionResult Proposal_summary()
         {
-            return View();
+            try
+            {
+                var strToken = HttpContext.Session.GetString("JwTokenPos");
+                if (strToken != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "User");
+            }
         }
 
         [HttpPost]
@@ -1086,6 +1192,7 @@ namespace POS_APPLICATION.Controllers
 
 
         [HttpPost]
+        //[ValidateInput(true)]
         public async Task<ActionResult> POS_USER_LOGIN(string SUM_SYS_USER_CODE, string SUM_USER_PASSWORD)
         {
             userMaster user_master = new userMaster();

@@ -52,11 +52,26 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#spinner").hide();
-            $(".sign_out").click(function () {
-                window.location.href = "/";
-                sessionStorage.clear();
-                localStorage.clear();
-            })
+        
+
+
+            $(".sign_out").on('click', function () {
+                cookieStore.getAll().then(cookies => cookies.forEach(cookie => {
+                console.log('Cookie deleted:', cookie);
+                    cookieStore.delete(cookie.name)
+                }));
+                            sessionStorage.clear();
+                            localStorage.clear();
+                            window.location.href = "/";
+              
+            });
+
+            //$(".sign_out").click(function () {
+            //    deleteCookie("Session");
+            //    sessionStorage.clear();
+            //    localStorage.clear();
+            //    window.location.href = "/";
+            //})
             $(".regularDepositPlan").click(function () {
                 $("#videoGraphy").modal("show");
             })
@@ -193,7 +208,7 @@
                                 <i class="ti-settings text-primary"></i>
                                 Settings
                             </a>
-                            <a class="dropdown-item sign_out">
+                            <a class="dropdown-item sign_out" asp-action="Logout" asp-controller="User"  id="signOutBtn">
                                 <i class="ti-power-off text-primary"></i>
                                 Logout
                             </a>
