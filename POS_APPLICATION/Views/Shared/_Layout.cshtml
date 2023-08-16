@@ -52,6 +52,26 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#spinner").hide();
+        
+
+
+            $(".sign_out").on('click', function () {
+                cookieStore.getAll().then(cookies => cookies.forEach(cookie => {
+                console.log('Cookie deleted:', cookie);
+                    cookieStore.delete(cookie.name)
+                }));
+                            sessionStorage.clear();
+                            localStorage.clear();
+                            window.location.href = "/";
+              
+            });
+
+            //$(".sign_out").click(function () {
+            //    deleteCookie("Session");
+            //    sessionStorage.clear();
+            //    localStorage.clear();
+            //    window.location.href = "/";
+            //})
             $(".regularDepositPlan").click(function () {
                 $("#videoGraphy").modal("show");
             })
@@ -88,10 +108,7 @@
         })();
     </script>
     <div id="spinner">
-        <img src="~/Assets/images/loader-img.gif" class="spinner-icon" />
-        <div class="row">
-            <img src="~/Assets/images/loading-text.gif" class="spinner-text" />
-        </div>
+        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
     </div>
     <div class="container-scroller">
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -191,7 +208,7 @@
                                 <i class="ti-settings text-primary"></i>
                                 Settings
                             </a>
-                            <a class="dropdown-item sign_out">
+                            <a class="dropdown-item sign_out" asp-action="Logout" asp-controller="User"  id="signOutBtn">
                                 <i class="ti-power-off text-primary"></i>
                                 Logout
                             </a>

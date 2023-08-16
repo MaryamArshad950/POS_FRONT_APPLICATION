@@ -10,14 +10,21 @@
             let nf = new Intl.NumberFormat('en-US');
             let getsession = sessionStorage.getItem("tokenIndex");
             let proposal_no = sessionStorage.getItem("Proposal_NoF");
+
             let policy_status = sessionStorage.getItem("PolicyStatusF");
+
             let policy_no = sessionStorage.getItem("PolicyNo");
             let grossContrib = sessionStorage.getItem("GROSS_AMT");
             $(".contrib_paid").html("<p class='text-center'>Total Takaful Contribution Paid</p><p class='text-center'>PKR " + nf.format(grossContrib) + "</p>")
             $(".policy_no").html(policy_no)
+            if (policy_status == 'Approved') {
+                policy_status = "Y";
+            }
             $.ajax({
                 "crossDomain": true,
+
                 url: Global_API + "/API/NEW_BUSINESS/GET_CUSTOMER_PROP_FUND/" + proposal_no + "/Y/" + policy_status,
+
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
                 headers: {
@@ -30,6 +37,10 @@
                 datatype: 'jsonp',
                 success: function (result) {
                     $(result).each(function () {
+                        let cashValue = this.FPDF_CASHVALUE_BC;
+                        if (cashValue == null) {
+                            cashValue = grossContrib;
+                        }
                         let units = this.FPDF_UNITS_END;
                         if (units == null) {
                             units = "N/A";
@@ -40,13 +51,13 @@
                             bidPrice = "N/A";
                             $(".text-cash").removeAttr("hidden", true);
                         }
-                        $(".currentCashValue").html("<p class='text-center'>Current Cash Value</p><p class='text-center'>PKR " + nf.format(this.FPDF_CASHVALUE_BC) + "</p>")
+                        $(".currentCashValue").html("<p class='text-center'>Current Cash Value</p><p class='text-center'>PKR " + nf.format(cashValue) + "</p>")
                         $("#tblMyFunds tbody").append("<tr>" +
                             "<td>" + this.FUND_NAME + "</td>" +
                             "<td>" + this.FPDF_DISTRIBURATE + "%</td>" +
                             "<td>" + units + "</td>" +
                             "<td>" + bidPrice + "</td>" +
-                            "<td>PKR " + nf.format(this.FPDF_CASHVALUE_BC) + "</td>" +
+                            "<td>PKR " + nf.format(cashValue) + "</td>" +
                             "</tr>");
                     })
                 },

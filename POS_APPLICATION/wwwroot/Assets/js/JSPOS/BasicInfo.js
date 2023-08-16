@@ -1,5 +1,6 @@
 ﻿!function () {
     $(document).ready(function () {
+        let nf = new Intl.NumberFormat('en-US');
         var cust_email = '';
         var cust_phone = '';
         $.ajax({
@@ -66,7 +67,6 @@
             },
             datatype: 'jsonp',
             success: function (result) {
-                console.log(result)
                 if (result.length != 0) {
                     $("#basicInfo-tab").attr("disabled", true);
                     $("#userIdentification-tab").attr("disabled", true);
@@ -89,7 +89,6 @@
                         },
                         datatype: 'jsonp',
                         success: function (result) {
-                            console.log(result)
                             sessionStorage.setItem("docIdPrpsl", document_code.slice(3));
                             sessionStorage.getItem("docIdPrpsl");
                             $(result).each(function () {
@@ -112,7 +111,6 @@
                                     },
                                     datatype: 'jsonp',
                                     success: function (result) {
-                                        console.log(result)
                                         if (result.length == 0) {
                                             $("#proposalMesg").attr("hidden", true);
                                             $(".returnToFlagship").removeAttr("hidden", true);
@@ -136,6 +134,7 @@
                                             $("#HS_TransactionReferenceNumber").val(randomNum);
                                             $("#TransactionReferenceNumber").val(randomNum);
                                             $("#FIPR_COLL_AMOUNT").val(this.CONTRIB_AMOUNT);
+                                            sessionStorage.setItem("CONTRIB_AMOUNT_DMS", this.CONTRIB_AMOUNT)
                                             $("#TransactionAmount").val(this.CONTRIB_AMOUNT);
                                             $("#PARTICIPANT_NAME").val(this.FSCU_FULL_NAME);
                                             $("#PARTICIPANT_DOB").val(birth_date);
@@ -182,6 +181,7 @@
         $(".sidebar-offcanvas").attr("hidden", true);
         let thisCustCNIC = sessionStorage.getItem("thisCustCNIC");
 
+
         if (thisCustCNIC != null) {
             $("#FSCU_IDENTIFICATION_NO").val(thisCustCNIC);
             $(".welcome-div").removeAttr("hidden", true);
@@ -204,7 +204,7 @@
                         let customer_code = this.FSCU_CUSTOMER_CODE;
                         sessionStorage.setItem("thisCustomerCode", customer_code);
                         sessionStorage.getItem("thisCustomerCode");
-                        $("#FSCU_CUST_ANNUAL_INCOME").val(this.FSCU_CUST_ANNUAL_INCOME);
+                        $("#FSCU_CUST_ANNUAL_INCOME").val(nf.format(this.FSCU_CUST_ANNUAL_INCOME));
                         if (this.FSCU_IDENTISSUE_DATE != null && this.FSCU_IDENTIEXPIRY_DATE != null) {
                             let FSCU_IDENTISSUE_DATE = this.FSCU_IDENTISSUE_DATE.slice(0, 10);
                             let FSCU_IDENTIEXPIRY_DATE = this.FSCU_IDENTIEXPIRY_DATE.slice(0, 10);
@@ -274,7 +274,8 @@
                         let customer_code = this.FSCU_CUSTOMER_CODE;
                         sessionStorage.setItem("thisCustomerCode", customer_code);
                         sessionStorage.getItem("thisCustomerCode");
-                        $("#FSCU_CUST_ANNUAL_INCOME").val(this.FSCU_CUST_ANNUAL_INCOME);
+
+                        $("#FSCU_CUST_ANNUAL_INCOME").val(nf.format(this.FSCU_CUST_ANNUAL_INCOME));
                         if (this.FSCU_IDENTISSUE_DATE != null && this.FSCU_IDENTIEXPIRY_DATE != null) {
                             let FSCU_IDENTISSUE_DATE = this.FSCU_IDENTISSUE_DATE.slice(0, 10);
                             let FSCU_IDENTIEXPIRY_DATE = this.FSCU_IDENTIEXPIRY_DATE.slice(0, 10);
@@ -325,12 +326,24 @@
                 }
             });
         }
+        //function deleteCookie(cookieName) {
+        //    debugger
+        //    document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        //    // Also, clear the cookie for the current domain and path
+        //    document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + window.location.hostname;
+        //}
 
-        $(".sign_out").click(function () {
-            window.location.href = "/";
-            sessionStorage.clear();
-            localStorage.clear();
-        })
+
+
+        //$(".sign_out").click(function () {
+        //    debugger
+        //    deleteCookie("Session");
+        //    sessionStorage.clear();
+        //    localStorage.clear();
+        //    window.location.href = "/";
+
+        //    // Destroy the "Session" cookie by setting its expiration to a past date and add the secure flag
+        //});
         $("#btnPrev").click(function () {
             window.location.href = "/Onboarding";
         })
@@ -342,6 +355,7 @@
             let current_country = $("#FSSC_COUNTRY_ID").val();
             let cust_cnic = $("#FSCU_IDENTIFICATION_NO").val();
             let annual_income = $("#FSCU_CUST_ANNUAL_INCOME").val();
+            annual_income = Number(annual_income.replaceAll(",", ""));
             let cnic_issuedate = $("#FSCU_IDENTISSUE_DATE").val();
             let cnic_expirydate = $("#FSCU_IDENTIEXPIRY_DATE").val();
            
@@ -580,44 +594,6 @@
             $("#basicInfo-tab").click();
             $(window).scrollTop(0);
         })
-        //$("#btnNextIdentify").click(function () {
-        //    //debugger;
-        //    //let FPDH_DMSCUS_CNIC = $("#FPDH_DMSCUS_CNIC").val();
-
-        //    ////let FPDD_PATH = $("input[name=FPDD_PATH]");
-        //    //let FPDD_PATH = $("input[name=FPDD_PATH]");
-        //    //FPDD_PATH = FPDD_PATH.toArray();
-
-        //    ////let FPDD_PATH1 = $("#FPDD_PATH1");
-        //    ////let FPDD_PATH2 = $("#FPDD_PATH2");
-        //    ////let FPDD_PATH3 = $("#FPDD_PATH3");
-        //    ////let FPDD_PATH = [FPDD_PATH1, FPDD_PATH2, FPDD_PATH3]
-        //    //console.log(FPDD_PATH)
-
-        //    //$.ajax({
-        //    //    //"async": false,
-        //    //    "crossDomain": true,
-
-        //    //    url: "/User/SaveDMS?FPDH_DMSCUS_CNIC=" + FPDH_DMSCUS_CNIC + "&FPDD_PATH=" + FPDD_PATH,
-        //    //    type: "POST",
-        //    //    contentType: "application/json; charset=utf-8",
-        //    //    headers: {
-        //    //        'Content-Type': 'application/x-www-form-urlencoded',
-        //    //        'Access-Control-Allow-Origin': Result_API,
-        //    //        'Access-Control-Allow-Methods': 'POST, GET',
-        //    //        'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
-        //    //        'Authorization': 'Bearer ' + getsession
-        //    //    },
-        //    //    datatype: 'jsonp',
-        //    //    success: function (result) {
-        //    //        console.log(result);
-        //    //    },
-        //    //    error: function (data) { }
-        //    //});
-
-        ////    $("#beneficiary-tab").removeAttr("disabled", true);
-        ////    $("#beneficiary-tab").click();
-        //})
         $("#btnPrevBenef").click(function () {
             $("#userIdentification-tab").click();
             $(window).scrollTop(0);
@@ -710,6 +686,7 @@
 
         $("#btnPaymentProcess").click(function () {
             let Prpsl_No = sessionStorage.getItem("Prpsl_No");
+            sessionStorage.setItem("PayCheck", "ProposalPay");
             $.ajax({
                 //"async": false,
                 "crossDomain": true,
@@ -1325,6 +1302,7 @@
             $("#PaymentType").attr("required", true);
             $(".bank_charges").html("2.6%")
             $("#chargesDisclaimer").modal("show");
+            sessionStorage.setItem("BNK_CHRGS", "2669");
         })
         $("#btnNIFTPay").click(function () {
             $("#PaymentType").val("NI");

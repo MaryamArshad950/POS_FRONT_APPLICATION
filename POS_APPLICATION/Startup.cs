@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -66,10 +67,13 @@ namespace POS_APPLICATION
             services.AddSession(options =>
             {
                 options.Cookie.Name = "Session";
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
-                options.Cookie.IsEssential = true;
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                //options.Cookie.HttpOnly = true;
+                // Make the session cookie essential if you wish
+                options.Cookie.IsEssential = false;
             });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,6 +91,20 @@ namespace POS_APPLICATION
             app.UseRouting();
             app.UseSession();
             app.UseAuthorization();
+            //app.UseHsts();
+            app.UseHsts();
+            //it is use for X-Frame-Option header for VAPT's according document
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+                await next();
+            });
+            // it is use X-XSS-Protection header middleware
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+                await next();
+            });
             app.UseDeveloperExceptionPage();
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -128,6 +146,9 @@ namespace POS_APPLICATION
                   name: "AlterEmail",
                   pattern: "AlterEmail/{controller=Services}/{action=AlterEmail}");
                 endpoints.MapControllerRoute(
+                  name: "CheckEmail",
+                  pattern: "CheckEmail/{controller=Services}/{action=CheckEmail}");
+                endpoints.MapControllerRoute(
                   name: "PartialWithdrawal",
                   pattern: "PartialWithdrawal/{controller=Services}/{action=PartialWithdrawal}");
                 endpoints.MapControllerRoute(
@@ -148,6 +169,9 @@ namespace POS_APPLICATION
                 endpoints.MapControllerRoute(
                   name: "CheckEmail",
                   pattern: "CheckEmail/{controller=Services}/{action=CheckEmail}");
+                endpoints.MapControllerRoute(
+                  name: "RecoverPassword",
+                  pattern: "RecoverPassword/{controller=User}/{action=RecoverPassword}");
             });
         }
     }

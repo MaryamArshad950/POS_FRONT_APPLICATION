@@ -78,12 +78,6 @@ namespace RDL_TestProject.RS_Services.RS_Contract
         {
             try
             {
-                //using (var Email_ = new WebClient())
-                //{
-                //    Email_.Credentials = new NetworkCredential(email.User, email.NetworkPassword);
-                //    Email_.UseDefaultCredentials = true;
-                //}
-
                 var message = new MailMessage();
                 message.To.Add(emailAddress);
                 message.From = new MailAddress(email.Email);

@@ -20,52 +20,58 @@
                 if ($("#policy_number").val() != "" && $("#TOTAL_AMOUNT").val() != "") {
                     let orderId = Math.floor(Math.random() * 9000000) + 1000000;
                     orderId = orderId.toString();
-
+                    let totalAmt = $("#TOTAL_AMOUNT").val();
+                    totalAmt = Number(totalAmt.replaceAll(",", ""));
+                    sessionStorage.setItem("Policy_NoF", $("#policy_number").val());
+                    sessionStorage.setItem("TOPUP_CONTRIB", totalAmt);
                     $("#HS_TransactionReferenceNumber").val(orderId);
                     $("#TransactionReferenceNumber").val(orderId);
-                    $("#TransactionAmount").val($("#TOTAL_AMOUNT").val());
+                    $("#TransactionAmount").val(totalAmt);
                     $(".paymode-select").removeAttr("hidden", true);
+                    $("#btnCreditCard").click(function () {
+                        $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+                        $("#FIPR_COLL_AMOUNT").val(totalAmt);
+                        $("#PaymentType").val("CC");
+                        $(".bank_charges").html("2.6%")
+                        $("#chargesDisclaimer").modal("show");
+                        sessionStorage.setItem("BNK_CHRGS", "2669");
+                    })
+                    $("#btnNIFTPay").click(function () {
+                        $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+                        $("#FIPR_COLL_AMOUNT").val(totalAmt);
+                        $("#PaymentType").val("NI");
+                        $(".disclaimer-text").html("Free! Zero bank transactional fee on Bank Transfer & Easy Paisa Premium / Loan Payments!")
+                        //$(".bank_charges").html("Free")
+                        $("#chargesDisclaimer").modal("show");
+                    })
+                    $("#btnJazzCash").click(function () {
+                        $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+                        $("#FIPR_COLL_AMOUNT").val(totalAmt);
+                        $("#PaymentType").val("JC");
+                    })
+                    $("#btnEasyPaisaPay").click(function () {
+                        $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
+                        $("#FIPR_COLL_AMOUNT").val(totalAmt);
+                        $("#PaymentType").val("EP");
+                    })
                 }
-                $("#btnCreditCard").click(function () {
-                    $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
-                    $("#FIPR_COLL_AMOUNT").val($("#TOTAL_AMOUNT").val());
-                    $("#PaymentType").val("CC");
-                    $(".bank_charges").html("2.6%")
-                    $("#chargesDisclaimer").modal("show");
-                })
-                $("#btnNIFTPay").click(function () {
-                    $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
-                    $("#FIPR_COLL_AMOUNT").val($("#TOTAL_AMOUNT").val());
-                    $("#PaymentType").val("NI");
-                    $(".disclaimer-text").html("Free! Zero bank transactional fee on Bank Transfer & Easy Paisa Premium / Loan Payments!")
-                    //$(".bank_charges").html("Free")
-                    $("#chargesDisclaimer").modal("show");
-                })
-                $("#btnJazzCash").click(function () {
-                    $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
-                    $("#FIPR_COLL_AMOUNT").val($("#TOTAL_AMOUNT").val());
-                    $("#PaymentType").val("JC");
-                })
-                $("#btnEasyPaisaPay").click(function () {
-                    $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
-                    $("#FIPR_COLL_AMOUNT").val($("#TOTAL_AMOUNT").val());
-                    $("#PaymentType").val("EP");
-                })
             })
         }
     })
 }()
+var PolicyNumbers = '';
+var ProposalNumbers = '';
+
 function checkValue(val) {
     let custCNIC = sessionStorage.getItem("cnic.");
     if (custCNIC && custCNIC.length === 13) {
         custCNIC = custCNIC.slice(0, 5) + '-' + custCNIC.slice(5, 12) + '-' + custCNIC.slice(12);
     }
-    let PolicyNumbers = '';
-    let ProposalNumbers = '';
+
     if (sessionStorage.getItem("policyResult") != null) {
         PolicyNumbers = sessionStorage.getItem("policyResult").split(",");
     }
-    if (sessionStorage.getItem("ProposalResult") != null) {
+    if (sessionStorage.getItem("proposalResult") != null) {
         ProposalNumbers = sessionStorage.getItem("proposalResult").split(",");
     }
     if (val == 1) {
@@ -81,7 +87,7 @@ function checkValue(val) {
         //$('.proposal_Contribution').attr("hidden", true)
         $(".policy-topup-no").attr("hidden", true)
         $(".topup-data").attr("hidden", true)
-        if (PolicyNumbers != null) {
+        if (PolicyNumbers != '') {
             $("#FPDM_POLICY_NO").empty();
             $("#FPDM_POLICY_NO").append($("<option value=''>Select</option>"))
             PolicyNumbers.forEach((policyNo) => {
@@ -91,7 +97,7 @@ function checkValue(val) {
                 $("#FPDM_POLICY_NO").append(option);
             });
         }
-        if (ProposalNumbers != null) {
+        if (ProposalNumbers != '') {
             $("#FPDM_PROPOSAL_NO").empty();
             $("#FPDM_PROPOSAL_NO").append($("<option value=''>Select</option>"))
             ProposalNumbers.forEach((Proposal) => {
@@ -103,6 +109,7 @@ function checkValue(val) {
         }
     }
     if (val == 2) {
+        sessionStorage.setItem("PayCheck", "TopupPay");
         $(".proposal_Contribution").attr("hidden", true)
         $(".paymode-select").attr("hidden", true);
         let proposal_no = sessionStorage.getItem("Proposal_NoF");
@@ -121,7 +128,7 @@ function checkValue(val) {
         //}
         $("#policy_number").empty();
         $("#policy_number").append($("<option value=''>Select</option>"))
-        if (PolicyNumbers != null) {
+        if (PolicyNumbers != '') {
             $(".policy-topup-no").removeAttr("hidden")
             PolicyNumbers.forEach((policyNo) => {
                 const option = document.createElement('option');
@@ -130,56 +137,20 @@ function checkValue(val) {
                 $("#policy_number").append(option);
             });
         }
-        if (PolicyNumbers == null) {
+        if (PolicyNumbers == '') {
             $(".policy-topup-no").attr("hidden")
             Swal.fire({
                 icon: 'info',
-                title: 'Alert',
                 text: 'No policy has been issued yet! Please isssue your policy if you want to make a topup policy payment'
             })
         }
-    //    $.ajax({
-    //        "crossDomain": true,
-    //        url: "" + Result_API + "/api/Inquiry/GetInquiryByUsername/" + custCNIC,
-    //        type: "GET",
-    //        contentType: "application/json; charset=utf-8",
-    //        headers: {
-    //            'Content-Type': 'application/x-www-form-urlencoded',
-    //            'Access-Control-Allow-Origin': Result_API,
-    //            'Access-Control-Allow-Methods': 'POST, GET',
-    //            'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
-    //            'Authorization': 'Bearer ' + getsession
-    //        },
-    //        datatype: 'jsonp',
-    //        success: function (result) {
-    //            console.log(result)
-    //            if (result.length >= 1) {
-    //                $(".policy-topup-no").removeAttr("hidden")
-    //                for (let i = 0; i < result.length; i++) {
-    //                    if (result[i].FPDM_POLICY_NO != null) {
-    //                        $("#policy_number").empty();
-    //                        $("#policy_number").append($("<option value=''>Select</option>"))
-    //                        $("#policy_number").append($("<option></option>").val(result[i].FPDM_POLICY_NO).html(result[i].FPDM_POLICY_NO));
-    //                    }
-    //                }
-    //            }
-    //            if (result.length == 0) {
-    //                $(".policy-topup-no").attr("hidden")
-    //                Swal.fire({
-    //                    icon: 'info',
-    //                    title: 'Alert',
-    //                    text: 'No policy has been issued yet! Please isssue your policy if you want to make a topup policy payment'
-    //                })
-    //            }
-    //        },
-    //        error: function (data2) { }
-    //    });
     }
 }
 
 function NB_Payments(Val, ID) {
     let proposalIn = document.getElementById("FPDM_PROPOSAL_NO");
     let policyIn = document.getElementById("FPDM_POLICY_NO");
+    $(".paymode-select").attr("hidden", true);
     if (Val == 1) {
         $("#FPDM_POLICY_NO").attr("hidden", true);
         $(".indexation-contribution").attr("hidden", true);
@@ -189,7 +160,6 @@ function NB_Payments(Val, ID) {
         if (proposalIn.options.length == 1) {
             Swal.fire({
                 icon: 'info',
-                title: 'Alert',
                 text: 'No proposal payment is left! Please generate a new proposal if you want to make a payment'
             })
         }
@@ -205,7 +175,6 @@ function NB_Payments(Val, ID) {
         if (policyIn.options.length == 1) {
             Swal.fire({
                 icon: 'info',
-                title: 'Alert',
                 text: 'No policy has been issued yet! Please isssue your policy if you want to make a renewal policy payment'
             })
         }
@@ -227,7 +196,7 @@ function PayContributionAmount(Val) {
         if (sessionStorage.getItem("PayCheck") == "ProposalPay") {
             sessionStorage.setItem("Proposal_NoF", $("#FPDM_PROPOSAL_NO").val());
         }
-        if (sessionStorage.getItem("PayCheck") == "RenewalPay") {
+        if (sessionStorage.getItem("PayCheck") == "RenewalPay" || sessionStorage.getItem("PayCheck") == "TopupPay") {
             sessionStorage.setItem("Policy_NoF", $("#FPDM_POLICY_NO").val());
         }
         $.ajax({
@@ -247,12 +216,12 @@ function PayContributionAmount(Val) {
                 $(result).each(function () {
                     if (this.FPDM_POLICY_NO == Val) {
                         sessionStorage.setItem("GROSS_AMT", this.FPDM_GROSSCONTRIB);
-                        $(".non-index-contrib").html('<p>Non-index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
-                        $(".index-contrib").html('<p>Index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>');
+                        $(".non-index-contrib").html('<p>Non-index Contribution</p><p class="ContribAmtoPay">PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
+                        $(".index-contrib").html('<p>Index Contribution</p><p class="ContribAmtoPay">PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>');
                     } if (this.FPDM_PROPOSAL_NO == Val) {
                         sessionStorage.setItem("GROSS_AMT", this.FPDM_GROSSCONTRIB);
-                        $(".non-index-contrib").html('<p>Non-index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
-                        $(".index-contrib").html('<p>Index Contribution</p><p>PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>');
+                        $(".non-index-contrib").html('<p>Non-index Contribution</p><p class="ContribAmtoPay">PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>')
+                        $(".index-contrib").html('<p>Index Contribution</p><p class="ContribAmtoPay">PKR ' + nf.format(this.FPDM_GROSSCONTRIB) + '</p>');
                     }
                 })
             },
@@ -318,6 +287,61 @@ function showFund(ProposalNum, PolicyNumb) {
                 $(".topup-data").removeAttr("hidden", true);
                 $(result).each(function () {
                     $(".fund_name").html(this.FUND_NAME);
+                    sessionStorage.setItem("PRMFND_ID", this.FSPRF_PRMFND_ID);
+                    sessionStorage.setItem("DISTRIBURATE", this.FPDF_DISTRIBURATE);
+                    sessionStorage.setItem("DOCUMENT_ID", this.DOCUMENT_ID);
+                })
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 401) {
+                }
+            }
+        });
+        $.ajax({
+            "crossDomain": true,
+            url: Result_API + "/API/TOPUP/GET_DOCID/" + PolicyNumb,
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Access-Control-Allow-Origin': Result_API,
+                'Access-Control-Allow-Methods': 'POST, GET',
+                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                'Authorization': 'Bearer ' + getsession
+            },
+            datatype: 'jsonp',
+            success: function (result) {
+                $(result).each(function () {
+                    sessionStorage.setItem("DOCUMENT_ID", this.DOCUMENT_ID);
+                    sessionStorage.setItem("DOC_CODE", this.DOCUMENT_CODE);
+                    $.ajax({
+                        "crossDomain": true,
+                        url: Result_API + "/API/TOPUP/GET_TOPUP/" + this.DOCUMENT_CODE,
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Access-Control-Allow-Origin': Result_API,
+                            'Access-Control-Allow-Methods': 'POST, GET',
+                            'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+                            'Authorization': 'Bearer ' + getsession
+                        },
+                        datatype: 'jsonp',
+                        success: function (result) {
+                            if (result.length > 0) {
+                                $(result).each(function () {
+                                    sessionStorage.setItem("SERIAL_NO", this.FCDT_SERIAL_NO);
+                                })
+                            }
+                            else{
+                                sessionStorage.setItem("SERIAL_NO", 0);
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            if (jqXHR.status === 401) {
+                            }
+                        }
+                    });
                 })
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -331,7 +355,7 @@ function calculateTotalPayment(Amount) {
     if (Amount == "" || Amount == undefined) {
         $("#TOTAL_AMOUNT").val($("#fund_payment").val());
     } else {
-        $("#TOTAL_AMOUNT").val(Amount)
+        $("#TOTAL_AMOUNT").val(Amount);
     }
 }
 function paymentSelection() {
@@ -353,9 +377,12 @@ function paymentSelection() {
             if (sessionStorage.getItem("PayCheck") == "ProposalPay") {
                 $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Proposal_NoF"));
             }
-            if (sessionStorage.getItem("PayCheck") == "RenewalPay") {
+            if (sessionStorage.getItem("PayCheck") == "RenewalPay" || sessionStorage.getItem("PayCheck") == "TopupPay") {
                 $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Policy_NoF"));
             }
+            //if (sessionStorage.getItem("PayCheck") == "TopupPay") {
+            //    $("#P_DOCUMENT_ID").val(sessionStorage.getItem("Policy_NoF"));
+            //}
             $("#FIPR_COLL_AMOUNT").val(gross_payment);
             $("#PaymentType").val("CC");
             $(".bank_charges").html("2.6%")
@@ -397,7 +424,6 @@ function paymentSelection() {
     } else {
         Swal.fire({
             icon: 'info',
-            title: 'Alert',
             text: 'The gross payment input is not checked!',
         })
     }

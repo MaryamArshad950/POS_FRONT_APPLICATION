@@ -21,14 +21,14 @@
                 },
                 datatype: 'jsonp',
                 success: function (result) {
-                    for (let i = 0; i < result.length; i++) {
-                        let frontPath = result[i].FPDD_PATH;
-                        let changePath = frontPath.split("\\").pop();
-                        let img_front = "/upload/" + changePath;
-                        $('#document' + (i + 1)).attr("src", img_front);
-                        $('#document' + (i + 1)).addClass('w-50 h-50')
-                        $('#document' + (i + 1)).val(changePath);
-                    }
+                    $.each(result, function (index, value) {
+                        let frontPath = value.fpdD_PATH;
+                        console.log(frontPath)
+                        let img_front = "/upload/" + frontPath;
+                        $('#document' + (index + 1)).attr("src", img_front);
+                        $('#document' + (index + 1)).addClass('w-50 h-50')
+                        $('#document' + (index + 1)).val(frontPath);
+                    });
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     if (jqXHR.status === 401) {

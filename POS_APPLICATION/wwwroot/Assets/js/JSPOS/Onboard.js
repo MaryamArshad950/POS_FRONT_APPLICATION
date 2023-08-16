@@ -1,5 +1,6 @@
 ﻿!function () {
     $(document).ready(function () {
+        var nf = new Intl.NumberFormat('en-US');
         $('#CUOCP_FSCD_ID').select2();
         $(".select2-container").addClass("w-100");
         $(".select2-selection").addClass("h-75");
@@ -29,7 +30,7 @@
         //            ProcessGlobalCore(sessionPos);
         //        }
         //    }
-            
+
         //    let sessionCNIC = '';
         //    //let sessionPos = sessionStorage.getItem("GlobalPos");
         //    if (sessionStorage.getItem("cnic.") != null) {
@@ -80,9 +81,9 @@
                     //let sessionPos = getsession;
                     ProcessGlobalCore(sessionStorage.getItem("token"));
                 }
-            }            
+            }
         }
-        let nf = new Intl.NumberFormat('en-US');
+        //let nf = new Intl.NumberFormat('en-US');
         if (sessionStorage.getItem("GlobalPos") != null) {
             getFinancialQues(sessionStorage.getItem("GlobalPos"));
         }
@@ -124,6 +125,7 @@
                         $(result).each(function () {
                             if (this.FCIH_INSUREREXIST_YN == "N") {
                                 $("#INSUREREXIST_N").attr("checked", true)
+                                $("#FCIH_INSUREREXIST_ID").val(this.FCIH_INSUREREXIST_ID);
                             }
                             if (this.FCIH_INSUREREXIST_YN == "Y") {
                                 if (this.FCIH_START_DATE != null && this.FCIH_MATURITY_DATE != null) {
@@ -167,13 +169,13 @@
                 success: function (result) {
                     $(result).each(function () {
                         $("#FCFA_FIN_ID").val(this.FCFA_FIN_ID);
-                        $("#FCFA_ANNUAL_INCOME").val(this.FCFA_ANNUAL_INCOME);
-                        $("#FCFA_OTHER_INCOME").val(this.FCFA_OTHER_INCOME);
-                        $("#FCFA_TOTAL_INCOME").val(this.FCFA_TOTAL_INCOME);
-                        $("#FCFA_CUST_EXPENSES").val(this.FCFA_CUST_EXPENSES);
-                        $("#FCFA_EXPENSES_LASTYR").val(this.FCFA_EXPENSES_LASTYR);
-                        $("#FCFA_EXPENSES_CURRENTYR").val(this.FCFA_EXPENSES_CURRENTYR);
-                        $("#FCFA_NET_SAVINGS").val(this.FCFA_NET_SAVINGS);
+                        $("#FCFA_ANNUAL_INCOME").val(nf.format(this.FCFA_ANNUAL_INCOME));
+                        $("#FCFA_OTHER_INCOME").val(nf.format(this.FCFA_OTHER_INCOME));
+                        $("#FCFA_TOTAL_INCOME").val(nf.format(this.FCFA_TOTAL_INCOME));
+                        $("#FCFA_CUST_EXPENSES").val(nf.format(this.FCFA_CUST_EXPENSES));
+                        $("#FCFA_EXPENSES_LASTYR").val(nf.format(this.FCFA_EXPENSES_LASTYR));
+                        $("#FCFA_EXPENSES_CURRENTYR").val(nf.format(this.FCFA_EXPENSES_CURRENTYR));
+                        $("#FCFA_NET_SAVINGS").val(nf.format(this.FCFA_NET_SAVINGS));
                         $("#FCFA_ADDTNL_DTLS").val(this.FCFA_ADDTNL_DTLS);
                     })
                 },
@@ -236,6 +238,7 @@
                             $(result).each(function () {
                                 if (this.FCIH_INSUREREXIST_YN == "N") {
                                     $("#INSUREREXIST_N").attr("checked", true)
+                                    $("#FCIH_INSUREREXIST_ID").val(this.FCIH_INSUREREXIST_ID);
                                 }
                                 if (this.FCIH_INSUREREXIST_YN == "Y") {
                                     if (this.FCIH_START_DATE != null && this.FCIH_MATURITY_DATE != null) {
@@ -279,13 +282,13 @@
                     success: function (result) {
                         $(result).each(function () {
                             $("#FCFA_FIN_ID").val(this.FCFA_FIN_ID);
-                            $("#FCFA_ANNUAL_INCOME").val(this.FCFA_ANNUAL_INCOME);
-                            $("#FCFA_OTHER_INCOME").val(this.FCFA_OTHER_INCOME);
-                            $("#FCFA_TOTAL_INCOME").val(this.FCFA_TOTAL_INCOME);
-                            $("#FCFA_CUST_EXPENSES").val(this.FCFA_CUST_EXPENSES);
-                            $("#FCFA_EXPENSES_LASTYR").val(this.FCFA_EXPENSES_LASTYR);
-                            $("#FCFA_EXPENSES_CURRENTYR").val(this.FCFA_EXPENSES_CURRENTYR);
-                            $("#FCFA_NET_SAVINGS").val(this.FCFA_NET_SAVINGS);
+                            $("#FCFA_ANNUAL_INCOME").val(nf.format(this.FCFA_ANNUAL_INCOME));
+                            $("#FCFA_OTHER_INCOME").val(nf.format(this.FCFA_OTHER_INCOME));
+                            $("#FCFA_TOTAL_INCOME").val(nf.format(this.FCFA_TOTAL_INCOME));
+                            $("#FCFA_CUST_EXPENSES").val(nf.format(this.FCFA_CUST_EXPENSES));
+                            $("#FCFA_EXPENSES_LASTYR").val(nf.format(this.FCFA_EXPENSES_LASTYR));
+                            $("#FCFA_EXPENSES_CURRENTYR").val(nf.format(this.FCFA_EXPENSES_CURRENTYR));
+                            $("#FCFA_NET_SAVINGS").val(nf.format(this.FCFA_NET_SAVINGS));
                             $("#FCFA_ADDTNL_DTLS").val(this.FCFA_ADDTNL_DTLS);
                         })
                     },
@@ -708,6 +711,7 @@
             let occupation = $("#FCDM_OW_CUOCP_FSCD_ID").val();
             let takafulContrib = $("#FCDM_PLAN_CONTRIB").val();
             let covergeAmt = $("#FCDM_FACE_VALUE").val();
+            covergeAmt = Number(covergeAmt.replaceAll(",", ""));
             let sessionPos = getSessionpos();
             setTimeout(function () {
                 $(".validation-alert").fadeTo(500, 0).slideUp(500, function () {
@@ -749,17 +753,17 @@
                 $(window).scrollTop(0);
                 return false;
             }
-            if (bmiVal == 0 || bmiVal == null || bmiVal == undefined) {
+            if (bmiVal == 0 || bmiVal == null || bmiVal == undefined || bmiVal == NaN) {
                 $(".flex-div").after("<div class='row validation-alert mt-3 mb-3'><div class='col-md-3 pb-5'><div class='alert alert-danger alert-dismissible fade show p-3 mt-2' role='alert'>Please check your BMI</div></div></div>")
                 $(window).scrollTop(0);
                 return false;
             }
-            if (takafulContrib == 0 || takafulContrib == null || takafulContrib == undefined) {
+            if (takafulContrib == 0 || takafulContrib == null || takafulContrib == "" || takafulContrib == undefined) {
                 $(".flex-div").after("<div class='row validation-alert mt-3 mb-3'><div class='col-md-3 pb-5'><div class='alert alert-danger alert-dismissible fade show p-3 mt-2' role='alert'>Please enter valid takaful contribution </div></div></div>")
                 $(window).scrollTop(0);
                 return false;
             }
-            if (covergeAmt == 0 || covergeAmt == null || covergeAmt == undefined) {
+            if (covergeAmt == 0 || covergeAmt == null || covergeAmt == "" || covergeAmt == undefined) {
                 $(".flex-div").after("<div class='row validation-alert mt-3 mb-3'><div class='col-md-3 pb-5'><div class='alert alert-danger alert-dismissible fade show p-3 mt-2' role='alert'>Please enter valid takaful contribution again </div></div></div>")
                 $(window).scrollTop(0);
                 return false;
@@ -785,7 +789,6 @@
                                 $("#needAnalysisModal").modal("hide");
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Alert',
                                     text: 'Something went wrong! Your account already exists.\nPlease sign in',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
@@ -868,9 +871,49 @@
                 $("#needAnalysisModal").modal("show");
             }
         })
+        //$("#btnSubmitParticipant").click(function () {
+        //    if ($("#FCDM_OWCUST_BMI").val() == 0 || $("#FCDM_OWCUST_BMI").val() == "") {
+        //        calculate_BMI();
+        //    }
+        //})
         $(".closeRidersForm").click(function () {
             $("#RiderSection").modal("hide");
         })
+
+        document.getElementById("btnAddFamilyHstry").addEventListener("click", function () {
+            var table = document.getElementById("tblfamilyHistory");
+            var rowCount = table.rows.length;
+
+            // Check if the maximum limit has been reached
+            if (rowCount >= 8) {
+                    Swal.fire({
+                        text: 'You have reached the maximum limit of 7 rows.',
+                        icon: 'info',
+                    })
+                return;
+            }
+
+            // Clone the last row
+            var lastRow = rowCount - 1;
+            var newRow = table.rows[lastRow].cloneNode(true);
+
+            // Update the IDs of the cloned row
+            var rowInputs = newRow.getElementsByTagName("input");
+            var rowSelects = newRow.getElementsByTagName("select");
+
+            for (var i = 0; i < rowInputs.length; i++) {
+                rowInputs[i].id = rowInputs[i].id.replace(/\d+$/, lastRow + 1);
+                rowInputs[i].value = ""; // Clear the input values in the new row
+            }
+
+            for (var j = 0; j < rowSelects.length; j++) {
+                rowSelects[j].id = rowSelects[j].id.replace(/\d+$/, lastRow + 1);
+                rowSelects[j].value = ""; // Clear the select values in the new row
+            }
+
+            // Append the new row to the table
+            table.getElementsByTagName("tbody")[0].appendChild(newRow);
+        });
     })
 }()
 
@@ -885,6 +928,96 @@ function getSessionpos() {
     if (sessionStorage.getItem("tokenIndex") != null) {
         let sessionPos = sessionStorage.getItem("tokenIndex");
         return sessionPos;
+    }
+}
+function calculate_BMI() {
+    let heightComplete = $("#FCDM_OWCUST_HEITACT").val();
+    let DDL_height = 20;
+    let cust_weight = $("#FCDM_OWCUST_WEITACT").val();
+    let DDL_weight = 23;
+    if ($("#FCDM_OWCUST_HEITACT").val() != "" && $("#FCDM_OWCUST_WEITACT").val() != "") {
+        if (cust_weight > 0 && heightComplete > 0 || heightComplete[1] == ".") {
+            let heightFoot = heightComplete.substring(0, 1);
+            let HeightInch = heightComplete.substring(2);
+            if (HeightInch == "") {
+                HeightInch = 0;
+            }
+            // BMI WITH FEET & inches AND KG
+            if (DDL_height == '20' && DDL_weight == '23') {
+                heightFoot = heightFoot * 0.3048; // from feet to meters
+                HeightInch = HeightInch * 0.0254; // from inches to meters
+                let height = heightFoot + HeightInch;
+                var calculated_bmi = (cust_weight / (height * height)).toFixed(2);
+                if (calculated_bmi.includes(".")) {
+                    let i = calculated_bmi.indexOf(".");
+                    if (Number(calculated_bmi[i + 1]) >= 5) {
+                        calculated_bmi = Number(calculated_bmi.slice(0, i)) + 1;
+                        $("#FCDM_OWCUST_BMI").val(calculated_bmi);
+                        if (calculated_bmi < 18) {
+                            //    $("#bmi_unhealthy").removeAttr("hidden", true)
+                            //    $("#bmi_healthy").attr("hidden", true)
+                            //    $("#bmi_obesity").attr("hidden", true)
+                            //    $("#bmi_serious").attr("hidden", true)
+                        }
+                        if (calculated_bmi >= 18 && calculated_bmi <= 30) {
+                            //    $("#bmi_healthy").removeAttr("hidden", true)
+                            //    $("#bmi_unhealthy").attr("hidden", true)
+                            //    $("#bmi_obesity").attr("hidden", true)
+                            //    $("#bmi_serious").attr("hidden", true)
+                        }
+                        if (calculated_bmi >= 31) {
+                            //    $("#bmi_obesity").removeAttr("hidden", true)
+                            //    $("#bmi_unhealthy").attr("hidden", true)
+                            //    $("#bmi_healthy").attr("hidden", true)
+                            //    $("#bmi_serious").attr("hidden", true)
+                        }
+                    }
+                    if (Number(calculated_bmi[i + 1]) < 5) {
+                        calculated_bmi = calculated_bmi.slice(0, i);
+                        $("#FCDM_OWCUST_BMI").val(calculated_bmi);
+                        if (calculated_bmi < 18) {
+                            //    $("#bmi_unhealthy").removeAttr("hidden", true)
+                            //    $("#bmi_healthy").attr("hidden", true)
+                            //    $("#bmi_obesity").attr("hidden", true)
+                            //    $("#bmi_serious").attr("hidden", true)
+                        }
+                        if (calculated_bmi >= 18 && calculated_bmi <= 30) {
+                            //    $("#bmi_healthy").removeAttr("hidden", true)
+                            //    $("#bmi_unhealthy").attr("hidden", true)
+                            //    $("#bmi_obesity").attr("hidden", true)
+                            //    $("#bmi_serious").attr("hidden", true)
+                        }
+                        if (calculated_bmi >= 31) {
+                            //    $("#bmi_obesity").removeAttr("hidden", true)
+                            //    $("#bmi_unhealthy").attr("hidden", true)
+                            //    $("#bmi_healthy").attr("hidden", true)
+                            //    $("#bmi_serious").attr("hidden", true)
+                        }
+                    }
+                }
+                else {
+                    if (calculated_bmi < 18) {
+                        //    $("#bmi_unhealthy").removeAttr("hidden", true)
+                        //    $("#bmi_healthy").attr("hidden", true)
+                        //    $("#bmi_obesity").attr("hidden", true)
+                        //    $("#bmi_serious").attr("hidden", true)
+                    }
+                    if (calculated_bmi >= 18 && calculated_bmi <= 30) {
+                        //    $("#bmi_healthy").removeAttr("hidden", true)
+                        //    $("#bmi_unhealthy").attr("hidden", true)
+                        //    $("#bmi_obesity").attr("hidden", true)
+                        //    $("#bmi_serious").attr("hidden", true)
+                    }
+                    if (calculated_bmi >= 31) {
+                        //    $("#bmi_obesity").removeAttr("hidden", true)
+                        //    $("#bmi_unhealthy").attr("hidden", true)
+                        //    $("#bmi_healthy").attr("hidden", true)
+                        //    $("#bmi_serious").attr("hidden", true)
+                    }
+                    $("#FCDM_OWCUST_BMI").val(calculated_bmi);
+                }
+            }
+        }
     }
 }
 function fillCustomerInfo(CNIC, session) {
@@ -1044,8 +1177,10 @@ function checkValue(val) {
     }
 }
 async function calculateFaceValue() {
+    let nf = new Intl.NumberFormat('en-US');
     let sessionPos = getSessionpos()
     let annual_savings = $("#FCDM_PLAN_CONTRIB").val();
+    annual_savings = Number(annual_savings.replaceAll(",", ""));
     let contrib_frequency = $("#FCDM_PFREQ_FSCD_ID").val();
     let cover_multiple_standard = $("#FCDM_PLAN_CASE_STATUS").val();
     let cover_multiple = $("#FCDM_COVER_MULTIPLE").val();
@@ -1085,7 +1220,8 @@ async function calculateFaceValue() {
             });
 
             $(result).each(function () {
-                $("#FCDM_FACE_VALUE").val(this.V_FACE_VALUE);
+                $("#FCDM_FACE_VALUE").val(nf.format(this.V_FACE_VALUE));
+                maxlimitVal(this.V_FACE_VALUE);
             });
         } catch (jqXHR) {
             if (jqXHR.status === 401) {
@@ -1133,6 +1269,7 @@ function isValidInput(inputString) {
     return regex.test(inputString);
 }
 function checkCNICQuotations(Val, ID2) {
+    let nf = new Intl.NumberFormat('en-US');
     let sessionPos = getSessionpos()
     if (Val.length == 15 && Val[5] == "-" && Val[13] == "-") {
         sessionStorage.setItem("thisCustCNIC", Val);
@@ -1161,8 +1298,6 @@ function checkCNICQuotations(Val, ID2) {
             datatype: 'jsonp',
             timeout: 2000,
             success: function (data) {
-                let nf = new Intl.NumberFormat('en-US');
-
                 if (data.length >= 1) {
                     $("#mySavedIllustModal").modal("show");
                     $("#tableSavedillust tbody").empty();
@@ -1244,103 +1379,13 @@ function setHeightMaxLength(Val) {
 }
 function setHeightDescp(Val) {
     if (Val[1] == ".") {
-    //    $("#heightResult").val(Val + " Inches");
+        //    $("#heightResult").val(Val + " Inches");
     }
     else {
-    //    $("#heightResult").val(Val + " Feet");
+        //    $("#heightResult").val(Val + " Feet");
     }
 }
 //---------------------------BMI CALCULATION-------------------------------//
-function calculate_BMI() {
-    let heightComplete = $("#FCDM_OWCUST_HEITACT").val();
-    let DDL_height = 20;
-    let cust_weight = $("#FCDM_OWCUST_WEITACT").val();
-    let DDL_weight = 23;
-    if ($("#FCDM_OWCUST_HEITACT").val() != "" && $("#FCDM_OWCUST_WEITACT").val() != "") {
-        if (cust_weight > 0 && heightComplete > 0 || heightComplete[1] == ".") {
-            let heightFoot = heightComplete.substring(0, 1);
-            let HeightInch = heightComplete.substring(2);
-            if (HeightInch == "") {
-                HeightInch = 0;
-            }
-            // BMI WITH FEET & inches AND KG
-            if (DDL_height == '20' && DDL_weight == '23') {
-                heightFoot = heightFoot * 0.3048; // from feet to meters
-                HeightInch = HeightInch * 0.0254; // from inches to meters
-                let height = heightFoot + HeightInch;
-                var calculated_bmi = (cust_weight / (height * height)).toFixed(2);
-                if (calculated_bmi.includes(".")) {
-                    let i = calculated_bmi.indexOf(".");
-                    if (Number(calculated_bmi[i + 1]) >= 5) {
-                        calculated_bmi = Number(calculated_bmi.slice(0, i)) + 1;
-                        $("#FCDM_OWCUST_BMI").val(calculated_bmi);
-                        if (calculated_bmi < 18) {
-                        //    $("#bmi_unhealthy").removeAttr("hidden", true)
-                        //    $("#bmi_healthy").attr("hidden", true)
-                        //    $("#bmi_obesity").attr("hidden", true)
-                        //    $("#bmi_serious").attr("hidden", true)
-                        }
-                        if (calculated_bmi >= 18 && calculated_bmi <= 30) {
-                        //    $("#bmi_healthy").removeAttr("hidden", true)
-                        //    $("#bmi_unhealthy").attr("hidden", true)
-                        //    $("#bmi_obesity").attr("hidden", true)
-                        //    $("#bmi_serious").attr("hidden", true)
-                        }
-                        if (calculated_bmi >= 31) {
-                        //    $("#bmi_obesity").removeAttr("hidden", true)
-                        //    $("#bmi_unhealthy").attr("hidden", true)
-                        //    $("#bmi_healthy").attr("hidden", true)
-                        //    $("#bmi_serious").attr("hidden", true)
-                        }
-                    }
-                    if (Number(calculated_bmi[i + 1]) < 5) {
-                        calculated_bmi = calculated_bmi.slice(0, i);
-                        $("#FCDM_OWCUST_BMI").val(calculated_bmi);
-                        if (calculated_bmi < 18) {
-                        //    $("#bmi_unhealthy").removeAttr("hidden", true)
-                        //    $("#bmi_healthy").attr("hidden", true)
-                        //    $("#bmi_obesity").attr("hidden", true)
-                        //    $("#bmi_serious").attr("hidden", true)
-                        }
-                        if (calculated_bmi >= 18 && calculated_bmi <= 30) {
-                        //    $("#bmi_healthy").removeAttr("hidden", true)
-                        //    $("#bmi_unhealthy").attr("hidden", true)
-                        //    $("#bmi_obesity").attr("hidden", true)
-                        //    $("#bmi_serious").attr("hidden", true)
-                        }
-                        if (calculated_bmi >= 31) {
-                        //    $("#bmi_obesity").removeAttr("hidden", true)
-                        //    $("#bmi_unhealthy").attr("hidden", true)
-                        //    $("#bmi_healthy").attr("hidden", true)
-                        //    $("#bmi_serious").attr("hidden", true)
-                        }
-                    }
-                }
-                else {
-                    if (calculated_bmi < 18) {
-                    //    $("#bmi_unhealthy").removeAttr("hidden", true)
-                    //    $("#bmi_healthy").attr("hidden", true)
-                    //    $("#bmi_obesity").attr("hidden", true)
-                    //    $("#bmi_serious").attr("hidden", true)
-                    }
-                    if (calculated_bmi >= 18 && calculated_bmi <= 30) {
-                    //    $("#bmi_healthy").removeAttr("hidden", true)
-                    //    $("#bmi_unhealthy").attr("hidden", true)
-                    //    $("#bmi_obesity").attr("hidden", true)
-                    //    $("#bmi_serious").attr("hidden", true)
-                    }
-                    if (calculated_bmi >= 31) {
-                    //    $("#bmi_obesity").removeAttr("hidden", true)
-                    //    $("#bmi_unhealthy").attr("hidden", true)
-                    //    $("#bmi_healthy").attr("hidden", true)
-                    //    $("#bmi_serious").attr("hidden", true)
-                    }
-                    $("#FCDM_OWCUST_BMI").val(calculated_bmi);
-                }
-            }
-        }
-    }
-}
 function continueThisDocument(ID) {
     ID = ID.slice(11);
     let thisDocID = $("#DOCUMENT_ID" + ID).val();
@@ -1367,7 +1412,6 @@ function continueThisDocument(ID) {
                         $("#" + ID).removeClass("illustIcons", true);
                         Swal.fire({
                             icon: 'info',
-                            title: 'Alert',
                             text: 'You have already issued Policy on this document!',
                         })
                     }
@@ -1393,6 +1437,8 @@ function continueThisDocument(ID) {
     });
 }
 function editThisDocument(ID) {
+    let nf = new Intl.NumberFormat('en-US');
+
     ID = ID.slice(7);
     let thisDocumentCode = $("#DOCUMENT_CODE" + ID).val();
     $("#mySavedIllustModal").modal("hide");
@@ -1413,8 +1459,8 @@ function editThisDocument(ID) {
         cache: false,
         success: function (result) {
             $(result).each(function () {
-                sessionStorage.setItem("thisDocumentDode", this.DOCUMENT_CODE);
-                sessionStorage.getItem("thisDocumentDode");
+                sessionStorage.setItem("thisDocumentCode", this.DOCUMENT_CODE);
+                sessionStorage.getItem("thisDocumentCode");
                 let custDOB = (this.DOB).slice(0, 10);
                 $("#FCDM_DOCUMENT_ID").val(this.DOCUMENT_ID);
                 $("#FCDM_DOCUMENT_CODE").val(this.DOCUMENT_CODE);
@@ -1434,8 +1480,12 @@ function editThisDocument(ID) {
                 $("#FCDM_OWCUST_WEITUNT").val(this.FCDM_OWCUST_WEITUNT);
                 $("#FCDM_OWCUST_BMI").val(this.FCDM_OWCUST_BMI);
                 $("#FCDM_PAYING_TERM").val(this.MEMBERSHIP_TERM);
-                $("#FCDM_PLAN_CONTRIB").val(this.BASIC_CONTRIBUTION);
-                $("#FCDM_FACE_VALUE").val(this.POL_COVGE_SUMASSURD);
+                $("#FCDM_PLAN_CONTRIB").val(nf.format(this.BASIC_CONTRIBUTION));
+                $("#FCDM_FACE_VALUE").val(nf.format(this.POL_COVGE_SUMASSURD));
+                maxlimitVal(this.POL_COVGE_SUMASSURD);
+                //if (this.POL_COVGE_SUMASSURD >= 500000) {
+                //    genderQuestionnaire(this.GENDER, this.POL_COVGE_SUMASSURD);
+                //}
                 $("#FSAG_AGENT_CODE").val(this.FSAG_AGENT_CODE);
             })
         },
@@ -1476,12 +1526,21 @@ function editThisDocument(ID) {
     });
 }
 function formatNumber(input) {
-  let value = input.value.replace(/,/g, ''); // Remove existing commas
-  let formattedValue = Number(value).toLocaleString(); // Format the number with commas
-  input.value = formattedValue;
+    let value = input.value.replace(/,/g, ''); // Remove existing commas
+    let formattedValue = Number(value).toLocaleString(); // Format the number with commas
+    input.value = formattedValue;
 }
-function DeleteTblRecord(elem) {
+function DeleteTblRecord(elem, ID) {
     $(elem).closest('tr').remove();
+    if (ID != "" || ID != undefined) {
+        if (rdersIDArr.length != 0) {
+            const index = rdersIDArr.indexOf(ID);
+            if (index > -1) {
+                rdersIDArr.splice(index, 1);
+                rdrsArray.splice(index, 1);
+            }
+        }
+    }
 }
 function ReturnQuestVal(ID, Val) {
     ID = ID.slice(21)
@@ -1508,17 +1567,24 @@ function ExistInsValNo(ID, VAL) {
     $("#FCIH_INSURER_PURPOSE").removeAttr("required", true);
     $("#FCIH_INSURER_NM").removeAttr("required", true);
     $("#FCIH_COND_ACCPTNCE").removeAttr("required", true);
+    $(".fact_find").val("");
 }
 function calcTotalIncome(VAL) {
+    let nf = new Intl.NumberFormat('en-US');
     let annualIncome = $("#FCFA_ANNUAL_INCOME").val();
+    annualIncome = annualIncome.replaceAll(",", "");
     let otherIncome = $("#FCFA_OTHER_INCOME").val();
+    otherIncome = otherIncome.replaceAll(",", "");
     let expensesLastYr = $("#FCFA_EXPENSES_LASTYR").val();
+    expensesLastYr = expensesLastYr.replaceAll(",", "");
     let expensesCurrYr = $("#FCFA_EXPENSES_CURRENTYR").val();
-    $("#FCFA_TOTAL_INCOME").val(Number(annualIncome) + Number(otherIncome));
-    $("#FCFA_NET_SAVINGS").val((Number(annualIncome) + Number(otherIncome)) - (Number(expensesLastYr) + Number(expensesCurrYr)));
+    expensesCurrYr = expensesCurrYr.replaceAll(",", "");
+    $("#FCFA_TOTAL_INCOME").val(nf.format(Number(annualIncome) + Number(otherIncome)));
+    $("#FCFA_NET_SAVINGS").val(nf.format((Number(annualIncome) + Number(otherIncome)) - (Number(expensesLastYr) + Number(expensesCurrYr))));
 }
-function DiseaseAnalysis(QuesID) {
+function DiseaseAnalysis(QuesID, Val) {
     QuesID = QuesID.slice(21);
+    $("#FCUQ_ANSR_YN" + QuesID).val(Val);
     let sessionPos = getSessionpos()
     if ($("#FSPQS_QSTNR_FSCD_ID" + QuesID).val() == "3541") {
         $("#medicalUnderWT").modal("show");
@@ -1533,7 +1599,7 @@ function DiseaseAnalysis(QuesID) {
         $(".closeDiseaseForm").click(function () {
             $("#medicalUnderWT").modal("hide");
         })
-        let doc_code = sessionStorage.getItem("thisDocumentDode").slice(3);
+        let doc_code = sessionStorage.getItem("thisDocumentCode").slice(3);
         if (doc_code != null) {
             $.ajax({
                 "crossDomain": true,
@@ -1571,7 +1637,7 @@ function DiseaseAnalysis(QuesID) {
         $(".closeDiseaseForm2").click(function () {
             $("#medicalUnderWT2").modal("hide");
         })
-        let doc_code = sessionStorage.getItem("thisDocumentDode").slice(3);
+        let doc_code = sessionStorage.getItem("thisDocumentCode").slice(3);
         if (doc_code != null) {
             $.ajax({
                 "crossDomain": true,
@@ -1604,6 +1670,33 @@ function DiseaseAnalysis(QuesID) {
     if ($("#FSPQS_QSTNR_FSCD_ID" + QuesID).val() == "3543") {
         $("#INSUREREXIST_YN").attr("checked", true);
         $(".ExistingLifePlans").removeAttr("hidden", true);
+    }
+    if ($("#FSPQS_QSTNR_FSCD_ID" + QuesID).val() == "3641") {
+        $("#medicalUnderWT3").modal("show");
+        $(".closeDiseaseForm3").click(function () {
+            $("#medicalUnderWT3").modal("hide");
+        })
+    }
+    if ($("#FSPQS_QSTNR_FSCD_ID" + QuesID).val() == "3642") {
+        $("#medicalUnderWT4").modal("show");
+        $(".closeDiseaseForm4").click(function () {
+            $("#medicalUnderWT4").modal("hide");
+        })
+    }
+    if ($("#FSPQS_QSTNR_FSCD_ID" + QuesID).val() == "3643") {
+        $("#familyHistory").modal("show");
+        $(".closeFamilyHistory").click(function () {
+            $("#familyHistory").modal("hide");
+        })
+    }
+    if ($("#FSPQS_QSTNR_FSCD_ID" + QuesID).val() == "3644") {
+
+    }
+    if ($("#FSPQS_QSTNR_FSCD_ID" + QuesID).val() == "3645") {
+        $("#medicalUnderWT5").modal("show");
+        $(".closeDiseaseForm5").click(function () {
+            $("#medicalUnderWT5").modal("hide");
+        })
     }
 }
 function setAgentName(AgentCode) {
@@ -1654,9 +1747,9 @@ function showDisease(elem, DisID) {
             }
         }
     }
-    if (DisID >= 27) {
+    if (DisID >= 27 && DisID <= 33) {
         if ($('#tblMedCatgry tbody tr').length == 0) {
-            MedCatgryUniqueAdd(DisID, diseaseName)
+            MedCatgryUniqueAdd(DisID, diseaseName, "tblMedCatgry")
         }
         else {
             $('#tblMedCatgry tbody tr').each(function (index, row) {
@@ -1664,7 +1757,49 @@ function showDisease(elem, DisID) {
             });
             if (diseaseArray.includes('DiseaseID' + DisID)) {
             } else {
-                MedCatgryUniqueAdd(DisID, diseaseName)
+                MedCatgryUniqueAdd(DisID, diseaseName, "tblMedCatgry")
+            }
+        }
+    }
+    if (DisID >= 34 && DisID <= 36) {
+        if ($('#tblconditionCatgry tbody tr').length == 0) {
+            MedCatgryUniqueAdd(DisID, diseaseName, "tblconditionCatgry")
+        }
+        else {
+            $('#tblconditionCatgry tbody tr').each(function (index, row) {
+                diseaseArray.push(row.children[0].children[0].id);
+            });
+            if (diseaseArray.includes('DiseaseID' + DisID)) {
+            } else {
+                MedCatgryUniqueAdd(DisID, diseaseName, "tblconditionCatgry")
+            }
+        }
+    }
+    if (DisID >= 37 && DisID <= 40) {
+        if ($('#tbldiseaseSelect tbody tr').length == 0) {
+            MedCatgryUniqueAdd(DisID, diseaseName, "tbldiseaseSelect")
+        }
+        else {
+            $('#tbldiseaseSelect tbody tr').each(function (index, row) {
+                diseaseArray.push(row.children[0].children[0].id);
+            });
+            if (diseaseArray.includes('DiseaseID' + DisID)) {
+            } else {
+                MedCatgryUniqueAdd(DisID, diseaseName, "tbldiseaseSelect")
+            }
+        }
+    }
+    if (DisID >= 41) {
+        if ($('#tblfemaleCatgry tbody tr').length == 0) {
+            MedCatgryUniqueAdd(DisID, diseaseName, "tblfemaleCatgry")
+        }
+        else {
+            $('#tblfemaleCatgry tbody tr').each(function (index, row) {
+                diseaseArray.push(row.children[0].children[0].id);
+            });
+            if (diseaseArray.includes('DiseaseID' + DisID)) {
+            } else {
+                MedCatgryUniqueAdd(DisID, diseaseName, "tblfemaleCatgry")
             }
         }
     }
@@ -1677,11 +1812,12 @@ function checkRider(RdrYN) {
         $("#tableRiders tbody").empty();
     }
 }
-const rdersIDArr = [];
+let rdersIDArr = [];
+let rdrsArray = [];
+
 function AddRdr(elem, ID) {
     let rdrName = elem.innerText;
     ID = ID.slice(8);
-    let rdrsArray = [];
     if ($('#rdrInput' + ID).attr('checked')) {
         $(elem).removeClass("bg-info");
         $("#rdrInput" + ID).removeAttr("checked", true);
@@ -1689,28 +1825,44 @@ function AddRdr(elem, ID) {
         $("#rdrInput" + ID).attr("checked", true);
         $(elem).addClass("bg-info");
         if ($('#tableRiders tbody tr').length == 0) {
+            rdrsArray.push('FCDR_DOC_RDR_ID' + ID)
             rdersIDArr.push(ID)
             RidersUniqueAdd(ID, rdrName)
         }
         else {
-            rdersIDArr.push(ID)
-            $('#tableRiders tbody tr').each(function (index, row) {
-                rdrsArray.push(row.children[0].children[0].id);
-            });
             if (rdrsArray.includes('FCDR_DOC_RDR_ID' + ID)) {
-            } if (rdersIDArr.includes('19') && rdersIDArr.includes('20')) {
-                $(elem).removeClass("bg-info");
-                $("#rdrInput" + ID).removeAttr("checked", true);
-                Swal.fire({
-                    icon: 'info',
-                    //title: 'Alert',
-                    text: 'You cannot select ADB & ADD together!',
-                })
-            }else {
-                RidersUniqueAdd(ID, rdrName)
+            }
+            else {
+                if (ID == 19 || ID == 20) {
+                    if (rdersIDArr.includes('19') || rdersIDArr.includes('20')) {
+                        $(elem).removeClass("bg-info");
+                        $("#rdrInput" + ID).removeAttr("checked", true);
+                        Swal.fire({
+                            icon: 'info',
+                            text: 'You cannot select ADB & ADD together!',
+                        }).then(() => {
+                        })
+                    }
+                    else {
+                        rdrsArray.push('FCDR_DOC_RDR_ID' + ID)
+                        rdersIDArr.push(ID)
+                        RidersUniqueAdd(ID, rdrName)
+                    }
+                }
+                else {
+                    rdrsArray.push('FCDR_DOC_RDR_ID' + ID)
+                    rdersIDArr.push(ID)
+                    RidersUniqueAdd(ID, rdrName)
+                }
             }
         }
     }
+}
+const TrackDiseaseDoc = (elem) => {
+    let ID = elem.parentNode.parentNode.children[0].children[0].value;
+
+    let DiseaseIDDoc = document.getElementById("DiseaseDoc" + ID);
+    DiseaseIDDoc.value = "Doc for Disease ID " + ID;
 }
 function RidersUniqueAdd(ID, name) {
     $("#tableRiders tbody").append("<tr><td hidden><input class='form-control' name='FCDR_DOC_RDR_ID' id='FCDR_DOC_RDR_ID" + ID + "' value='0' /></td>" +
@@ -1718,7 +1870,7 @@ function RidersUniqueAdd(ID, name) {
         "<td><input style='width:315px' class='form-control readonly' name='RDR_NAME' id='RDR_NAME" + ID + "' value='" + name + "' readonly /></td>" +
         "<td><input style='width:119px' class='form-control' name='FCDR_PAYING_TERM' id='FCDR_PAYING_TERM" + ID + "' placeholder='5 years' type='number' /></td>" +
         "<td><input style='width:150px' class='form-control' name='FCDR_FACE_VALUE' id='FCDR_FACE_VALUE" + ID + "' placeholder='100,000' type='number' /></td>" +
-        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td></tr>"
+        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' id='" + ID + "' onclick='DeleteTblRecord(this,this.id)' /></td></tr>"
     )
 }
 function MedDiseasesUniqueAdd(ID, name) {
@@ -1726,18 +1878,56 @@ function MedDiseasesUniqueAdd(ID, name) {
         "<td><input style='width:200px' class='form-control readonly' name='DISEAESE_NAME' id='DISEAESE_NAME" + ID + "' value='" + name + "' readonly /></td>" +
         "<td><select style='width:119px' class='form-control' name='FCDS_DISEASE_DURATION' id='FCDS_DISEASE_DURATION" + ID + "'><option value=''>Select</option><option value='1'>Less than an year</option><option value='3'>1-5 years</option><option value='5'>Above 5 yearsr</option></select></td>" +
         "<td><input style='width:150px' class='form-control' name='FCDS_DISEASE_DETAILS' id='FCDS_DISEASE_DETAILS" + ID + "' placeholder='More Details' /></td>" +
-        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH" + ID + "' /></td>" +
-        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td></tr>"
+        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH' oninput='TrackDiseaseDoc(this)' /></td>" +
+        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td>" +
+        "<td><input style='width:80px' class='form-control' name='DiseaseDoc' id='DiseaseDoc" + ID + "' value='none' readonly /></td></tr>"
     )
 }
-function MedCatgryUniqueAdd(ID, name) {
-    $("#tblMedCatgry tbody").append("<tr><td hidden><input class='form-control' name='DiseaseID' id='DiseaseID" + ID + "' value='" + ID + "' /></td>" +
+function MedCatgryUniqueAdd(ID, name, table) {
+    $("#" + table + " tbody").append("<tr><td hidden><input class='form-control' name='DiseaseID' id='DiseaseID" + ID + "' value='" + ID + "' /></td>" +
         "<td><input style='width:280px' class='form-control readonly' name='DISEAESE_NAME' id='DISEAESE_NAME" + ID + "' value='" + name + "' readonly /></td>" +
-        "<td><input style='width:150px' class='form-control' name='FCDS_DISEASE_DETAILS' id='FCDS_DISEASE_DETAILS" + ID + "' placeholder='More Details' /></td>" +
-        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH" + ID + "' /></td>" +
-        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td></tr>"
+        "<td><input style='width:150px' class='form-control' name='FCDS_DISEASE_DETAILS' id='FCDS_DISEASE_DETAILS" + ID + "' placeholder='Details' /></td>" +
+        "<td><input style='width:150px' type='file' class='form-control' name='FPDD_PATH' id='FPDD_PATH' oninput='TrackDiseaseDoc(this)' /></td>" +
+        "<td><img src='/Assets/images/delete-btn.png' class='delete-btn' onclick='DeleteTblRecord(this)' /></td>" +
+        "<td><input style='width:80px' class='form-control' name='DiseaseDoc' id='DiseaseDoc" + ID + "' value='none' readonly /></td></tr>"
     )
 }
 function selectOccup(CUOCP_ID) {
     $("#FCDM_OW_CUOCP_FSCD_ID").val(CUOCP_ID)
+}
+const genderQuestionnaire = (gender, Amount) => {
+    if (Amount == undefined) {
+        Amount = $("#FCDM_FACE_VALUE").val();
+        Amount = Amount.replaceAll(",", "");
+        gender = Number(gender);
+        Amount = Number(Amount);
+    }
+    if (gender == 1 && Amount >= 5000000) {
+        $(".contribLimit7").attr("hidden", true);
+        $("#FSPQS_QSTNR_FSCD_ID8").removeAttr("required", true);
+        $("#FCUQ_ANSR_YN8").removeAttr("required", true);
+    }
+    if(gender == 2 && Amount >= 5000000) {
+        $(".contribLimit7").removeAttr("hidden", true);
+        $("#FSPQS_QSTNR_FSCD_ID8").attr("required", true);
+        $("#FCUQ_ANSR_YN8").attr("required", true);
+    }
+}
+const maxlimitVal = (Contribution) => {
+    if (Contribution >= 5000000) {
+        $(".contribLimit").removeAttr("hidden", true);
+        $('.FCUQ_ANSR_YN').attr("required", true);
+        $('.FSPQS_QSTNR_FSCD_ID').attr("required", true);
+        if ($("#FCDM_OW_GENDR_FSCD_ID").val() == 1) {
+            genderQuestionnaire(1,Contribution);
+        }
+        if ($("#FCDM_OW_GENDR_FSCD_ID").val() == 2) {
+            genderQuestionnaire(2, Contribution);
+        }
+    } else {
+        $(".contribLimit").attr("hidden", true);
+        $('.FCUQ_ANSR_YN').removeAttr("required", true);
+        $('.FSPQS_QSTNR_FSCD_ID').removeAttr("required", true);
+        $('.FCUQ_ANSR_YN').val("");
+    }
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace POS_APPLICATION.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

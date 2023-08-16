@@ -1,6 +1,7 @@
 ﻿* {
     box-sizing: border-box
 }
+
 @media only screen and (min-width: 850px) {
     .container-scroller {
         background-image: url(/Assets/images/bg_analysis.png);
@@ -11,6 +12,7 @@
         width: 10px !important;
     }
 }
+
 .illusticon {
     height: 6rem;
 }
@@ -28,131 +30,173 @@ body {
     height: 11em;
 }
 
-.spinner-text {
-    position: absolute;
-    top: 59%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 27em;
-    border-top-color: #000;
-    border-radius: 50%;
-}
-
 .life-illustration {
     height: 11em;
 }
-    #spinner {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 9999;
-    }
 
-.illusticon{
+#spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+.illusticon {
     height: 4rem;
 }
-.spinner-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 144px;
-    height: 140px;
-    border-top-color: #000;
-    border-radius: 50%;
-    /*animation: spin 1s infinite linear;*/
+
+.lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
 }
-.spinner-text {
-    position: absolute;
-    top: 59%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 27em;
-    border-top-color: #000;
-    border-radius: 50%;
+
+    .lds-ellipsis div {
+        position: absolute;
+        top: 33px;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: #fff;
+        animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    }
+
+        .lds-ellipsis div:nth-child(1) {
+            left: 8px;
+            animation: lds-ellipsis1 0.6s infinite;
+        }
+
+        .lds-ellipsis div:nth-child(2) {
+            left: 8px;
+            animation: lds-ellipsis2 0.6s infinite;
+        }
+
+        .lds-ellipsis div:nth-child(3) {
+            left: 32px;
+            animation: lds-ellipsis2 0.6s infinite;
+        }
+
+        .lds-ellipsis div:nth-child(4) {
+            left: 56px;
+            animation: lds-ellipsis3 0.6s infinite;
+        }
+
+@keyframes lds-ellipsis1 {
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
-    .card-illust {
-        background-image: url(/Assets/images/bg_analysis.png);
+
+@keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
     }
 
-    .form-control2 {
-        background-color: transparent !important;
-        border-top: none !important;
-        border-left: none !important;
-        border-right: none !important;
+    100% {
+        transform: scale(0);
+    }
+}
+
+@keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
     }
 
-    .bg-tansparent {
-        background-color: none !important;
+    100% {
+        transform: translate(24px, 0);
+    }
+}
+
+.card-illust {
+    background-image: url(/Assets/images/bg_analysis.png);
+}
+
+.form-control2 {
+    background-color: transparent !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+.bg-tansparent {
+    background-color: none !important;
+}
+
+.container-bar {
+    width: 100%;
+}
+
+.cash-bar {
+    text-align: right;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: white;
+    background: linear-gradient(to right, rgba(106,198,0,1), rgba(255,0,0,0));
+}
+
+.contrib-bar {
+    text-align: right;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: white;
+    background: linear-gradient(to right, #6cb1ff, rgba(255,0,0,0));
+}
+
+.netgraph {
+    background-color: #c1e3c7;
+}
+
+/***********Agreement modal**************************/
+#AgreementModal > .modal-dialog .modal-content {
+    border-radius: 25px;
+    background: linear-gradient(to bottom left, #c2c2c2 0%, #fbfbfb 100%);
+    border: none;
+    position: fixed;
+    /*        font-family: cursive;
+*/
+}
+
+    #AgreementModal > .modal-dialog .modal-content .modal-body .title {
+        font-size: 2rem;
+        font-weight: 700;
+        text-transform: capitalize;
+        margin: 0 0 8px;
+        color: #7f0000;
     }
 
-    .container-bar {
-        width: 100%;
+    #AgreementModal > .modal-dialog .modal-content .modal-body h5 {
+        line-height: 27px;
     }
 
-    .cash-bar {
-        text-align: right;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        color: white;
-        background: linear-gradient(to right, rgba(106,198,0,1), rgba(255,0,0,0));
+    #AgreementModal > .modal-dialog .modal-content .modal-body .btn {
+        min-width: 165px;
     }
 
-    .contrib-bar {
-        text-align: right;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        color: white;
-        background: linear-gradient(to right, #6cb1ff, rgba(255,0,0,0));
+@media (min-width: 576px) {
+    .card-illustrations {
+        padding-left: 10em;
+        padding-right: 10em;
     }
 
-    .netgraph {
-        background-color: #c1e3c7;
+    #AgreementModal > .modal-dialog {
+        max-width: 500px !important;
+        margin: 30px auto;
     }
 
-    /***********Agreement modal**************************/
-    #AgreementModal > .modal-dialog .modal-content {
-        border-radius: 25px;
-        background: linear-gradient(to bottom left, #c2c2c2 0%, #fbfbfb 100%);
-        border: none;
-        position: fixed;
-/*        font-family: cursive;
-*/    }
-
-        #AgreementModal > .modal-dialog .modal-content .modal-body .title {
-            font-size: 2rem;
-            font-weight: 700;
-            text-transform: capitalize;
-            margin: 0 0 8px;
-            color: #7f0000;
+        #AgreementModal > .modal-dialog .modal-content {
+            right: -90%;
+            width: 265% !important;
         }
+}
 
-        #AgreementModal > .modal-dialog .modal-content .modal-body h5 {
-            line-height: 27px;
-        }
-
-        #AgreementModal > .modal-dialog .modal-content .modal-body .btn {
-            min-width: 165px;
-        }
-
-    @media (min-width: 576px) {
-        .card-illustrations {
-            padding-left: 10em;
-            padding-right: 10em;
-        }
-        #AgreementModal > .modal-dialog {
-            max-width: 500px !important;
-            margin: 30px auto;
-        }
-
-            #AgreementModal > .modal-dialog .modal-content {
-                right: -90%;
-                width: 265% !important;
-            }
-    }
 @media (max-width: 520px) {
     #AgreementModal > .modal-dialog {
         transform: scale(1);
