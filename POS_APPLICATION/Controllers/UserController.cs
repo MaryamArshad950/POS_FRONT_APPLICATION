@@ -312,6 +312,7 @@ namespace POS_APPLICATION.Controllers
                 }
             }
 
+
             return Convert.ToBase64String(array);
         }
         public string DecryptString(string Text)
