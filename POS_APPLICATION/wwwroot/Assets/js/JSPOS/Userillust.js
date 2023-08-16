@@ -1,5 +1,6 @@
 ﻿!function () {
     $(document).ready(function () {
+        //
         $("#spinner").hide();
         if ($("#FCDM_DOCUMENT_CODE").val() != "") {
             let document_code = $("#FCDM_DOCUMENT_CODE").val();
@@ -34,6 +35,7 @@
             datatype: 'jsonp',
             cache: false,
             success: function (data2) {
+                console.log(data2)
                 for (let i = 0; i <= data2.length - 1; i++) {
                     let cust_dob = (data2[i].DOB).slice(0, 10);
                     sessionStorage.setItem("DocCNIC", data2[i].FCDM_OWCUST_CNIC)
@@ -71,50 +73,26 @@
                         "<td><input readonly class='input_custom' type='date' style='width:100px;' name='SUM_CUST_DOB' id='SUM_CUST_DOB' value='" + cust_dob + "'></td>" +
                         "<td hidden><input class='input_custom' style='width:100px;' name='SUM_USER_EMAIL_ADDR' id='SUM_USER_EMAIL_ADDR' value='" + data2[i].FCDM_OWCUST_EMAILADDR + "'></td>" +
                         "<td hidden><input class='input_custom' style='width:100px;' name='FSDS_DESIGN_ID' id='FSDS_DESIGN_ID' value='" + data2[i].FCDM_OW_CUOCP_FSCD_ID + "'></td>" +
-                        "</tr>"
-                    );
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                if (jqXHR.status === 401) {
-                }
-            }
-        });
+                        "</tr>");
 
-        $.ajax({
-            "crossDomain": true,
-            url: "" + Result_API + "/api/Partcipant/GetParticipantDetails/" + document_code,
-            type: "GET",
-            contentType: "application/json; charset=utf-8",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Access-Control-Allow-Origin': Result_API,
-                'Access-Control-Allow-Methods': 'POST, GET',
-                'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
-                'Authorization': 'Bearer ' + getsession
-            },
-            datatype: 'jsonp',
-            //cache: false,
-            success: function (result) {
-                $(result).each(function () {
-                    let birth_date = new Date(this.DOB);
+                    let birth_date = new Date(data2[i].DOB);
                     let birthMonth = birth_date.getMonth() + 1;
                     if (("" + birthMonth).length == 1) {
                         birthMonth = "0" + birthMonth;
                     }
                     birth_date = birth_date.getDate() + "-" + birthMonth + "-" + birth_date.getFullYear();
-                    $("#p_fcdm_document_code").val(this.DOCUMENT_CODE);
-                    $("#p_reference_no").val(this.DOCUMENT_CODE);
+                    $("#p_fcdm_document_code").val(data2[i].DOCUMENT_CODE);
+                    $("#p_reference_no").val(data2[i].DOCUMENT_CODE);
                     $("#p_commencement_date").val(finalDate)
-                    if (this.BASIC_PLAN == '28') {
+                    if (data2[i].BASIC_PLAN == '28') {
                         $("#FSPM_PRODUCT_ID").val("Salaam Life & Saving Plan")
                     }
-                    if (this.BASIC_PLAN == '19') {
+                    if (data2[i].BASIC_PLAN == '19') {
                         $("#FSPM_PRODUCT_ID").val("Salaam Saving(Vanilla2)")
                     }
 
-                    $("#p_PARTICIPANT_NAME").val(this.FULL_NAME.replace(/\s{2,}/g, ' '));
-                    if (this.GENDER == '2') {
+                    $("#p_PARTICIPANT_NAME").val(data2[i].FULL_NAME.replace(/\s{2,}/g, ' '));
+                    if (data2[i].GENDER == '2') {
                         $("#p_GENDER").val("Female")
                     }
                     else {
@@ -126,39 +104,63 @@
                     //else {
                     //    $("#extraMortality").val("N/A")
                     //}
-                    $("#extraMortality").val(this.EM_TXT_VALUE)
+                    $("#extraMortality").val(data2[i].EM_TXT_VALUE)
                     $("#p_DOB").val(birth_date);
-                    $("#p_CONTRIBUTION_FREQUENCY").val(this.CONTRIBUTION_FREQENCY);
-                    let BASIC_CONTRIBUTION = this.BASIC_CONTRIBUTION;
+                    $("#p_CONTRIBUTION_FREQUENCY").val(data2[i].CONTRIBUTION_FREQENCY);
+                    let BASIC_CONTRIBUTION = data2[i].BASIC_CONTRIBUTION;
                     let nf = new Intl.NumberFormat('en-US');
                     BASIC_CONTRIBUTION = nf.format(BASIC_CONTRIBUTION);
 
-                    let POL_COVGE_SUMASSURD = this.POL_COVGE_SUMASSURD;
+                    let POL_COVGE_SUMASSURD = data2[i].POL_COVGE_SUMASSURD;
                     POL_COVGE_SUMASSURD = nf.format(POL_COVGE_SUMASSURD);
 
                     $("#p_BASIC_CONTRIBUTION").val("PKR " + BASIC_CONTRIBUTION);
-                    $("#p_MEMBERSHIP_TERM").val(this.MEMBERSHIP_TERM);
-                    $("#p_COVER_MULTIPLE_TYPE").val(this.COVER_MULTIPLE_TYPE);
-                    $("#p_COVER_MULTIPLE").val(this.MEMBERSHIP_TERM);
-                    $("#p_CONTRIBUTION_INDEXATION_RATE").val(this.CONTRIBUTION_INDEXATION_RATE);
-                    $("#p_SA_INDEXATION_RATE").val(this.SA_INDEXATION_RATE);
-                    $("#p_IDENTITY_TYPE").val(this.IDENTITY_TYPE);
-                    $("#p_IDENTITY_NO").val(this.IDENTITY_NO);
-                    $("#p_NUMBER_OF_PROJECTION_YEARS").val(this.NUMBER_OF_PROJECTION_YEARS + " Years");
-                    $("#p_PROPOSAL_NUMBER").val(this.PROPOSAL_NUMBER);
+                    $("#p_MEMBERSHIP_TERM").val(data2[i].MEMBERSHIP_TERM);
+                    $("#p_COVER_MULTIPLE_TYPE").val(data2[i].COVER_MULTIPLE_TYPE);
+                    $("#p_COVER_MULTIPLE").val(data2[i].MEMBERSHIP_TERM);
+                    $("#p_CONTRIBUTION_INDEXATION_RATE").val(data2[i].CONTRIBUTION_INDEXATION_RATE);
+                    $("#p_SA_INDEXATION_RATE").val(data2[i].SA_INDEXATION_RATE);
+                    $("#p_IDENTITY_TYPE").val(data2[i].IDENTITY_TYPE);
+                    $("#p_IDENTITY_NO").val(data2[i].IDENTITY_NO);
+                    $("#p_NUMBER_OF_PROJECTION_YEARS").val(data2[i].NUMBER_OF_PROJECTION_YEARS + " Years");
+                    $("#p_PROPOSAL_NUMBER").val(data2[i].PROPOSAL_NUMBER);
                     $("#p_SA").val("PKR " + POL_COVGE_SUMASSURD);
                     //$(".customer-name").html(this.PARTICIPANT_NAME);
                     if (sessionStorage.getItem("customer_name") == null && sessionStorage.getItem("cust_gender") == null) {
-                        sessionStorage.setItem("customer_name", (this[i].FULL_NAME).replace(/\s{2,}/g, ' '));
-                        sessionStorage.setItem("cust_gender", this.GENDER)
+                        sessionStorage.setItem("customer_name", (data2[i][i].FULL_NAME).replace(/\s{2,}/g, ' '));
+                        sessionStorage.setItem("cust_gender", data2[i].GENDER)
                     }
-                });
+                }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 if (jqXHR.status === 401) {
                 }
             }
         });
+
+        //$.ajax({
+        //    "crossDomain": true,
+        //    url: "" + Result_API + "/api/Partcipant/GetParticipantDetails/" + document_code,
+        //    type: "GET",
+        //    contentType: "application/json; charset=utf-8",
+        //    headers: {
+        //        'Content-Type': 'application/x-www-form-urlencoded',
+        //        'Access-Control-Allow-Origin': Result_API,
+        //        'Access-Control-Allow-Methods': 'POST, GET',
+        //        'Access-Control-Allow-Headers': 'x-requested-with, x-requested-by',
+        //        'Authorization': 'Bearer ' + getsession
+        //    },
+        //    datatype: 'jsonp',
+        //    //cache: false,
+        //    success: function (result) {
+        //        $(result).each(function () {
+        //        });
+        //    },
+        //    error: function (jqXHR, textStatus, errorThrown) {
+        //        if (jqXHR.status === 401) {
+        //        }
+        //    }
+        //});
         $.ajax({
             "crossDomain": true,
             url: "" + Result_API + "/api/Participant/GET_RIDER_INFO/" + document_code,
